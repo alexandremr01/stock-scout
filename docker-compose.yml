@@ -1,0 +1,59 @@
+version: '3.7'
+
+networks:
+  stockscout: { }
+
+services:
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432/tcp"
+    restart: always
+    networks:
+      - stockscout
+
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile.front.dev
+    depends_on:
+      - db
+      - back
+    environment:
+      ENV: development
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_NAME: core
+      DB_USER: root
+      DB_PASSWORD: root
+    ports:
+      - "8080:8080/tcp"
+    restart: always
+    networks:
+      - stockscout
+    volumes:
+      - .:/app
+
+  back:
+    build:
+      context: .
+      dockerfile: Dockerfile.back.dev
+    depends_on:
+      - db
+    environment:
+      ENV: development
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_NAME: core
+      DB_USER: root
+      DB_PASSWORD: root
+    ports:
+      - "8000:8000/tcp"
+    restart: always
+    networks:
+      - stockscout
+    volumes:
+      - .:/app

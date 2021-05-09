@@ -1,0 +1,5 @@
+FROM node:15
+WORKDIR /app/frontend
+
+RUN yarn install
+CMD yarn serve
