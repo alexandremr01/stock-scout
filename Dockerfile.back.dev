@@ -1,5 +1,6 @@
 FROM python:3.7-buster
 WORKDIR /app
 
-RUN pip install django dj_database_url
+COPY requirements.txt .
+RUN pip install -r /app/requirements.txt
 CMD python manage.py runserver 0.0.0.0:8000
