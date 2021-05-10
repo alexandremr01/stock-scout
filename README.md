@@ -14,16 +14,4 @@ Now you can view the production Vue application at `127.0.0.1:8000`, and the dev
 
 # Deploy
 
-First, login in heroku with 
-
-```bash
-heroku login
-```
-
-Then, deploy to the remote with
-
-```bash
-git push heroku main
-```
-
-Production uses `Dockerfile.prod`.
+Deploy is automatic with pushes to main. Production uses `Dockerfile.prod`.

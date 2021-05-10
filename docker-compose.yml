@@ -29,6 +29,7 @@ services:
       DB_NAME: core
       DB_USER: root
       DB_PASSWORD: root
+      DATABASE_URL: postgres:///db
     ports:
       - "8080:8080/tcp"
     restart: always
