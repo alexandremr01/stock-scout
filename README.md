@@ -1,20 +1,29 @@
 # Stock Scout
 
-Next, change into the `frontend` directory, install the Node dependencies, build the Vue.js application, and run the Vue dev server. I use [Yarn](https://yarnpkg.com/en/):
+# Running in development
+
+Run in 3 different terminals.
 
 ```bash
-cd frontend
-yarn install
-yarn build
-yarn serve
+docker-compose up db
+docker-compose up front
+docker-compose up back
 ```
 
-Finally, run the Django development server in a different terminal:
+Now you can view the production Vue application at `127.0.0.1:8000`, and the development application at `localhost:8080`. 
+
+# Deploy
+
+First, login in heroku with 
 
 ```bash
-./manage.py runserver
+heroku login
 ```
 
-Now you can view the production Vue application at `127.0.0.1:8000`, and the development application at `localhost:8080`. Both will use the local Django instance as the API.
+Then, deploy to the remote with
 
-Thanks for visiting!
+```bash
+git push heroku main
+```
+
+Production uses `Dockerfile.prod`.
