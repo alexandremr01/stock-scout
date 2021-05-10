@@ -1,0 +1,9 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: stockscout
+build:
+  docker:
+    web: Dockerfile.prod
+release:
+  image: web
