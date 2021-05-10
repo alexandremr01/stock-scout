@@ -5,18 +5,10 @@ COPY ./frontend /app
 RUN yarn add @vue/cli@3.7.0
 RUN yarn install & yarn build
 
-FROM python:3.7-alpine3.12
+FROM python:3.7-slim
 WORKDIR /app
 COPY --from=builder /app /app/frontend
 COPY . /app
-
-RUN apk add --no-cache --virtual .build-deps \
-    gcc \
-    python3-dev \
-    musl-dev \
-    postgresql-dev \
-    && pip install --no-cache-dir psycopg2 \
-    && apk del --no-cache .build-deps
 
 RUN pip install -r /app/requirements.txt
 
