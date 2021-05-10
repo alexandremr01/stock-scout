@@ -11,6 +11,7 @@ COPY --from=builder /app /app/frontend
 COPY . /app
 
 RUN pip install -r /app/requirements.txt
+RUN pip install psycopg2-binary==2.8.6
 
 CMD python /app/manage.py runserver 0.0.0.0:$PORT
 
