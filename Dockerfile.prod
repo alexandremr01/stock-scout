@@ -10,6 +10,14 @@ WORKDIR /app
 COPY --from=builder /app /app/frontend
 COPY . /app
 
+RUN apk add --no-cache --virtual .build-deps \
+    gcc \
+    python3-dev \
+    musl-dev \
+    postgresql-dev \
+    && pip install --no-cache-dir psycopg2 \
+    && apk del --no-cache .build-deps
+
 RUN pip install -r /app/requirements.txt
 
 CMD python /app/manage.py runserver 0.0.0.0:$PORT
