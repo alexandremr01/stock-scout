@@ -9,7 +9,7 @@ def index(request):
 def simple_api_view(request):
     response = JsonResponse({
         'data': [
-            'You get an phrase from the API!',
+            'Deu certo!',
             'And you get a phrase from the API!',
             'And you get a phrase from the API!',
             'And you get a phrase from the API!',
