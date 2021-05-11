@@ -9,6 +9,8 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
+      POSTGRES_DB: core
+    command: [ "postgres", "-c", "log_statement=all" ]
     ports:
       - "5432:5432/tcp"
     restart: always
@@ -29,7 +31,6 @@ services:
       DB_NAME: core
       DB_USER: root
       DB_PASSWORD: root
-      DATABASE_URL: postgres:///db
     ports:
       - "8080:8080/tcp"
     restart: always
@@ -51,6 +52,7 @@ services:
       DB_NAME: core
       DB_USER: root
       DB_PASSWORD: root
+      DATABASE_URL: postgres://root:root@db:5432/core
     ports:
       - "8000:8000/tcp"
     restart: always

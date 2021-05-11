@@ -5,3 +5,8 @@ setup:
 build:
   docker:
     web: Dockerfile.prod
+
+release:
+  image: web
+  command:
+    - python manage.py migrate
