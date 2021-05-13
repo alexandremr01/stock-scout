@@ -9,5 +9,7 @@ router.register(r'heroes', views.WalletViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+    path('phrases/', views.PhraseView.as_view()),
+
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -14,13 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from backend.views import index, simple_api_view
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from rest_framework_jwt.blacklist.views import BlacklistView
 
 urlpatterns = [
     path('', index, name='index'),
     path('ssapi/', include('ssapi.urls')),
+    re_path(r'^auth/obtain_token/', obtain_jwt_token),
+    re_path(r'^auth/refresh_token/', refresh_jwt_token),
+    path("auth/logout/", BlacklistView.as_view({"post": "create"})),
 
     path('api/phrases/', simple_api_view, name='phrases'),
     path('admin/', admin.site.urls),
