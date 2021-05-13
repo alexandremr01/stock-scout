@@ -1,0 +1,22 @@
+// Your variable overrides
+
+$primary: #889399;
+$info: #47545d;
+$success: #5ea766;
+$warning: #db972e;
+$danger: #f44336;
+
+// pallete
+$pallete-main: #889399;
+$pallete-light-shades: #ecf2f2;
+$pallete-light-accent: #918B76;
+$pallete-dark-accent: #806865;
+$pallete-dark-shades: #47545D;
+
+$body-bg: $pallete-dark-shades;
+$body-color: $pallete-light-shades;
+
+  // Bootstrap and its default variables
+@import '../../node_modules/bootstrap/scss/bootstrap';
+// BootstrapVue and its default variables
+@import '../../node_modules/bootstrap-vue/src/index.scss';
