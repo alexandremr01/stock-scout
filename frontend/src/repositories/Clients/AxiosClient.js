@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const baseURL = "/api/";
+const baseURL = "";
 
 // ALL DEFUALT CONFIGURATION HERE
 
-export default axios.create({
+export default (token = "") => axios.create({
     baseURL,
     headers: {
-        // "Authorization": "Bearer xxxxx"
+        "Authorization": "Bearer " + token
     }
 });

@@ -22,11 +22,10 @@ from rest_framework_jwt.blacklist.views import BlacklistView
 
 urlpatterns = [
     path('', index, name='index'),
-    path('ssapi/', include('ssapi.urls')),
+    path('api/', include('ssapi.urls')),
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),
     path("auth/logout/", BlacklistView.as_view({"post": "create"})),
 
-    path('api/phrases/', simple_api_view, name='phrases'),
     path('admin/', admin.site.urls),
 ]

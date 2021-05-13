@@ -9,7 +9,7 @@
   <b-collapse id="nav-collapse" is-nav>
     <b-navbar-nav>
       <b-nav-item to="/">Home</b-nav-item>
-      <b-nav-item to="dashboard">Dashboard</b-nav-item>
+      <b-nav-item to="dashboard" v-if="isLoggedIn">Dashboard</b-nav-item>
       <b-nav-item to="about">About</b-nav-item>
     </b-navbar-nav>
 
@@ -23,13 +23,13 @@
         <b-dropdown-item href="#">FA</b-dropdown-item>
       </b-nav-item-dropdown>
 
-      <b-nav-item-dropdown right>
+      <b-nav-item-dropdown right  v-if="isLoggedIn">
         <!-- Using 'button-content' slot -->
         <template #button-content>
-          <em>User</em>
+          <em>{{ $store.state.user }}</em>
         </template>
         <b-dropdown-item href="#">Profile</b-dropdown-item>
-        <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+        <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
   </b-collapse>
@@ -40,5 +40,16 @@
 <script>
 export default {
   name: 'AppNavigation',
+  computed : {
+    isLoggedIn : function(){ return this.$store.getters.isLoggedIn},
+    username: 'Usuario'
+  },
+  methods: {
+    logout(){
+      this.$store.commit('removeToken');
+      this.$router.push('/join');
+    }
+  }
+
 };
 </script>

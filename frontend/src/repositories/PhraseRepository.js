@@ -1,20 +1,20 @@
 import Client from './Clients/AxiosClient';
-const resource = '/phrases';
+const resource = '/api/phrases';
 
 export default {
-    get() {
-        return Client.get(`${resource}`);
+    get(token) {
+        return Client(token).get(`${resource}`);
     },
-    getPost(id) {
-        return Client.get(`${resource}/${id}`);
+    getPost(id, token) {
+        return Client(token).get(`${resource}/${id}`);
     },
-    create(payload) {
-        return Client.post(`${resource}`, payload);
+    create(payload, token) {
+        return Client(token).post(`${resource}`, payload);
     },
-    update(payload, id) {
-        return Client.put(`${resource}/${id}`, payload);
+    update(payload, id, token) {
+        return Client(token).put(`${resource}/${id}`, payload);
     },
-    delete(id) {
-        return Client.delete(`${resource}/${id}`)
+    delete(id, token) {
+        return Client(token).delete(`${resource}/${id}`)
     },
 };
