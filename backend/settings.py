@@ -26,7 +26,7 @@ SECRET_KEY = '9tt=f*qnd&ky%&()0d9x=7pp0*xn*qn$pgje1zds=b&ph7m61+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['stock-scout.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['stock-scout.herokuapp.com', 'localhost', '0.0.0.0', 'back']
 
 
 # Application definition

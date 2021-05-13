@@ -1,5 +1,4 @@
 FROM node:15
 WORKDIR /app/frontend
-RUN yarn add @vue/cli@3.7.0
-RUN yarn install
-CMD yarn serve
+ENV NODE_ENV=development
+CMD yarn install && yarn run serve

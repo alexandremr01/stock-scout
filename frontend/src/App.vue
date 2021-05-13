@@ -8,13 +8,16 @@
     >
       {{ phrase }}
     </p>
-    <button type="button" @click="fetchPhrases">
-      Fetch Phrases
-    </button>
+    <button type="button" class="btn btn-primary" @click="fetchPhrases">Fetch Phrases</button>
+
   </div>
 </template>
 
 <script>
+import Repository from "./repositories/RepositoryFactory";
+const PhraseRepository = Repository.get("phrase");
+
+
 export default {
   name: 'app',
 
@@ -26,8 +29,8 @@ export default {
 
   methods: {
     async fetchPhrases() {
-      const response = await this.$http.get('/api/phrases/')
-      this.phrases_from_api = response.body.data
+      const response = await PhraseRepository.get();
+      this.phrases_from_api = response.data.data;
     }
   }
 
