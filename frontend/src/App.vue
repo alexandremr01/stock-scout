@@ -1,37 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <h1>Phrases from Django API:</h1>
-    <p
-      v-for="(phrase, index) in phrases_from_api"
-      :key="index"
-    >
-      {{ phrase }}
-    </p>
-    <button type="button" class="btn btn-primary" @click="fetchPhrases">Fetch Phrases</button>
-
+    <app-navigation></app-navigation>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Repository from "./repositories/RepositoryFactory";
-const PhraseRepository = Repository.get("phrase");
-
-
+import AppNavigation from "./components/AppNavigation";
 export default {
   name: 'app',
-
-  data: function() {
-    return {
-      phrases_from_api: [],
-    }
-  },
-
-  methods: {
-    async fetchPhrases() {
-      const response = await PhraseRepository.get();
-      this.phrases_from_api = response.data.data;
-    }
+  components: {
+    AppNavigation
   }
 
 }
@@ -44,6 +23,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
