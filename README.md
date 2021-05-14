@@ -10,8 +10,11 @@ docker-compose up front
 docker-compose up back
 ```
 
-Now you can view the production Vue application at `127.0.0.1:8000`, and the development application at `localhost:8080`. 
+Now you can view the django admin site at `0.0.0.0:8000/admin`, and the vue application at `localhost:8080`. 
 
 # Deploy
 
 Deploy is automatic with pushes to main. Production uses `Dockerfile.prod`.
+
+To view in production, access `https://stock-scout.herokuapp.com/`
+
