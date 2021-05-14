@@ -1,24 +1,29 @@
 <template>
   <div>
-    <h1>Login Page</h1>
+    <h1>Signup Page</h1>
 
     <b-form @submit="onSubmit" >
-      <b-form-group
-          id="input-group-1"
-          label="Email address:"
-          label-for="input-1"
-      >
+      <b-form-group id="input-group-1" label="Username:" label-for="input-1">
         <b-form-input
             id="input-1"
+            v-model="form.username"
+            placeholder="Enter username"
+            required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group id="input-group-2" label="Email address:" label-for="input-2">
+        <b-form-input
+            id="input-2"
             v-model="form.email"
             placeholder="Enter email"
             required
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Your Password:" label-for="input-2">
+      <b-form-group id="input-group-3" label="Your Password:" label-for="input-3">
         <b-form-input
-            id="input-2"
+            id="input-3"
             v-model="form.password"
             placeholder="Enter password"
             type="password"
@@ -30,20 +35,21 @@
         Usuário ou senha incorreto.
       </div>
 
-      <b-button type="submit" variant="primary" >Login</b-button>
+      <b-button type="submit" variant="primary" >Sign up</b-button>
     </b-form>
   </div>
 </template>
 <script>
 import Repository from "../repositories/RepositoryFactory";
 
-const TokenRepository = Repository.get("token");
+const RegisterRepository = Repository.get("register");
 
 export default {
-  name: 'Login',
+  name: 'Signup',
   data() {
     return {
       form: {
+        username: '',
         email: '',
         password: ''
       },
@@ -56,9 +62,8 @@ export default {
   methods: {
     async onSubmit(event) {
       event.preventDefault()
-      await TokenRepository.obtain(this.form.email, this.form.password)
+      RegisterRepository.register(this.form.username, this.form.email, this.form.password)
           .then( (response) => {
-            this.$store.commit('updateToken', response.data.token)
             this.$router.push('/');
         }).catch( (error) => {
             console.log(error)

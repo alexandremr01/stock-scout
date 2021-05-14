@@ -5,7 +5,7 @@
     <button type="button" class="btn btn-primary" @click="$router.push('login')">Login</button>
   </div>
   <div>
-    <button type="button" class="btn btn-secondary" @click="$router.push('sign-in')">Signin</button>
+    <button type="button" class="btn btn-secondary" @click="$router.push('sign-up')">Signup</button>
   </div>
   </div>
 </template>
