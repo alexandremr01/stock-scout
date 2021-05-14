@@ -1,17 +1,24 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from django.contrib.auth.models import User
+from rest_framework import viewsets, generics
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 from django.http import JsonResponse
 
-from .serializers import WalletSerializer
+from .serializers import WalletSerializer, UserSerializer
 from .models import Wallet
 
 
 class WalletViewSet(viewsets.ModelViewSet):
     queryset = Wallet.objects.all().order_by('name')
     serializer_class = WalletSerializer
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class PhraseView(APIView):
