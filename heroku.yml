@@ -9,4 +9,4 @@ build:
 release:
   image: web
   command:
-    - python manage.py migrate
+    - python /app/backend/manage.py migrate
