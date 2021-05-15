@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SsapiConfig(AppConfig):
+class WalletsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ssapi'
+    name = 'wallets'
