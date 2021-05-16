@@ -1,10 +1,10 @@
 from django.db import models
-from users.models import User
+from users.models import Profile
 
 # Create your models here.
 
 class Wallet(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
     created_at = models.DateField()
     def __str__(self):

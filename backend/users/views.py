@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework import permissions
 
-from .serializers import UserSerializer
+from .models import Profile
+from .serializers import ProfileSerializer
 
 
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
     permission_classes = (permissions.AllowAny,)
