@@ -23,7 +23,7 @@
       </b-form-group>
 
       <div v-if="incorrect">
-        Email ou senha incorreto.
+        Algo de errado aconteceu.
       </div>
 
       <b-button type="submit" variant="primary" >Sign up</b-button>
