@@ -5,15 +5,18 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=Profile.objects.all())]
-            )
     password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = Profile
-        fields = ['email', 'password']
+        fields = [
+            'email',
+            'password',
+            'cpf_number',
+            'first_name',
+            'last_name',
+            'phone_number'
+        ]
     
     def create(self, request):
         user = User.objects.create_user(
@@ -22,6 +25,13 @@ class ProfileSerializer(serializers.ModelSerializer):
             password=request['password']
         )
         user.save()
-        profile = Profile.objects.create(email=request['email'], user=user)
+        profile = Profile.objects.create(
+            email=request['email'],
+            cpf_number=request['cpf_number'],
+            first_name=request['first_name'],
+            last_name=request['last_name'],
+            phone_number=request['phone_number'],
+            user=user
+        )
         profile.save()
         return profile
