@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY ./frontend /app
 RUN yarn global add @vue/cli@3.7.0 sw-precache
-RUN yarn install & yarn build & yarn sw-precache --config sw-config.js & cp service-worker.js dist/service-worker.js
+RUN yarn install & yarn build & yarn sw-precache --config /app/frontend/sw-config.js & cp service-worker.js /app/frontend/dist/service-worker.js
 
 FROM python:3.7-slim
 WORKDIR /app
