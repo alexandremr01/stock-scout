@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-from backend.views import index, simple_api_view, TemplateView
+from backend.views import index, simple_api_view
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from rest_framework_jwt.blacklist.views import BlacklistView
 
