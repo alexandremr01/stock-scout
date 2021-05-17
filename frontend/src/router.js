@@ -48,6 +48,11 @@ const router = new Router({
             name: 'join',
             component: () => import('./views/Join.vue')
         },
+        {
+            path: '*',
+            name: 'not-found',
+            component: () => import('./views/NotFound.vue')
+        },
     ]
 });
 router.beforeEach((to, from, next) => {
