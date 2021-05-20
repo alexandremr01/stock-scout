@@ -11,6 +11,7 @@ COPY --from=builder /app /app/frontend
 COPY ./backend /app/backend
 
 RUN pip install -r /app/backend/requirements.txt
+RUN python /app/backend/manage.py collectstatic
 
 CMD python /app/backend/manage.py runserver 0.0.0.0:$PORT
 

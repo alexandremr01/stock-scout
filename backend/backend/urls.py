@@ -25,8 +25,6 @@ urlpatterns = [
     path('', index, name='index'),
     path('api/', include('wallets.urls')),
     path('api/', include('users.urls')),
-    path('service-worker.js', (TemplateView.as_view(template_name="service-worker.js", content_type='application/javascript', )), name='sw.js'),
-    path('manifest.json', (TemplateView.as_view(template_name="manifest.json", content_type='application/json', )), name='manifest.json'),
 
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),
