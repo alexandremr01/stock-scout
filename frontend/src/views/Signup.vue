@@ -105,9 +105,11 @@ export default {
       event.preventDefault()
       RegisterRepository.register(this.form)
           .then( () => {
-            this.$router.push('/');
+            this.$router.push('/join');
         }).catch( (error) => {
-            console.log(error)
+            if (error.response.data.email[0] == "This field must be unique.") {
+              console.log("email already exists");
+            }
             this.incorrect = true;
         });
     }

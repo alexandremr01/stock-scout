@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+            required=True,
+            validators=[UniqueValidator(queryset=Profile.objects.all())]
+            )
     password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
