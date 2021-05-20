@@ -107,8 +107,12 @@ export default {
           .then( () => {
             this.$router.push('/join');
         }).catch( (error) => {
-            if (error.response.data.email[0] == "This field must be unique.") {
-              console.log("email already exists");
+            if (error.response.hasOwnProperty('data')) {
+              if (error.response.data.hasOwnProperty('email')) {
+                console.log(error.response.data.email[0])
+              }
+            } else {
+              console.log('something went wrong')
             }
             this.incorrect = true;
         });
