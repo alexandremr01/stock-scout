@@ -33,6 +33,7 @@ module.exports = {
         msTileImage: 'img/icons/icon.png'
       },
     manifestOptions: {
+      start_url: '/index.html',
       icons: [
         {
           src: '/static/img/icons/icon.png',
