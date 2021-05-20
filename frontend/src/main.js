@@ -6,6 +6,7 @@ import router from './router';
 import store from './store';
 import i18n from '@/plugins/i18n';
 import FlagIcon from 'vue-flag-icon';
+import './registerServiceWorker'
 
 Vue.use(FlagIcon);
 // Make BootstrapVue available throughout your project
@@ -16,14 +17,6 @@ Vue.use(IconsPlugin)
 Vue.use(VueResource)
 
 Vue.config.productionTip = false
-
-const prod = process.env.NODE_ENV === 'production'
-const shouldSW = 'serviceWorker' in navigator && prod
-if (shouldSW) {
-  navigator.serviceWorker.register('/service-worker.js').then(() => {
-    console.log("Service Worker Registered!")
-  })
-}
 
 new Vue({
   i18n,

@@ -19,11 +19,13 @@ from django.urls import path, include, re_path
 from backend.views import index, simple_api_view
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from rest_framework_jwt.blacklist.views import BlacklistView
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', index, name='index'),
     path('api/', include('wallets.urls')),
     path('api/', include('users.urls')),
+    path('service-worker.js', (TemplateView.as_view(template_name="service-worker.js", content_type='application/javascript', )), name='sw.js'),
 
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),
