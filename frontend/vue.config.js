@@ -14,6 +14,7 @@ module.exports = {
   pwa: {
     name: 'Stock Scout',
     scope: '/',
+    start_url: '/',
     themeColor: '#889399',
     msTileColor: '#47545D',
     appleMobileWebAppCapable: 'yes',
