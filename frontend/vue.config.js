@@ -14,7 +14,7 @@ module.exports = {
   pwa: {
     name: 'Stock Scout',
     scope: '/',
-    start_url: '/',
+    start_url: 'index.html',
     themeColor: '#889399',
     msTileColor: '#47545D',
     appleMobileWebAppCapable: 'yes',
@@ -23,9 +23,7 @@ module.exports = {
     sw: 'static/service-worker.js',
 
     workboxOptions: {
-      modifyUrlPrefix: {
-        '/': 'static/'
-      }
+      navigateFallback: '/index.html',
     },
     iconPaths: {
         favicon32: 'img/icons/icon.png',
