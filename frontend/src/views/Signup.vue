@@ -12,45 +12,36 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="CPF:" label-for="input-2">
+      <b-form-group id="input-group-2" label="First name:" label-for="input-2">
         <b-form-input
             id="input-2"
-            v-model="form.cpf"
-            placeholder="Enter CPF"
-            required
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group id="input-group-3" label="First name:" label-for="input-3">
-        <b-form-input
-            id="input-3"
             v-model="form.firstName"
             placeholder="Enter first name"
             required
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-4" label="Last name:" label-for="input-4">
+      <b-form-group id="input-group-3" label="Last name:" label-for="input-3">
         <b-form-input
-            id="input-4"
+            id="input-3"
             v-model="form.lastName"
             placeholder="Enter last name"
             required
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-5" label="Phone number:" label-for="input-5">
+      <b-form-group id="input-group-4" label="Phone number:" label-for="input-4">
         <b-form-input
-            id="input-5"
+            id="input-4"
             v-model="form.phoneNumber"
             placeholder="Enter phone number"
             required
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-6" label="Your Password:" label-for="input-6">
+      <b-form-group id="input-group-5" label="Your Password:" label-for="input-5">
         <b-form-input
-            id="input-6"
+            id="input-5"
             v-model="form.password"
             placeholder="Enter password"
             type="password"
@@ -58,9 +49,9 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-7" label="Confirm password:" label-for="input-7">
+      <b-form-group id="input-group-6" label="Confirm password:" label-for="input-6">
         <b-form-input
-            id="input-7"
+            id="input-6"
             v-model="form.confirmPassword"
             placeholder="Confirm password"
             type="password"
@@ -87,7 +78,6 @@ export default {
     return {
       form: {
         email: '',
-        cpf: '',
         firstName: '',
         lastName: '',
         phoneNumber: '',

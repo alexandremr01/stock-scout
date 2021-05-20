@@ -16,7 +16,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = [
             'email',
             'password',
-            'cpf_number',
             'first_name',
             'last_name',
             'phone_number'
@@ -31,7 +30,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         user.save()
         profile = Profile.objects.create(
             email=request['email'],
-            cpf_number=request['cpf_number'],
             first_name=request['first_name'],
             last_name=request['last_name'],
             phone_number=request['phone_number'],
