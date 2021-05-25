@@ -8,8 +8,9 @@
 
   <b-collapse id="nav-collapse" is-nav>
     <b-navbar-nav>
-      <b-nav-item to="/">Home</b-nav-item>
+      <b-nav-item to="home">Home</b-nav-item>
       <b-nav-item to="dashboard" v-if="isLoggedIn">Dashboard</b-nav-item>
+      <b-nav-item to="simulations">Simulations</b-nav-item>
       <b-nav-item to="about">About</b-nav-item>
     </b-navbar-nav>
 
@@ -61,7 +62,7 @@ export default {
   methods: {
     logout(){
       this.$store.commit('removeToken');
-      this.$router.push('/join');
+      this.$router.push('/');
     },
     changeLocale(locale) {
       i18n.locale = locale.language;

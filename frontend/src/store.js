@@ -12,8 +12,7 @@ export default new Vuex.Store({
         updateToken(state, newToken){
             localStorage.setItem('t', newToken);
             state.token = newToken;
-
-            console.log(jwt_decode(newToken).username)
+            state.user = jwt_decode(newToken).username
         },
         removeToken(state){
             localStorage.removeItem('t');

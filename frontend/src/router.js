@@ -10,12 +10,17 @@ const router = new Router({
     base: '',
     routes: [
         {
-            path: '/',
+            path: '/home',
             name: 'home',
             component: Home,
             meta: {
                 authRequired: true
             }
+        },
+        {
+            path: '/simulations',
+            name: 'simulation',
+            component: () => import('./views/Simulations.vue'),
         },
         {
             path: '/about',
@@ -44,7 +49,7 @@ const router = new Router({
             component: () => import('./views/Signup.vue')
         },
         {
-            path: '/join',
+            path: '/',
             name: 'join',
             component: () => import('./views/Join.vue')
         },
@@ -59,7 +64,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.authRequired)) {
         if (!store.getters.isLoggedIn) {
             next({
-                path: '/join'
+                path: '/'
             });
         } else {
             next();

@@ -31,6 +31,7 @@
       </div>
 
       <b-button type="submit" variant="primary" >Login</b-button>
+      <b-button @click="$router.push('/')" variant="primary" >{{ $t('back') }}</b-button>
     </b-form>
   </div>
 </template>
