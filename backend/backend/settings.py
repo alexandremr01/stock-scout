@@ -129,7 +129,7 @@ FRONTEND_DIR = os.path.join(BASE_DIR, '../frontend')
 
 # Vue assets directory (assetsDir)
 STATICFILES_DIRS = [
-    os.path.join(FRONTEND_DIR, 'dist'),
+    os.path.join(FRONTEND_DIR, 'dist/static'),
 ]
 
 # Webpack output location containing Vue index.html file (outputDir)
