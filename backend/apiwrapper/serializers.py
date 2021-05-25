@@ -18,4 +18,4 @@ def alphav_to_ss(alphav_data, freq):
         }
         ss_arr.append(ss_dict)
     
-    return json.loads(json.dumps(ss_arr))
+    return json.dumps(ss_arr)

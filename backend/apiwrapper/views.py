@@ -22,7 +22,7 @@ class StockDetail(APIView):
         freq = request.query_params.get('freq')
         filter1 = StockTimeSeries.objects.filter(ticker=symbol)
         if filter1.exists():
-            filter2 = StockTimeSeries.objects.filter(frequency=freq)
+            filter2 = filter1.filter(frequency=freq)
             if filter2.exists():
                 time_series = filter2[0]
                 refresh = {'DAY': 1, 'WEEK': 7, 'MONTH': 30}
