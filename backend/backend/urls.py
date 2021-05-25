@@ -25,6 +25,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('api/', include('wallets.urls')),
     path('api/', include('users.urls')),
+    path('api/', include('apiwrapper.urls')),
 
     re_path(r'^auth/obtain_token/', obtain_jwt_token),
     re_path(r'^auth/refresh_token/', refresh_jwt_token),

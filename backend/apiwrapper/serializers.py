@@ -10,7 +10,7 @@ def alphav_to_ss(alphav_data, freq):
 
     ss_arr = []
     time_series = alphav_data[alphav[freq]]
-    for key, value in time_series:
+    for key, value in time_series.items():
         ss_dict = {
             'Date': key,
             'open': value['1. open'],
@@ -18,4 +18,4 @@ def alphav_to_ss(alphav_data, freq):
         }
         ss_arr.append(ss_dict)
     
-    return json.dumps(ss_arr)
+    return json.loads(json.dumps(ss_arr))

@@ -13,5 +13,5 @@ def alpha_vantage_client(sym, freq):
         'MONTH': 'TIME_SERIES_MONTHLY_ADJUSTED'
     }
 
-    response = requests.get(f'{ALPHAV_BASE_URL}?function={alphav[freq]}&symbol={sym}&apikey={ALPHAV_API_KEY}')
+    response = requests.get(f'{ALPHAV_BASE_URL}function={alphav[freq]}&symbol={sym}&apikey={ALPHAV_API_KEY}')
     return response.json()
