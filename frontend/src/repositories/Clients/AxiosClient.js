@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseURL = "";
 
-// ALL DEFUALT CONFIGURATION HERE
+// ALL DEFAULT CONFIGURATION HERE
 
 export default (token = "") => axios.create({
     baseURL,
