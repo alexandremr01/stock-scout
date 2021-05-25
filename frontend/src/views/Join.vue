@@ -14,7 +14,7 @@
         <b-button variant="secondary" @click="$router.push('sign-up')">{{ $t('signup') }}</b-button>
       </b-col>
       <b-col>
-        <b-button variant="secondary" @click="$router.push('home')">{{ $t('guest') }}</b-button>
+        <b-button variant="secondary" @click="$router.push('dashboard')">{{ $t('guest') }}</b-button>
       </b-col>
     </b-row>
   </div>
