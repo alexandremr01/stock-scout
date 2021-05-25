@@ -12,6 +12,7 @@ class StockTimeSeries(models.Model):
             ('MONTH', 'Monthly')
         ]
     )
+    last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Stocks time series"
