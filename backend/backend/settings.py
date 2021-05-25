@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'wallets.apps.WalletsConfig',
+    'apiwrapper.apps.ApiwrapperConfig',
     'rest_framework',
     'rest_framework_jwt',
     'rest_framework_jwt.blacklist',
