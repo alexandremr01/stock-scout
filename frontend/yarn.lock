@@ -905,6 +905,13 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/chart.js@^2.7.55":
+  version "2.9.32"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.32.tgz#b17d9a8c41ad348183a2ce041ebdeef892998251"
+  integrity sha512-d45JiRQwEOlZiKwukjqmqpbqbYzUX2yrXdH9qVn6kXpPDsTYCo6YbfFOlnUaJ8S/DhJwbBJiLsMjKpW5oP8B2A==
+  dependencies:
+    moment "^2.10.2"
+
 "@types/connect@*":
   version "3.4.34"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.34.tgz#170a40223a6d666006d93ca128af2beb1d9b1901"
@@ -2938,6 +2945,11 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
+
+chart.js@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.3.2.tgz#667f3a0b6371b9719d8949c04a5bcbaec0d8c615"
+  integrity sha512-H0hSO7xqTIrwxoACqnSoNromEMfXvfuVnrbuSt2TuXfBDDofbnto4zuZlRtRvC73/b37q3wGAWZyUU41QPvNbA==
 
 check-types@^8.0.3:
   version "8.0.3"
@@ -7426,6 +7438,11 @@ mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.0, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.10.2:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -11029,6 +11046,13 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
+
+vue-chartjs@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-3.5.1.tgz#d25e845708f7744ae51bed9d23a975f5f8fc6529"
+  integrity sha512-foocQbJ7FtveICxb4EV5QuVpo6d8CmZFmAopBppDIGKY+esJV8IJgwmEW0RexQhxqXaL/E1xNURsgFFYyKzS/g==
+  dependencies:
+    "@types/chart.js" "^2.7.55"
 
 vue-cli-plugin-apollo@^0.20.0:
   version "0.20.0"
