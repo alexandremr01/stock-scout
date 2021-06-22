@@ -1,8 +1,7 @@
 <script>
-import {Line} from 'vue-chartjs'
+import VueApexCharts from 'vue-apexcharts'
 
-export default {
-    extends: Line,
+export default {    
     props: {
         label: {
             type: String
@@ -20,15 +19,25 @@ export default {
 
         console.log(price);
 
-        this.renderChart(
-        {
-            labels: date,
-            datasets: [{
-                label: this.label,
-                chart_data: price,
-            }]
-        },
-        this.options)
+        var chart = new Vue({
+            el: '#appl',
+            data: function() {
+                return {
+                    options: {
+                        chart: {
+                            id: 'example'
+                        },
+                        xaxis: {
+                            date: date
+                        }
+                    },
+                    series: [{
+                        name: 'example',
+                        data: price,
+                    }]
+                }
+            }
+        })
     }
 }
 </script>
