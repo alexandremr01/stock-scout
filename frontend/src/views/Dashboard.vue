@@ -1,6 +1,6 @@
 <template>
   <div id="Dashboard">
-    <apexcharts ref="Chart" :options="chartOptions" :series="series"></apexcharts>
+    <apexcharts ref="Chart" width="70%" type="line" :options="chartOptions" :series="series"></apexcharts>
   </div>
 </template>
 
@@ -19,13 +19,31 @@ export default {
     return {
       chartOptions: {
         chart: {
-          width: "100%",
-          height: "20%",
-          type: "line"
+          toolbar: {
+            show: false
+          }
         },
+        colors: ['#cc5d18'], // @todo
         xaxis: {
-          categories: []
-        }
+          categories: [],
+          type: 'datetime',
+          labels: {
+            format: 'dd MMM'
+          }
+        },
+        yaxis: {
+          decimalsInFloat: 2,
+          title: {
+            text: 'Price ($)'
+          }
+        },
+        stroke: {
+          curve: 'smooth',
+          width: 3
+        },
+        theme: {
+          mode: 'light',
+        },
       },
       series: [{
         data: []
@@ -41,7 +59,7 @@ export default {
     var opening_price_array = [];
     
     data.forEach(data_element => {
-      const date = moment(data_element.Date, "YYYYMMDD").format("DD/MM");
+      const date = data_element.Date // moment(data_element.Date, "YYYYMMDD").format("DD/MM");
       const opening = data_element.open;
       
       date_array.push(date);
