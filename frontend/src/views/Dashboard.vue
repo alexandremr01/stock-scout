@@ -6,7 +6,6 @@
 
 <script>
 import axios from 'axios'
-import moment from 'moment'
 
 import VueApexCharts from 'vue-apexcharts'
 
@@ -59,7 +58,7 @@ export default {
     var opening_price_array = [];
     
     data.forEach(data_element => {
-      const date = data_element.Date // moment(data_element.Date, "YYYYMMDD").format("DD/MM");
+      const date = data_element.Date
       const opening = data_element.open;
       
       date_array.push(date);
