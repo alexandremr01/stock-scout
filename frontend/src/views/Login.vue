@@ -30,8 +30,8 @@
       <div v-if="incorrect">
         Usuário ou senha incorreto.
       </div>
-
       <b-button type="submit" variant="success" class="largura-botao">Login</b-button>
+      <b-button @click="$router.push('/')" variant="success" class="largura-botao">{{ $t('back') }}</b-button>
     </b-form>
   </div>
 </template>

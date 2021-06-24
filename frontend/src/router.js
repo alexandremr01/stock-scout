@@ -7,15 +7,20 @@ Vue.use(Router);
 
 const router = new Router({
     mode: 'history',
-    // base: process.env.BASE_URL,
+    base: '',
     routes: [
         {
-            path: '/',
+            path: '/home',
             name: 'home',
             component: Home,
             meta: {
                 authRequired: true
             }
+        },
+        {
+            path: '/simulations',
+            name: 'simulation',
+            component: () => import('./views/Simulations.vue'),
         },
         {
             path: '/about',
@@ -28,10 +33,7 @@ const router = new Router({
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: () => import('./views/Dashboard.vue'),
-            meta: {
-                authRequired: true
-            }
+            component: () => import('./views/Dashboard.vue')
         },
         {
             path: '/login',
@@ -44,9 +46,14 @@ const router = new Router({
             component: () => import('./views/Signup.vue')
         },
         {
-            path: '/join',
+            path: '/',
             name: 'join',
             component: () => import('./views/Join.vue')
+        },
+        {
+            path: '*',
+            name: 'not-found',
+            component: () => import('./views/NotFound.vue')
         },
     ]
 });
@@ -54,7 +61,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.authRequired)) {
         if (!store.getters.isLoggedIn) {
             next({
-                path: '/join'
+                path: '/'
             });
         } else {
             next();

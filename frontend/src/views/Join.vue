@@ -1,21 +1,42 @@
 <template>
   <div>
-      <h1>Join! (logo bodosa)</h1>
-  <div>
-    <button type="button" class="btn btn-primary" @click="$router.push('login')">Login</button>
-  </div>
-  <div>
-    <button type="button" class="btn btn-secondary" @click="$router.push('sign-up')">Signup</button>
-  </div>
+    <div>
+      <h1>{{ $t('join') }}</h1>
+      <img :src="backgroundImage" class="icon"/>
+
+    </div>
+
+    <b-row>
+      <b-col>
+        <b-button variant="primary" @click="$router.push('login')">{{ $t('login') }}</b-button>
+      </b-col>
+      <b-col>
+        <b-button variant="secondary" @click="$router.push('sign-up')">{{ $t('signup') }}</b-button>
+      </b-col>
+      <b-col>
+        <b-button variant="secondary" @click="$router.push('dashboard')">{{ $t('guest') }}</b-button>
+      </b-col>
+    </b-row>
   </div>
 </template>
 <script>
+
 export default {
   name: 'Join',
-  mounted(){
-
+  mounted() {
+    if (this.$store.getters.isLoggedIn)
+      this.$router.push('/home')
+  },
+  data(){
+    return {
+      backgroundImage: require('../assets/S.svg')
+    }
   }
+
 };
 </script>
-<style scoped>
+<style >
+.icon {
+  width: 100%;
+}
 </style>

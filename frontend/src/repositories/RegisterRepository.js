@@ -6,7 +6,6 @@ export default {
         var payload = {
             "email": profile.email,
             "password": profile.password,
-            "cpf_number": profile.cpf,
             "first_name": profile.firstName,
             "last_name": profile.lastName,
             "phone_number": profile.phoneNumber
