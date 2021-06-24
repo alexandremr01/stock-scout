@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <h1>Login Page</h1>
+  <div class="bloco bg-primary">
+    <h1>Login</h1>
 
-    <b-form @submit="onSubmit" >
-      <b-form-group
+    <b-form @submit="onSubmit" class="bloco-input">
+      <b-form-group class="align-label"
           id="input-group-1"
           label="Email address:"
           label-for="input-1"
       >
-        <b-form-input
+        <b-form-input 
             id="input-1"
             v-model="form.email"
             placeholder="Enter email"
@@ -16,7 +16,8 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Your Password:" label-for="input-2">
+      <b-form-group class="align-label"
+          id="input-group-2" label="Your Password:" label-for="input-2">
         <b-form-input
             id="input-2"
             v-model="form.password"
@@ -30,7 +31,7 @@
         Usuário ou senha incorreto.
       </div>
 
-      <b-button type="submit" variant="primary" >Login</b-button>
+      <b-button type="submit" variant="success" class="largura-botao">Login</b-button>
     </b-form>
   </div>
 </template>
@@ -69,4 +70,27 @@ export default {
 };
 </script>
 <style scoped>
+
+.bloco {
+  width: 500px;
+  height: 100%;
+  border-radius: 20px;
+  margin: 100px auto;
+  padding: 20px;
+}
+
+.bloco-imput {
+  width: 70%;
+  margin: 20px auto;
+}
+
+.align-label{
+  text-align: left;
+  padding-bottom: 30px;
+}
+
+.largura-botao {
+  width: 150px;
+}
+
 </style>
