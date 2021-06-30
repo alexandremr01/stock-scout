@@ -50,7 +50,7 @@ export default {
     };
   },
   async created() {
-    var { data } = await axios.get("http://localhost:8080/api/stocks/?symbol=NDAQ&freq=DAY");
+    var { data } = await axios.get("/api/stocks/?symbol=NDAQ&freq=DAY");
     
     data = JSON.parse(data);
     
