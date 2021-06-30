@@ -1,8 +1,50 @@
 <template>
   <div id="Dashboard">
-    <apexcharts ref="Chart" width="70%" type="line" :options="chartOptions" :series="series"></apexcharts>
+    
+      <input type="text" oninput="refresh" v-model="searchText" placeholder="search" class="searchText"/>
+
+      <b-button variant="success" class="addStock">Add</b-button>
+
+      <b-button-group class="optionsMenu">
+        <b-button :pressed=true>Daily</b-button>
+        <b-button>Weekly</b-button>
+        <b-button>Monthly</b-button>
+      </b-button-group>
+
+      <div class="Chart">
+        <apexcharts ref="Chart" width="80%" type="line" :options="chartOptions" :series="series" class="Chart"></apexcharts>
+      </div>
+  
   </div>
 </template>
+
+<style>
+  .searchText {
+    display: inline-block;
+    position: absolute;
+    top: 15%;
+    left: 80%;
+  }
+  .addStock {
+    display: inline-block;
+    position: absolute;
+    top: 15%;
+    left: 70%;
+  }
+  .Chart {
+    display: inline-block;
+    position: absolute;
+    top: 25%;
+    left: 3%;
+    width: 80%;
+  }
+  .optionsMenu {
+    display: inline-block;
+    position: absolute;
+    top: 15%;
+    left: 25%;
+  }
+</style>
 
 <script>
 import axios from 'axios'
@@ -16,6 +58,7 @@ export default {
   },
   data: function() {
     return {
+      searchText: '',
       chartOptions: {
         chart: {
           toolbar: {
@@ -50,8 +93,8 @@ export default {
     };
   },
   async created() {
-    var { data } = await axios.get("/api/stocks/?symbol=NDAQ&freq=DAY");
-    
+    var { data } = await axios.get("/api/stocks/?symbol=TSLA&freq=DAY");
+
     data = JSON.parse(data);
     
     var date_array = [];
