@@ -1,27 +1,45 @@
 <template>
   <div id="Dashboard">
-    
-      <input type="text" v-on:keyup.enter="searchStock" v-model="stockSymbol" placeholder="search" class="searchText"/>
 
-      <b-button variant="success" class="buyStock">Buy</b-button>
+      <b-input-group size="sm" class="mt-4" style="width: 15%; left: 80%;">
+        <b-input-group-prepend is-text>
+          <b-icon icon="search"></b-icon>
+        </b-input-group-prepend>
+        <b-form-input type="text" v-on:keyup.enter="searchStock" v-model="searchText" placeholder="search"></b-form-input>
+      </b-input-group>
 
-      <b-button variant="danger" class="sellStock">Sell</b-button>
+      <b-button variant="success" class="buyStock" size="sm">
+        <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon>
+      </b-button>
 
-      <b-dropdown text="Visualization" variant="primary" class="visualizationMenu" size="sm">
-        <b-dropdown-item href="#">Line</b-dropdown-item>
-        <b-dropdown-item href="#">Candlestick</b-dropdown-item>
+      <b-button variant="danger" class="sellStock" size="sm">
+        <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>
+      </b-button>
+
+      <b-dropdown class="visualizationMenu" size="sm" variant="primary">
+        <template #button-content>
+          <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon> Visualization
+        </template>
+        <b-dropdown-item-button>
+          <b-icon icon="graph-up" aria-hidden="true"></b-icon>
+          Line
+        </b-dropdown-item-button>
+        <b-dropdown-item-button>
+          <b-icon icon="align-middle" aria-hidden="true"></b-icon>
+          Candlestick
+        </b-dropdown-item-button>
       </b-dropdown>
 
-      <b-button-group class="stockFreqOptions" size="sm">
+      <b-button-group class="stockFrequencyOptions" size="sm">
         <b-button
-          v-for="(btn, idx) in stockFreqOptions.buttons"
+          v-for="(btn, idx) in stockFrequencyOptions.buttons"
           :key="idx"
           :pressed.sync="btn.state"
           variant="primary"
-          @click="stockFreqOnPress(idx)"
-          class = "stockFreqOptionsButton"
+          @click="stockFrequencyOnPress(idx)"
+          class = "stockFrequencyOptionsButton"
         >
-        {{ btn.caption }}
+        <b-icon :icon=btn.icon></b-icon>&nbsp;{{ btn.caption }}
         </b-button>
       </b-button-group>
 
@@ -33,50 +51,40 @@
 </template>
 
 <style>
-  .searchText {
-    display: inline-block;
-    position: absolute;
-    top: 15%;
-    left: 80%;
-    font-size: 80%;
-    border: none;
-    background-color: white;
-    outline: none;
-  }
   .buyStock {
     display: inline-block;
     position: absolute;
-    top: 15%;
-    left: 70%;
+    top: 85%;
+    left: 47%;
     box-shadow: none !important;
   }
   .sellStock {
     display: inline-block;
     position: absolute;
-    top: 30%;
-    left: 70%;
+    top: 85%;
+    left: 52%;
     box-shadow: none !important;
   }
   .Chart {
     display: inline-block;
     position: absolute;
-    top: 25%;
+    top: 15%;
     left: 3%;
     width: 80%;
   }
-  .stockFreqOptions {
+  .stockFrequencyOptions {
     display: inline-block;
     position: absolute;
-    top: 15%;
-    left: 25%;
+    top: 85%;
+    left: 24%;
   }
-  .stockFreqOptionsButton {
+  .stockFrequencyOptionsButton {
     box-shadow: none !important;
   }
   .visualizationMenu {
     display: inline-block;
     position: absolute;
-    top: 15%;
+    top: 85%;
     left: 10%;
     box-shadow: none !important;
   }
@@ -94,13 +102,14 @@ export default {
   },
   data: function() {
     return {
-      stockSymbol: '',
-      stockFreq: '',
-      stockFreqOptions: {
+      stockSymbol: 'TSLA', // initial value
+      stockFrequency: 'DAY', // initial value
+      searchText: '',
+      stockFrequencyOptions: {
         buttons: [
-          { caption: 'Daily', state: true},
-          { caption: 'Weekly', state: false},
-          { caption: 'Monthly', state: false}
+          { caption: 'Daily', state: true, frequency: 'DAY', icon: 'calendar3-event'},
+          { caption: 'Weekly', state: false, frequency: 'WEEK', icon: 'calendar3-week'},
+          { caption: 'Monthly', state: false, frequency: 'MONTH', icon: 'calendar3'}
         ]
       },
       chartOptions: {
@@ -118,7 +127,7 @@ export default {
           }
         },
         yaxis: {
-          decimalsInFloat: 2,
+          decimalsInFloat: 0,
           title: {
             text: 'Price (USD)'
           }
@@ -137,8 +146,8 @@ export default {
     };
   },
   methods: {
-    renderChart: async function(stockSymbol, stockFreq) {
-      var { data } = await axios.get('/api/stocks/?symbol=' + stockSymbol + '&freq=' + stockFreq);
+    renderChart: async function(stockSymbol, stockFrequency) {
+      var { data } = await axios.get('/api/stocks/?symbol=' + stockSymbol + '&freq=' + stockFrequency);
 
       data = JSON.parse(data);
     
@@ -164,18 +173,21 @@ export default {
         }
       })
     },
-    updateChart: function() {
-      return;
+    changeChartFrequency: function(stockFrequency) {
+      return this.renderChart(this.stockSymbol, stockFrequency);
     },
     searchStock: function() {
-      return this.renderChart(this.stockSymbol, 'DAY');
+      this.stockSymbol = this.searchText.toUpperCase();
+      return this.renderChart(this.stockSymbol, this.stockFrequency);
     },
-    stockFreqOnPress(i) {
-      this.stockFreqOptions.buttons.forEach((btn, index) => btn.state = i === index);
+    stockFrequencyOnPress(i) {
+      this.stockFrequencyOptions.buttons.forEach((btn, index) => btn.state = i === index);
+      this.stockFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.changeChartFrequency(btn.frequency) : null);
+      this.stockFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.stockFrequency = btn.frequency : null);
     }
   },
   beforeMount() {
-    this.renderChart('TSLA', 'DAY'); // Initialization config
+    this.renderChart(this.stockSymbol, this.stockFrequency);
   }
 };
 </script>
