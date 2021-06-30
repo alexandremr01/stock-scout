@@ -10,7 +10,7 @@ docker-compose up front
 docker-compose up back
 ```
 
-Now you can view the django admin site at `0.0.0.0:8000/admin`, and the vue application at `localhost:8080`. 
+Now you can view the django admin site at `0.0.0.0:8000/admin/`, and the vue application at `localhost:8080`. 
 
 # Deploy
 
