@@ -14,7 +14,9 @@ def alphav_to_ss(alphav_data, freq):
         ss_dict = {
             'Date': key,
             'open': value['1. open'],
-            'close': value['4. close']
+            'close': value['4. close'],
+            'high': value['2. high'],
+            'low': value['3. low']
         }
         ss_arr.append(ss_dict)
     
