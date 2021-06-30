@@ -1,5 +1,13 @@
 import json
 
+from rest_framework import serializers
+from .models import CoinQuotation
+
+class CoinQuotationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoinQuotation
+        fields = ['buy', 'sell', 'variation']
+
 # json to json
 def alphav_to_ss(alphav_data, freq):
     alphav = {
