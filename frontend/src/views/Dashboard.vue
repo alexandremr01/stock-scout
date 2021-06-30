@@ -1,14 +1,28 @@
 <template>
   <div id="Dashboard">
     
-      <input type="text" oninput="refresh" v-model="searchText" placeholder="search" class="searchText"/>
+      <input type="text" v-on:keyup.enter="searchStock" v-model="stockSymbol" placeholder="search" class="searchText"/>
 
-      <b-button variant="success" class="addStock">Add</b-button>
+      <b-button variant="success" class="buyStock">Buy</b-button>
 
-      <b-button-group class="optionsMenu">
-        <b-button :pressed=true>Daily</b-button>
-        <b-button>Weekly</b-button>
-        <b-button>Monthly</b-button>
+      <b-button variant="danger" class="sellStock">Sell</b-button>
+
+      <b-dropdown text="Visualization" variant="primary" class="visualizationMenu" size="sm">
+        <b-dropdown-item href="#">Line</b-dropdown-item>
+        <b-dropdown-item href="#">Candlestick</b-dropdown-item>
+      </b-dropdown>
+
+      <b-button-group class="stockFreqOptions" size="sm">
+        <b-button
+          v-for="(btn, idx) in stockFreqOptions.buttons"
+          :key="idx"
+          :pressed.sync="btn.state"
+          variant="primary"
+          @click="stockFreqOnPress(idx)"
+          class = "stockFreqOptionsButton"
+        >
+        {{ btn.caption }}
+        </b-button>
       </b-button-group>
 
       <div class="Chart">
@@ -24,12 +38,24 @@
     position: absolute;
     top: 15%;
     left: 80%;
+    font-size: 80%;
+    border: none;
+    background-color: white;
+    outline: none;
   }
-  .addStock {
+  .buyStock {
     display: inline-block;
     position: absolute;
     top: 15%;
     left: 70%;
+    box-shadow: none !important;
+  }
+  .sellStock {
+    display: inline-block;
+    position: absolute;
+    top: 30%;
+    left: 70%;
+    box-shadow: none !important;
   }
   .Chart {
     display: inline-block;
@@ -38,11 +64,21 @@
     left: 3%;
     width: 80%;
   }
-  .optionsMenu {
+  .stockFreqOptions {
     display: inline-block;
     position: absolute;
     top: 15%;
     left: 25%;
+  }
+  .stockFreqOptionsButton {
+    box-shadow: none !important;
+  }
+  .visualizationMenu {
+    display: inline-block;
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    box-shadow: none !important;
   }
 </style>
 
@@ -58,7 +94,15 @@ export default {
   },
   data: function() {
     return {
-      searchText: '',
+      stockSymbol: '',
+      stockFreq: '',
+      stockFreqOptions: {
+        buttons: [
+          { caption: 'Daily', state: true},
+          { caption: 'Weekly', state: false},
+          { caption: 'Monthly', state: false}
+        ]
+      },
       chartOptions: {
         chart: {
           toolbar: {
@@ -76,7 +120,7 @@ export default {
         yaxis: {
           decimalsInFloat: 2,
           title: {
-            text: 'Price ($)'
+            text: 'Price (USD)'
           }
         },
         stroke: {
@@ -92,32 +136,46 @@ export default {
       }]
     };
   },
-  async created() {
-    var { data } = await axios.get("/api/stocks/?symbol=TSLA&freq=DAY");
+  methods: {
+    renderChart: async function(stockSymbol, stockFreq) {
+      var { data } = await axios.get('/api/stocks/?symbol=' + stockSymbol + '&freq=' + stockFreq);
 
-    data = JSON.parse(data);
+      data = JSON.parse(data);
     
-    var date_array = [];
-    var opening_price_array = [];
+      var date_array = [];
+      var opening_price_array = [];
     
-    data.forEach(data_element => {
-      const date = data_element.Date
-      const opening = data_element.open;
+      data.forEach(data_element => {
+        const date = data_element.Date
+        const opening = data_element.open;
       
-      date_array.push(date);
-      opening_price_array.push(opening);
-    });
-    this.chartOptions.xaxis.categories = date_array.reverse();
-    this.series.data = opening_price_array.reverse();
+        date_array.push(date);
+        opening_price_array.push(opening);
+      });
+      this.chartOptions.xaxis.categories = date_array.reverse();
+      this.series.data = opening_price_array.reverse();
 
-    this.$refs.Chart.updateOptions({
-      series: [{
-        data: this.series.data
-      }],
-      xaxis: {
-        categories: this.chartOptions.xaxis.categories
-      }
-    })
+      this.$refs.Chart.updateOptions({
+        series: [{
+          data: this.series.data
+        }],
+        xaxis: {
+          categories: this.chartOptions.xaxis.categories
+        }
+      })
+    },
+    updateChart: function() {
+      return;
+    },
+    searchStock: function() {
+      return this.renderChart(this.stockSymbol, 'DAY');
+    },
+    stockFreqOnPress(i) {
+      this.stockFreqOptions.buttons.forEach((btn, index) => btn.state = i === index);
+    }
+  },
+  beforeMount() {
+    this.renderChart('TSLA', 'DAY'); // Initialization config
   }
 };
 </script>
