@@ -15,3 +15,7 @@ def alpha_vantage_client(sym, freq):
 
     response = requests.get(f'{ALPHAV_BASE_URL}function={alphav[freq]}&symbol={sym}&apikey={ALPHAV_API_KEY}')
     return response.json()
+
+def hg_brasil_client():
+    response = requests.get(f'{HGBR_BASE_URL}?key={HGBR_API_KEY}')
+    return response.json()
