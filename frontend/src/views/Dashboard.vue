@@ -1,92 +1,89 @@
 <template>
   <div id="Dashboard">
 
-      <b-input-group size="sm" class="mt-4" style="width: 15%; left: 80%;">
+      <b-input-group size="lm" class="searchBar">
         <b-input-group-prepend is-text>
           <b-icon icon="search"></b-icon>
         </b-input-group-prepend>
-        <b-form-input type="text" v-on:keyup.enter="searchStock" v-model="searchText" placeholder="search"></b-form-input>
+        <b-form-input type="text" v-on:keyup.enter="searchStock" v-model="searchText" placeholder="search for stocks"></b-form-input>
       </b-input-group>
 
-      <b-button variant="success" class="buyStock" size="sm">
-        <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon>
+      <b-button variant="success" class="buyStock" size="lm">
+        <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon>&nbsp;Buy
       </b-button>
 
-      <b-button variant="danger" class="sellStock" size="sm">
-        <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>
+      <b-button variant="danger" class="sellStock" size="lm">
+        <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
       </b-button>
 
-      <b-dropdown class="visualizationMenu" size="sm" variant="primary">
-        <template #button-content>
-          <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon> Visualization
-        </template>
-        <b-dropdown-item-button>
-          <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-          Line
-        </b-dropdown-item-button>
-        <b-dropdown-item-button>
-          <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-          Candlestick
-        </b-dropdown-item-button>
-      </b-dropdown>
-
-      <b-button-group class="stockFrequencyOptions" size="sm">
+      <b-button-group class="lineChartFrequencyOptions" size="lm">
         <b-button
-          v-for="(btn, idx) in stockFrequencyOptions.buttons"
+          v-for="(btn, idx) in lineChartFrequencyOptions.buttons"
           :key="idx"
           :pressed.sync="btn.state"
           variant="primary"
-          @click="stockFrequencyOnPress(idx)"
-          class = "stockFrequencyOptionsButton"
+          @click="lineChartFrequencyOnPress(idx)"
+          class = "lineChartFrequencyOptionsButton"
         >
         <b-icon :icon=btn.icon></b-icon>&nbsp;{{ btn.caption }}
         </b-button>
       </b-button-group>
 
       <div class="Chart">
-        <apexcharts ref="Chart" width="80%" type="line" :options="chartOptions" :series="series" class="Chart"></apexcharts>
+        <lineChart ref="Chart" width="75%" type="line" :options="lineChartOptions" :series="lineChartSeries" class="Chart"></lineChart>
+      </div>
+
+      <div class="candlestickChart">
+        <candlestickChart ref="candlestickChart" width="75%" type="candlestick" :options="candlestickChartOptions" :series="candlestickChartSeries" class="candlestickChart"></candlestickChart>
       </div>
   
   </div>
 </template>
 
 <style>
+  .searchBar {
+    width: 15%;
+    left: 3%;
+  }
   .buyStock {
     display: inline-block;
     position: absolute;
-    top: 85%;
-    left: 47%;
+    top: 6%;
+    left: 20%;
     box-shadow: none !important;
   }
   .sellStock {
     display: inline-block;
     position: absolute;
-    top: 85%;
-    left: 52%;
+    top: 6%;
+    left: 26%;
     box-shadow: none !important;
   }
   .Chart {
     display: inline-block;
     position: absolute;
     top: 15%;
-    left: 3%;
-    width: 80%;
+    left: 26%;
+    width: 75%;
   }
-  .stockFrequencyOptions {
+  .lineChartFrequencyOptions {
     display: inline-block;
     position: absolute;
-    top: 85%;
-    left: 24%;
+    top: 70%;
+    left: 58%;
   }
-  .stockFrequencyOptionsButton {
+  .lineChartFrequencyOptionsButton {
     box-shadow: none !important;
   }
-  .visualizationMenu {
+  .candlestickChart {
     display: inline-block;
     position: absolute;
-    top: 85%;
-    left: 10%;
-    box-shadow: none !important;
+    top: 15%;
+    left: 0%;
+    width: 75%;
+  }
+  .apexcharts-tooltip {
+    color: darkred
   }
 </style>
 
@@ -98,21 +95,87 @@ import VueApexCharts from 'vue-apexcharts'
 export default {
   name: 'Dashboard',
   components : { 
-    apexcharts: VueApexCharts
+    lineChart: VueApexCharts,
+    candlestickChart: VueApexCharts
   },
   data: function() {
     return {
       stockSymbol: 'TSLA', // initial value
       stockFrequency: 'DAY', // initial value
       searchText: '',
-      stockFrequencyOptions: {
+      lineChartFrequencyOptions: {
         buttons: [
           { caption: 'Daily', state: true, frequency: 'DAY', icon: 'calendar3-event'},
           { caption: 'Weekly', state: false, frequency: 'WEEK', icon: 'calendar3-week'},
           { caption: 'Monthly', state: false, frequency: 'MONTH', icon: 'calendar3'}
         ]
       },
-      chartOptions: {
+      lineChartOptions: {
+        chart: {
+          toolbar: {
+            show: false
+          }
+        },
+        colors: ['#cc5d18'], // @todo
+        dataLabels: {
+          enabled: true, // todo: add button to enable/disable
+          style: {
+            fontSize: '12px',
+          }
+        },
+        xaxis: {
+          categories: [],
+          type: 'datetime',
+          labels: {
+            format: 'dd MMM',
+            style: {
+              colors: '#ffffff',
+              fontSize: '16px',
+            }
+          }
+        },
+        yaxis: {
+          decimalsInFloat: 0,
+          labels: {
+            style: {
+              colors: '#ffffff',
+              fontSize: '16px',
+            }
+          },
+          title: {
+            text: 'Closing Price',
+            style: {
+              color: '#ffffff',
+              fontSize: '18px',
+            }
+          }
+        },
+        stroke: {
+          curve: 'smooth',
+          width: 3
+        },
+        theme: {
+          mode: 'light',
+        },
+        title: {
+          text: 'TSLA',
+          align: 'center',
+          offsetY: 10,
+          style: {
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: '#ffffff'
+          }
+        },
+        tooltip: {
+          custom: function({series, seriesIndex, dataPointIndex, w}) {
+            return '<div class="arrow_box">' +
+              '<span>' + series[seriesIndex][dataPointIndex] + '\ USD' + '</span>' +
+              '</div>'
+          }
+        }
+      },
+      candlestickChartOptions: {
         chart: {
           toolbar: {
             show: false
@@ -123,13 +186,27 @@ export default {
           categories: [],
           type: 'datetime',
           labels: {
-            format: 'dd MMM'
+            format: 'dd MMM',
+            style: {
+              colors: '#ffffff',
+              fontSize: '16px',
+            }
           }
         },
         yaxis: {
           decimalsInFloat: 0,
+          labels: {
+            style: {
+              colors: '#ffffff',
+              fontSize: '16px',
+            }
+          },
           title: {
-            text: 'Price (USD)'
+            text: 'Price',
+            style: {
+              color: '#ffffff',
+              fontSize: '18px',
+            }
           }
         },
         stroke: {
@@ -139,8 +216,21 @@ export default {
         theme: {
           mode: 'light',
         },
+        title: {
+          text: 'TSLA',
+          align: 'center',
+          offsetY: 10,
+          style: {
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: '#ffffff'
+          }
+        }
       },
-      series: [{
+      lineChartSeries: [{
+        data: []
+      }],
+      candlestickChartSeries: [{
         data: []
       }]
     };
@@ -151,25 +241,56 @@ export default {
 
       data = JSON.parse(data);
     
-      var date_array = [];
-      var opening_price_array = [];
-    
-      data.forEach(data_element => {
-        const date = data_element.Date
-        const opening = data_element.open;
+      var dateArray = [];
+      var closingPriceArray = [];
+      var candlestickArray = [];
       
-        date_array.push(date);
-        opening_price_array.push(opening);
+      data.forEach(dataElement => {
+        const date = dataElement.Date
+        const openingPrice = dataElement.open;
+        const closingPrice = dataElement.close;
+        const highPrice = dataElement.high;
+        const lowPrice = dataElement.low;
+
+        dateArray.push(date);
+        closingPriceArray.push(closingPrice);
+        candlestickArray.push({x: date, y: [openingPrice, highPrice, lowPrice, closingPrice]});
       });
-      this.chartOptions.xaxis.categories = date_array.reverse();
-      this.series.data = opening_price_array.reverse();
+      
+      this.renderLineChart(dateArray, closingPriceArray);
+      this.renderCandlestickChart(dateArray, candlestickArray);
+    },
+    renderLineChart: function(date, openingPrice) {
+      this.lineChartOptions.xaxis.categories = date.reverse();
+      this.lineChartSeries.data = openingPrice.reverse();
+
+      console.log(this.stockSymbol)
 
       this.$refs.Chart.updateOptions({
         series: [{
-          data: this.series.data
+          data: this.lineChartSeries.data
         }],
         xaxis: {
-          categories: this.chartOptions.xaxis.categories
+          categories: this.lineChartOptions.xaxis.categories
+        },
+        title: {
+          text: this.stockSymbol
+        }
+      })
+    },
+    renderCandlestickChart: function(date, data) {
+      this.candlestickChartOptions.xaxis.categories = date.reverse();
+      this.candlestickChartSeries.data = data.reverse();
+
+      this.$refs.candlestickChart.updateOptions({
+        series: [{
+          data: this.candlestickChartSeries.data
+        }],
+        xaxis: {
+          categories: this.candlestickChartOptions.xaxis.categories
+        },
+        title: {
+          text: this.stockSymbol
         }
       })
     },
@@ -178,12 +299,13 @@ export default {
     },
     searchStock: function() {
       this.stockSymbol = this.searchText.toUpperCase();
+      this.searchText = '';
       return this.renderChart(this.stockSymbol, this.stockFrequency);
     },
-    stockFrequencyOnPress(i) {
-      this.stockFrequencyOptions.buttons.forEach((btn, index) => btn.state = i === index);
-      this.stockFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.changeChartFrequency(btn.frequency) : null);
-      this.stockFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.stockFrequency = btn.frequency : null);
+    lineChartFrequencyOnPress(i) {
+      this.lineChartFrequencyOptions.buttons.forEach((btn, index) => btn.state = i === index);
+      this.lineChartFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.changeChartFrequency(btn.frequency) : null);
+      this.lineChartFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.stockFrequency = btn.frequency : null);
     }
   },
   beforeMount() {
