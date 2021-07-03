@@ -48,8 +48,11 @@
 
     <div class="container-fluid">
       <h2>  {{ $t('savedSimulations') }} </h2>
-      <b-table dark hover :items="simulations" :fields="fields" @row-clicked="selectRow">
+      <b-table dark hover :items="simulations" :fields="fields">
         <template #cell(actions)="row">
+          <b-button variant="primary" size="sm" @click="selectRow(row.item, row.index, $event.target)" class="mr-1">
+            {{ $t('see') }}
+          </b-button>
           <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
             {{ $t('remove') }}
           </b-button>
@@ -108,7 +111,7 @@ export default {
           sortable: true,
           label: "Data de criação"
         },
-        { key: 'actions', label: 'Remover' }
+        { key: 'actions', label: 'Ações' }
 
       ],
       calculationOptions: [
@@ -227,6 +230,8 @@ export default {
           final_amount: this.fromText(this.values.final),
           time: this.values.time,
           name: this.simName,
+        }).then((response) => {
+          this.fetchSimulations();
         }).catch((error) => {
           console.log(error)
           this.incorrect = true;
@@ -265,5 +270,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-</style>
