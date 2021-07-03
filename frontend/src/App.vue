@@ -1,19 +1,17 @@
 <template>
   <div id="app">
-    <app-navigation></app-navigation>
-    <router-view></router-view>
+    <MainContainer />
   </div>
 </template>
 
 <script>
-import AppNavigation from "./components/AppNavigation";
+import MainContainer from "./containers/MainContainer.vue";
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    AppNavigation
-  }
-
-}
+    MainContainer,
+  },
+};
 </script>
 
 <style lang="scss">

@@ -12,23 +12,20 @@ const router = new Router({
         {
             path: '/home',
             name: 'home',
-            component: Home,
-            meta: {
-                authRequired: true
-            }
+            component: () => import('./views/Home.vue'),
         },
         {
             path: '/simulations',
             name: 'simulation',
             component: () => import('./views/Simulations.vue'),
+            meta: {
+                authRequired: true
+            }
         },
         {
             path: '/about',
             name: 'about',
             component: () => import('./views/About.vue'),
-            meta: {
-                authRequired: true
-            }
         },
         {
             path: '/dashboard',
@@ -47,8 +44,8 @@ const router = new Router({
         },
         {
             path: '/',
-            name: 'join',
-            component: () => import('./views/Join.vue')
+            name: 'welcome',
+            component: () => import('./views/Welcome.vue')
         },
         {
             path: '*',

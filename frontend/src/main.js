@@ -13,10 +13,12 @@ Vue.use(FlagIcon);
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
- 
+
 Vue.use(VueResource)
 
 Vue.config.productionTip = false
+
+export const bus = new Vue();
 
 new Vue({
   i18n,

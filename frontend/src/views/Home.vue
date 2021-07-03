@@ -1,43 +1,30 @@
 <template>
   <div>
-      <h1>Home</h1>
-      <img alt="Vue logo" src="../assets/logo.png">
-      <h1>Phrases from Django API:</h1>
-      <p
-          v-for="(phrase, index) in phrases_from_api"
-          :key="index"
-      >
-        {{ phrase }}
-      </p>
-    <div>
-      <button type="button" class="btn btn-primary" @click="fetchPhrases">Fetch Phrases</button>
-    </div>
+    <b-container>
+      <b-row>
+        <b-col>
+          <b-card>column1</b-card>
+        </b-col>
+        <b-col>column2</b-col>
+        <b-col>column3</b-col>
+      </b-row>
+      <b-row>
+        <b-col>column1</b-col>
+        <b-col>column2</b-col>
+        <b-col>column3</b-col>
+      </b-row>
+      <b-row>
+        <b-col>column1</b-col>
+        <b-col>column2</b-col>
+        <b-col>column3</b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
-import Repository from "../repositories/RepositoryFactory";
-
-const PhraseRepository = Repository.get("phrase");
-
 export default {
-  name: 'Home',
-
-  data: function() {
-    return {
-      phrases_from_api: [],
-    }
-  },
-
-  methods: {
-    async fetchPhrases() {
-      const token = this.$store.state.token;
-      const response = await PhraseRepository.get(token);
-      this.phrases_from_api = response.data.data;
-
-    }
-  }
-
+  name: "Home",
 };
 </script>
 <style scoped>
