@@ -39,10 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'users.apps.UsersConfig',
     'wallets.apps.WalletsConfig',
     'apiwrapper.apps.ApiwrapperConfig',
-    'rest_framework',
+    'simulations.apps.SimulationsConfig',
     'rest_framework_jwt',
     'rest_framework_jwt.blacklist',
 ]

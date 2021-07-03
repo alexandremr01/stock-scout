@@ -20,3 +20,5 @@ $body-color: $pallete-light-shades;
 @import '../../node_modules/bootstrap/scss/bootstrap';
 // BootstrapVue and its default variables
 @import '../../node_modules/bootstrap-vue/src/index.scss';
+
+@import "../../node_modules/vue-select/src/scss/vue-select.scss";
