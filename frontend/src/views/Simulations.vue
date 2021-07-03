@@ -13,15 +13,15 @@
           <b-form-input v-model="values.initial" :readonly="selected==='A'" :formatter="currencyFormat" @input="update"></b-form-input>
         </b-col>
       </b-row>
-<!--      <b-row class="my-1" >-->
-<!--        <b-form-radio v-model="selected" name="some-radios" value="B"/>-->
-<!--        <b-col sm="3" align="left">-->
-<!--          <label>{{$t('monthly')}}</label>-->
-<!--        </b-col>-->
-<!--        <b-col sm="4">-->
-<!--          <b-form-input v-model="values.monthly" :readonly="selected==='B'" :formatter="currencyFormat" @input="update"></b-form-input>-->
-<!--        </b-col>-->
-<!--      </b-row>-->
+      <b-row class="my-1" >
+        <b-form-radio v-model="selected" name="some-radios" value="B"/>
+        <b-col sm="3" align="left">
+          <label>{{$t('monthly')}}</label>
+        </b-col>
+        <b-col sm="4">
+          <b-form-input v-model="values.monthly" :readonly="selected==='B'" :formatter="currencyFormat" @input="update"></b-form-input>
+        </b-col>
+      </b-row>
       <b-row class="my-1" >
         <b-form-radio v-model="selected" name="some-radios" value="C"/>
         <b-col sm="3" align="left">
@@ -81,30 +81,32 @@ export default {
       let monthly = (this.selected !== 'B') ? this.fromText(this.values.monthly) : null;
       let interest = (this.selected !== 'D') ? this.fromText(this.values.interest)/100 : null;
       let finalValue = (this.selected !== 'E') ? this.fromText(this.values.final) : null;
+
+      let monthlyInterest = Math.pow(1+interest, 1/12);
+      let ratio = monthlyInterest**(this.values.time);
+
       if (this.selected === 'E') {
         if (this.values.initial == null || this.values.interest==null || this.values.monthly == null || this.values.time == null)
           return;
-        let ratio = (1+interest)**(this.values.time/12);
-        let final = initial * ratio + monthly*(ratio-1)/(interest);
+        let final = initial * ratio + monthly*(ratio-1)/(monthlyInterest-1);
         this.values.final = this.toCurrency(final);
       } else if (this.selected === 'A') {
         if (this.values.final == null || this.values.interest==null || this.values.monthly == null || this.values.time == null)
           return;
-        let ratio = (1+interest)**(this.values.time/12);
-        let init = (finalValue - monthly*(ratio-1)/(interest))/ratio;
+        let init = (finalValue - monthly*(ratio-1)/(monthlyInterest-1))/ratio;
         this.values.initial = this.toCurrency(init);
       } else if (this.selected === 'B') {
         if (this.values.final == null || this.values.interest==null || this.values.initial == null || this.values.time == null)
           return;
-        let ratio = (1+interest)**(this.values.time/12);
-        let monthly = ((finalValue - initial*ratio) * (ratio) + 1)/ratio;
+        let monthly = ((finalValue - initial*ratio) * (monthlyInterest-1))/(ratio-1);
         this.values.monthly = this.toCurrency(monthly);
       } else if (this.selected === 'C') {
         if (this.values.final == null || this.values.interest==null || this.values.initial == null || this.values.monthly == null)
           return;
-        let x = (finalValue + monthly/interest) / (initial + monthly/interest);
-        let time = Math.log(x) / Math.log(1 + interest);
-        this.values.time = Math.ceil(time*12);
+        let aux = monthly/(monthlyInterest-1);
+        let x = (finalValue + aux) / (initial + aux);
+        let time = Math.log(x) / Math.log(monthlyInterest);
+        this.values.time = Math.ceil(time);
       }
     },
     toNumber(n){
