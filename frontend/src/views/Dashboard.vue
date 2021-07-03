@@ -1,6 +1,6 @@
 <template>
   <div id="Dashboard">
-    <b-container>
+    <b-container class="first-chart-options">
       <b-row>
         <b-col cols="11">
           <v-select
@@ -14,19 +14,30 @@
         </b-col>
 
         <b-col cols="1">
-        <b-dropdown size="lm" variant="primary">
-          <template #button-content>
-            <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon> Visualization
-          </template>
-          <b-dropdown-item-button @click="changeChartVisualization('line')">
-            <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-            Line
-          </b-dropdown-item-button>
-          <b-dropdown-item-button @click="changeChartVisualization('candlestick')">
-            <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-            Candlestick
-          </b-dropdown-item-button>
-        </b-dropdown>
+          <b-dropdown
+            class="visualization-dropdown"
+            size="lm"
+            variant="primary"
+          >
+            <template #button-content>
+              <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
+              Visualization
+            </template>
+            <b-dropdown-item-button
+              class="visualization-dropdown-item"
+              @click="changeChartVisualization('line')"
+            >
+              <b-icon icon="graph-up" aria-hidden="true"></b-icon>
+              Line
+            </b-dropdown-item-button>
+            <b-dropdown-item-button
+              class="visualization-dropdown-item"
+              @click="changeChartVisualization('candlestick')"
+            >
+              <b-icon icon="align-middle" aria-hidden="true"></b-icon>
+              Candlestick
+            </b-dropdown-item-button>
+          </b-dropdown>
         </b-col>
 
         <!--      <b-col cols="4">-->
@@ -142,6 +153,10 @@
   color: darkred;
 }
 
+.visualization-dropdown-item {
+  color: black;
+}
+
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
@@ -157,7 +172,7 @@
   fill: #394066;
 }
 
-.container {
+.first-chart-options {
   padding-left: 30%;
 }
 </style>
@@ -216,7 +231,7 @@ export default {
       },
       lineChartOptions: {
         chart: {
-          type: 'line',
+          type: "line",
           toolbar: {
             show: false,
           },
@@ -281,7 +296,7 @@ export default {
       },
       candlestickChartOptions: {
         chart: {
-          type: 'candlestick',
+          type: "candlestick",
           toolbar: {
             show: false,
           },
@@ -331,6 +346,9 @@ export default {
             color: "#ffffff",
           },
         },
+        tooltip: {
+          enabled: true
+        }
       },
       lineChartSeries: [
         {
@@ -413,35 +431,42 @@ export default {
         },
       });
     },
-    changeChartFrequency: function(stockFrequency) {
+    changeChartFrequency: function (stockFrequency) {
       return this.renderChart(this.stockSymbol, stockFrequency);
     },
-    changeChartVisualization: function(newType) {
-      console.log(newType);
-      if (newType != this.lineChartOptions.chart.type) {
-        var newData = []
-        var newCategories = []
+    changeChartVisualization: function (newType) {
+      if (newType != this.currentType) {
+        this.currentType = newType;
+        var newData = [];
+        var newCategories = [];
+        var newTooltip = [];
 
-        if (newType == 'line') {
-          newData = this.lineChartSeries.data
-          newCategories = this.lineChartOptions.xaxis.categories
+        if (newType == "line") {
+          newData = this.lineChartSeries.data;
+          newCategories = this.lineChartOptions.xaxis.categories;
+          newTooltip = this.lineChartOptions.tooltip;
         }
         else {
-          newData = this.candlestickChartSeries.data
-          newCategories = this.lineChartOptions.xaxis.categories
+          newData = this.candlestickChartSeries.data;
+          newCategories = this.candlestickChartOptions.xaxis.categories;
+          newTooltip = this.candlestickChartOptions.tooltip;
         }
 
         this.$refs.Chart.updateOptions({
           chart: {
-            type: newType
+            type: newType,
+            tooltip: newTooltip,
           },
-          series: [{
-            data: newData
-          }],
+          series: [
+            {
+              data: newData,
+            },
+          ],
           xaxis: {
-            categories: newCategories
+            categories: newCategories,
           },
-        })
+          tooltip: newTooltip
+        });
       }
     },
     searchStock: function () {
