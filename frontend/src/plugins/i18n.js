@@ -17,6 +17,7 @@ const messages = {
         'interest': "Annual interest (in %)",
         'final': "Final sum",
         'simulations': 'Simulations',
+        'calculate': 'Calculate',
         'simulationDescription': 'Select the field you want to be calculated and fill the others.'
     },
     'pt-br': {
@@ -33,6 +34,7 @@ const messages = {
         'interest': "Valorização anual (em %)",
         'final': "Acumulado final",
         'simulations': 'Simulações',
+        'calculate': 'Calcular',
         'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.'
     }
 };

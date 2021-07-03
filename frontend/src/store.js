@@ -6,16 +6,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         token: localStorage.getItem('t'),
-        user: "Usuario"
+        user: localStorage.getItem('name') || 'Usuário'
     },
     mutations: {
         updateToken(state, newToken){
             localStorage.setItem('t', newToken);
             state.token = newToken;
             state.user = jwt_decode(newToken).username
+            localStorage.setItem('name', state.user);
         },
         removeToken(state){
             localStorage.removeItem('t');
+            localStorage.removeItem('name');
             state.token = null;
         }
     },
