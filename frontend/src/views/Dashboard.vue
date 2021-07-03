@@ -159,9 +159,6 @@
   fill: #394066;
 }
 
-.container {
-  padding-left: 30%;
-}
 </style>
 
 <script>
