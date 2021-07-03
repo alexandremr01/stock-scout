@@ -11,6 +11,13 @@ const messages = {
         'guest': "Join as Guest",
         'join': "Join us!",
         'back': "Back",
+        'monthly': "Monthly contribution",
+        'initial': "Initial value",
+        'time': "Time - in months",
+        'interest': "Annual interest (in %)",
+        'final': "Final sum",
+        'simulations': 'Simulations',
+        'simulationDescription': 'Select the field you want to be calculated and fill the others.'
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -20,6 +27,13 @@ const messages = {
         'guest': "Entre como convidado",
         'join': "Junte-se a nós!",
         'back': "Voltar",
+        'monthly': "Aporte mensal",
+        'initial': "Valor inicial",
+        'time': "Tempo - em meses",
+        'interest': "Valorização anual (em %)",
+        'final': "Acumulado final",
+        'simulations': 'Simulações',
+        'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.'
     }
 };
 
