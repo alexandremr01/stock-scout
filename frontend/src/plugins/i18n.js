@@ -18,6 +18,10 @@ const messages = {
         'final': "Final sum",
         'simulations': 'Simulations',
         'calculate': 'Calculate',
+        'save': 'Save',
+        'remove': 'Delete',
+        'savedSimulations': 'Saved Simulations - Click to restore',
+        'errorSimulation': 'Simulation API error',
         'simulationDescription': 'Select the field you want to be calculated and fill the others.'
     },
     'pt-br': {
@@ -35,6 +39,10 @@ const messages = {
         'final': "Acumulado final",
         'simulations': 'Simulações',
         'calculate': 'Calcular',
+        'save': 'Salvar',
+        'remove': 'Remover',
+        'savedSimulations': 'Simulações salvas - Clique para recuperar',
+        'errorSimulation': 'Erro na API de simulação',
         'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.'
     }
 };

@@ -35,11 +35,11 @@
         </b-col>
         <b-col cols="4">
          <b-button variant="primary" @click="save">
-            Salvar
+            {{ $t('save') }}
           </b-button>
         </b-col>
         <div v-if="incorrect">
-          Erro ao salvar.
+          {{ $t('errorSimulation') }}
         </div>
       </b-row>
     </b-container>
@@ -47,11 +47,11 @@
     <br><br>
 
     <div class="container-fluid">
-      <h2>Simulações salvas</h2>
-      <b-table dark hover :items="simulations" :fields="fields" >
+      <h2>  {{ $t('savedSimulations') }} </h2>
+      <b-table dark hover :items="simulations" :fields="fields" @row-clicked="selectRow">
         <template #cell(actions)="row">
           <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
-            Remover
+            {{ $t('remove') }}
           </b-button>
         </template>
 
@@ -253,6 +253,15 @@ export default {
         this.incorrect = true;
       });
     },
+    selectRow(item){
+      console.log("lendo")
+      this.values.initial = this.toCurrency(item.initial_value);
+      this.values.monthly = this.toCurrency(item.monthly_contribution);
+      this.values.interest = this.percentageFormat(item.interest_rate);
+      this.values.time = item.time;
+      this.values.final = this.toCurrency(item.final_amount);
+      this.inputs.forEach((v, i, a) => v.value = this.values[v.name])
+    }
   }
 };
 </script>

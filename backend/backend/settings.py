@@ -136,7 +136,6 @@ STATICFILES_DIRS = [
 
 # Webpack output location containing Vue index.html file (outputDir)
 TEMPLATES[0]['DIRS'] += [
-    os.path.join(FRONTEND_DIR, 'public'),
     os.path.join(FRONTEND_DIR, 'dist'),
 ]
 
