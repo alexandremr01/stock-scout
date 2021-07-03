@@ -18,11 +18,11 @@
           <template #button-content>
             <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon> Visualization
           </template>
-          <b-dropdown-item-button>
+          <b-dropdown-item-button @click="changeChartVisualization('line')">
             <b-icon icon="graph-up" aria-hidden="true"></b-icon>
             Line
           </b-dropdown-item-button>
-          <b-dropdown-item-button>
+          <b-dropdown-item-button @click="changeChartVisualization('candlestick')">
             <b-icon icon="align-middle" aria-hidden="true"></b-icon>
             Candlestick
           </b-dropdown-item-button>
@@ -88,7 +88,6 @@
       <lineChart
         ref="Chart"
         width="75%"
-        type="line"
         :options="lineChartOptions"
         :series="lineChartSeries"
         class="Chart"
@@ -99,7 +98,6 @@
       <candlestickChart
         ref="candlestickChart"
         width="75%"
-        type="candlestick"
         :options="candlestickChartOptions"
         :series="candlestickChartSeries"
         class="candlestickChart"
@@ -187,6 +185,7 @@ export default {
       stockSymbol: "PETR4", // initial value
       stockFrequency: "DAY", // initial value
       searchText: "",
+      currentType: "line",
       lineChartFrequencyOptions: {
         buttons: [
           {
@@ -217,17 +216,12 @@ export default {
       },
       lineChartOptions: {
         chart: {
+          type: 'line',
           toolbar: {
             show: false,
           },
         },
         colors: ["#cc5d18"], // @todo
-        dataLabels: {
-          enabled: true, // todo: add button to enable/disable
-          style: {
-            fontSize: "12px",
-          },
-        },
         xaxis: {
           categories: [],
           type: "datetime",
@@ -287,6 +281,7 @@ export default {
       },
       candlestickChartOptions: {
         chart: {
+          type: 'candlestick',
           toolbar: {
             show: false,
           },
@@ -418,8 +413,36 @@ export default {
         },
       });
     },
-    changeChartFrequency: function (stockFrequency) {
+    changeChartFrequency: function(stockFrequency) {
       return this.renderChart(this.stockSymbol, stockFrequency);
+    },
+    changeChartVisualization: function(newType) {
+      console.log(newType);
+      if (newType != this.lineChartOptions.chart.type) {
+        var newData = []
+        var newCategories = []
+
+        if (newType == 'line') {
+          newData = this.lineChartSeries.data
+          newCategories = this.lineChartOptions.xaxis.categories
+        }
+        else {
+          newData = this.candlestickChartSeries.data
+          newCategories = this.lineChartOptions.xaxis.categories
+        }
+
+        this.$refs.Chart.updateOptions({
+          chart: {
+            type: newType
+          },
+          series: [{
+            data: newData
+          }],
+          xaxis: {
+            categories: newCategories
+          },
+        })
+      }
     },
     searchStock: function () {
       this.stockSymbol = this.searchText.toUpperCase();
