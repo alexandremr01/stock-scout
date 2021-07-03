@@ -1,22 +1,50 @@
 <template>
   <div id="Dashboard">
 
-      <b-input-group size="lm" class="searchBar">
-        <b-input-group-prepend is-text>
-          <b-icon icon="search"></b-icon>
-        </b-input-group-prepend>
-        <b-form-input type="text" v-on:keyup.enter="searchStock" v-model="searchText" placeholder="search for stocks"></b-form-input>
-      </b-input-group>
 
-      <b-button variant="success" class="buyStock" size="lm">
-        <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon>&nbsp;Buy
-      </b-button>
+    <b-row align-h="start">
+      <b-col cols="4">
+        <v-select class="style-chooser" @input="searchStock" :options="companies" v-model="searchText" :reduce="x => x.symbol" label="name"></v-select>
+      </b-col>
 
-      <b-button variant="danger" class="sellStock" size="lm">
-        <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
-      </b-button>
+<!--      <b-col cols="4">-->
+<!--      <b-input-group size="lm" class="searchBar">-->
+<!--        <b-input-group-prepend is-text>-->
+<!--          <b-icon icon="search"></b-icon>-->
+<!--        </b-input-group-prepend>-->
+<!--        <b-form-input list="company-list" type="text" v-on:keyup.enter="searchStock" v-model="searchText" placeholder="search for stocks"></b-form-input>-->
+<!--        <datalist id="company-list">-->
+<!--          <option v-for="company in companies"> {{ company.name }} - {{company.symbol}} </option>-->
+<!--        </datalist>-->
+<!--      </b-input-group>-->
+<!--      </b-col>-->
 
-      <b-button-group class="lineChartFrequencyOptions" size="lm">
+      <b-col cols="4">
+        <b-button variant="success" class="buyStock" size="lm">
+          <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon>&nbsp;Buy
+        </b-button>
+        <b-button variant="danger" class="sellStock" size="lm">
+          <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
+        </b-button>
+      </b-col>
+
+
+
+      <b-col cols="4">
+        <b-button-group class="" size="lm">
+          <b-button
+              v-for="(btn, idx) in marketOptions.buttons"
+              :key="idx"
+              :pressed.sync="btn.state"
+              variant="primary"
+              @click="updateMarket(btn.value)">
+            <flag :iso="btn.flag" v-bind:squared=false />&nbsp;{{ btn.caption }}
+          </b-button>
+        </b-button-group>
+      </b-col>
+    </b-row>
+
+    <b-button-group class="lineChartFrequencyOptions" size="lm">
         <b-button
           v-for="(btn, idx) in lineChartFrequencyOptions.buttons"
           :key="idx"
@@ -41,22 +69,12 @@
 </template>
 
 <style>
-  .searchBar {
-    width: 15%;
-    left: 3%;
-  }
   .buyStock {
     display: inline-block;
-    position: absolute;
-    top: 6%;
-    left: 20%;
     box-shadow: none !important;
   }
   .sellStock {
     display: inline-block;
-    position: absolute;
-    top: 6%;
-    left: 26%;
     box-shadow: none !important;
   }
   .Chart {
@@ -85,22 +103,45 @@
   .apexcharts-tooltip {
     color: darkred
   }
+
+
+  .style-chooser .vs__search::placeholder,
+  .style-chooser .vs__dropdown-toggle,
+  .style-chooser .vs__dropdown-menu {
+    background: #dfe5fb;
+    border: none;
+    color: #394066;
+    text-transform: lowercase;
+    font-variant: small-caps;
+  }
+
+  .style-chooser .vs__clear,
+  .style-chooser .vs__open-indicator {
+    fill: #394066;
+  }
 </style>
 
 <script>
 import axios from 'axios'
-
+import nasdaqCompanies from '../data/nasdaq.json';
+import bovespaCompanies from '../data/bovespa.json';
 import VueApexCharts from 'vue-apexcharts'
+import vSelect from 'vue-select'
+const BOVESPA = 'BOVESPA';
+const NASDAQ = 'NASDAQ';
 
 export default {
   name: 'Dashboard',
   components : { 
     lineChart: VueApexCharts,
-    candlestickChart: VueApexCharts
+    candlestickChart: VueApexCharts,
+    vSelect,
   },
   data: function() {
     return {
-      stockSymbol: 'TSLA', // initial value
+      companies: bovespaCompanies,
+      market: BOVESPA,
+      stockSymbol: 'PETR4', // initial value
       stockFrequency: 'DAY', // initial value
       searchText: '',
       lineChartFrequencyOptions: {
@@ -108,6 +149,12 @@ export default {
           { caption: 'Daily', state: true, frequency: 'DAY', icon: 'calendar3-event'},
           { caption: 'Weekly', state: false, frequency: 'WEEK', icon: 'calendar3-week'},
           { caption: 'Monthly', state: false, frequency: 'MONTH', icon: 'calendar3'}
+        ]
+      },
+      marketOptions: {
+        buttons: [
+          { caption: 'Bovespa', state: true, value: BOVESPA, flag: 'br'},
+          { caption: 'Nasdaq', state: false, value: NASDAQ, flag: 'us'}
         ]
       },
       lineChartOptions: {
@@ -237,13 +284,14 @@ export default {
   },
   methods: {
     renderChart: async function(stockSymbol, stockFrequency) {
-      var { data } = await axios.get('/api/stocks/?symbol=' + stockSymbol + '&freq=' + stockFrequency);
+      let parsedSymbol = stockSymbol + (this.market === BOVESPA? '.SA' : '');
+      let { data } = await axios.get('/api/stocks/?symbol=' + parsedSymbol + '&freq=' + stockFrequency);
 
       data = JSON.parse(data);
-    
-      var dateArray = [];
-      var closingPriceArray = [];
-      var candlestickArray = [];
+
+      let dateArray = [];
+      let closingPriceArray = [];
+      let candlestickArray = [];
       
       data.forEach(dataElement => {
         const date = dataElement.Date
@@ -299,13 +347,23 @@ export default {
     },
     searchStock: function() {
       this.stockSymbol = this.searchText.toUpperCase();
-      this.searchText = '';
+      console.log(this.stockSymbol);
+      console.log(this.searchText);
       return this.renderChart(this.stockSymbol, this.stockFrequency);
     },
     lineChartFrequencyOnPress(i) {
       this.lineChartFrequencyOptions.buttons.forEach((btn, index) => btn.state = i === index);
       this.lineChartFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.changeChartFrequency(btn.frequency) : null);
       this.lineChartFrequencyOptions.buttons.forEach((btn, index) => (i === index) ? this.stockFrequency = btn.frequency : null);
+    },
+    updateMarket(mkt) {
+      this.market = mkt;
+    }
+  },
+  watch: {
+    // a computed getter
+    market: function (val) {
+      this.companies = val === BOVESPA? bovespaCompanies : nasdaqCompanies;
     }
   },
   beforeMount() {
