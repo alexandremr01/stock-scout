@@ -50,7 +50,7 @@ class WalletViewSet(viewsets.ModelViewSet):
                 avg = r[2]/r[3]
             # TODO: calculate current value for stock in "symbol"
             resp.append({'symbol': r[0], 'quantity': r[1], 'avg_value': round(avg, 2), 'current': 0})
-        current_total_value = 0
+        current_total_value = 0 
         return JsonResponse({'stocks': resp, 'current_total_value': current_total_value})
 
     def create(self, request, pk=None):
