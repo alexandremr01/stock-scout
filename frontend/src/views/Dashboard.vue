@@ -95,13 +95,13 @@
       </b-button>
     </b-button-group>
 
-    <div class="Chart">
+    <div class="stockChart">
       <lineChart
-        ref="Chart"
+        ref="stockChart"
         width="75%"
         :options="lineChartOptions"
         :series="lineChartSeries"
-        class="Chart"
+        class="stockChart"
       ></lineChart>
     </div>
 
@@ -126,7 +126,7 @@
   display: inline-block;
   box-shadow: none !important;
 }
-.Chart {
+.stockChart {
   display: inline-block;
   position: absolute;
   top: 15%;
@@ -384,7 +384,7 @@ export default {
     };
   },
   methods: {
-    renderChart: async function (stockSymbol, stockFrequency) {
+    getStockData: async function (stockSymbol, stockFrequency) {
       let parsedSymbol = stockSymbol + (this.market === BOVESPA ? ".SA" : "");
       let { data } = await axios.get(
         "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + stockFrequency
@@ -411,14 +411,18 @@ export default {
         });
       });
 
-      this.renderLineChart(dateArray, closingPriceArray);
-      this.renderCandlestickChart(dateArray, candlestickArray);
-    },
-    renderLineChart: function (date, openingPrice) {
-      this.lineChartOptions.xaxis.categories = date.reverse();
-      this.lineChartSeries.data = openingPrice.reverse();
+      this.lineChartOptions.xaxis.categories = dateArray.reverse();
+      this.lineChartSeries.data = closingPriceArray.reverse();
 
-      this.$refs.Chart.updateOptions({
+      this.candlestickChartOptions.xaxis.categories = dateArray.reverse();
+      this.candlestickChartSeries.data = candlestickArray.reverse();
+
+      console.log(this.lineChartOptions.xaxis.categories);
+    },
+    renderLineChart: function () {
+      console.log(this.lineChartOptions.xaxis.categories);
+
+      this.$refs.stockChart.updateOptions({
         series: [
           {
             data: this.lineChartSeries.data,
@@ -432,11 +436,8 @@ export default {
         },
       });
     },
-    renderCandlestickChart: function (date, data) {
-      this.candlestickChartOptions.xaxis.categories = date.reverse();
-      this.candlestickChartSeries.data = data.reverse();
-
-      this.$refs.candlestickChart.updateOptions({
+    renderCandlestickChart: function () {
+      this.$refs.stockChart.updateOptions({
         series: [
           {
             data: this.candlestickChartSeries.data,
@@ -470,7 +471,7 @@ export default {
           newTooltip = this.candlestickChartOptions.tooltip;
         }
 
-        this.$refs.Chart.updateOptions({
+        this.$refs.stockChart.updateOptions({
           chart: {
             type: newType,
             tooltip: newTooltip,
@@ -505,6 +506,10 @@ export default {
     updateMarket(mkt) {
       this.market = mkt;
     },
+    async firstRender() {
+      await this.getStockData(this.stockSymbol, this.stockFrequency);
+      this.renderLineChart();
+    }
   },
   watch: {
     // a computed getter
@@ -513,7 +518,7 @@ export default {
     },
   },
   beforeMount() {
-    this.renderChart(this.stockSymbol, this.stockFrequency);
+    this.firstRender();
   },
 };
 </script>
