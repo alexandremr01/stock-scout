@@ -9,7 +9,6 @@ export default {
   name: "Welcome",
   methods: {
     toLogin() {
-      this.$emit("to-login-signup");
       this.$router.push("/login");
     },
   },

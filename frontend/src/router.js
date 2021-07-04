@@ -18,9 +18,6 @@ const router = new Router({
             path: '/simulations',
             name: 'simulation',
             component: () => import('./views/Simulations.vue'),
-            meta: {
-                authRequired: true
-            }
         },
         {
             path: '/about',

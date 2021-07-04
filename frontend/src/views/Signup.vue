@@ -134,7 +134,7 @@ export default {
       event.preventDefault();
       RegisterRepository.register(this.form)
         .then(() => {
-          this.$router.push("/join");
+          this.$router.push("/login");
         })
         .catch((error) => {
           if (error.response.hasOwnProperty("data")) {
@@ -148,7 +148,6 @@ export default {
         });
     },
     toLogin() {
-      this.$emit("to-login-signup");
       this.$router.push("/login");
     },
   },
