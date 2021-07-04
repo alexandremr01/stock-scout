@@ -8,32 +8,48 @@
       <h1> {{$t('wallets')}}</h1>
 
       <b-row cols="12">
-        <b-col cols="4">
+        <b-col cols="6">
           <h3> Inserir Operação </h3>
           <div class="container-fluid">
           <b-row class="my-1" align-h="start">
-              <b-col sm="4" align="left">{{$t('wDay')}} </b-col>
-              <b-col cols="8">     <b-form-datepicker id="example-datepicker" v-model="day" size="sm"></b-form-datepicker></b-col>
+              <b-col sm="3" align="left">{{$t('wDay')}} </b-col>
+              <b-col cols="9">     <b-form-datepicker id="example-datepicker" v-model="day" size="sm"></b-form-datepicker></b-col>
           </b-row>
           <b-row class="my-1" align-h="start">
-              <b-col sm="4" align="left">{{$t('wQuantity')}} </b-col>
-              <b-col cols="8"> <b-form-input v-model="quantity" type="number"></b-form-input> </b-col>
+              <b-col sm="3" align="left">{{$t('wQuantity')}} </b-col>
+              <b-col cols="9"> <b-form-input v-model="quantity" type="number"></b-form-input> </b-col>
           </b-row>
           <b-row class="my-1" align-h="start">
-              <b-col sm="4" align="left">{{$t('wValue')}} </b-col>
-            <b-col cols="8"> <b-form-input v-model="value" type="text" :formatter="currencyFormat"></b-form-input> </b-col>
+              <b-col sm="3" align="left">{{$t('wValue')}} </b-col>
+            <b-col cols="9"> <b-form-input v-model="value" type="text" :formatter="currencyFormat"></b-form-input> </b-col>
           </b-row>
-<!--            TODO: mudar esse input?-->
           <b-row class="my-1" align-h="start">
-              <b-col sm="4" align="left">{{$t('wSymbol')}} </b-col>
-              <b-col cols="8"> <b-form-input v-model="symbol" type="text"></b-form-input> </b-col>
+              <b-col sm="3" align="left">{{$t('wSymbol')}} </b-col>
+            <b-col cols="9"> <v-select
+                class="style-chooser"
+                :options="companies"
+                v-model="symbol"
+                :reduce="(x) => x.symbol"
+                label="name"
+            ></v-select> </b-col>
           </b-row>
+
           <b-row class="my-1" align-h="center">
-            <!--              <b-col sm="4" align="left">{{$t('wType')}} </b-col>-->
-            <!--              <b-col cols="8"> <v-select class="style-chooser" :options="operationTypes" v-model="opType"></v-select> </b-col>-->
+            <b-button-group class="right-chart-options" cols="8">
+              <b-button
+                  v-for="(btn, idx) in marketOptions.buttons"
+                  :key="idx"
+                  :pressed.sync="btn.state"
+                  variant="primary"
+                  @click="market=btn.value">
+                <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
+              </b-button>
+            </b-button-group>
+          </b-row>
+
+
+          <b-row class="my-1" align-h="center">
             <b-form-group>
-              <!--              <b-form-radio v-model="type" name="some-radios" value="Buy">Buy</b-form-radio>-->
-              <!--              <b-form-radio v-model="type" name="some-radios" value="Sell">Sell</b-form-radio>-->
               <b-form-radio-group
                   id="radio-group-1"
                   v-model="opType"
@@ -47,18 +63,12 @@
           </b-row>
           </div>
         </b-col>
-        <b-col cols="8">
+        <b-col cols="6">
           <h3> Composição atual </h3>
           <div class="container-fluid">
             <b-table sticky-header="true"
-                     no-border-collapse="true"
+                     no-border-collapse
                      small  dark hover :items="consolidated" :fields="fieldsConsolidated">
-              <template #cell(actions)="row">
-                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
-                  {{ $t('remove') }}
-                </b-button>
-              </template>
-
             </b-table>
           </div>
         </b-col>
@@ -66,7 +76,7 @@
           <h3> Histórico de Operações </h3>
           <div class="container-fluid">
             <b-table sticky-header="200px"
-                     no-border-collapse="true"
+                     no-border-collapse
                      small fixed dark hover :items="opHistory" :fields="fields">
               <template #cell(actions)="row">
                 <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
@@ -110,21 +120,39 @@
 <script>
 import i18n from '@/plugins/i18n';
 import Client from "../repositories/Clients/AxiosClient";
+import bovespaCompanies from "../data/bovespa.json";
+import nasdaqCompanies from "../data/nasdaq.json";
+import vSelect from "vue-select";
+import VueApexCharts from "vue-apexcharts";
+const BOVESPA = "BOVESPA";
+const NASDAQ = "NASDAQ";
 export default {
   name: "Wallets",
   mounted(){
     this.id = this.$route.params.id
     this.fetchStocks()
   },
+  components: {
+    vSelect,
+  },
   data() {
     return {
-      day: 0,
+      day: "",
+      market: BOVESPA,
       opType: "Buy",
       quantity: 0,
       value: 0,
+      searchText: '',
+      companies: bovespaCompanies,
       unauth: false,
       loading: true,
       firstLoading: true,
+      marketOptions: {
+        buttons: [
+          { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
+          { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
+        ],
+      },
       id: 0,
       symbol: '',
       opHistory: [],
@@ -200,12 +228,14 @@ export default {
     },
     submit(){
       const token = this.$store.state.token;
+      let parsedSymbol = this.symbol.toUpperCase() + (this.market === BOVESPA ? ".SA" : "");
+
       let {data} = Client(token).post('/api/wallets/' + this.id +  '/operations', {
         day: this.day,
         type: this.opType.toLowerCase(),
         quantity: this.quantity,
         value: this.fromText(this.value),
-        symbol: this.symbol,
+        symbol: parsedSymbol,
       }).then((response) => {
         this.fetchStocks();
       }).catch((error) => {
@@ -248,7 +278,12 @@ export default {
         this.incorrect = true;
       });
     },
-  }
+  },
+  watch: {
+    market: function (val) {
+      this.companies = val === BOVESPA ? bovespaCompanies : nasdaqCompanies;
+    },
+  },
 };
 </script>
 

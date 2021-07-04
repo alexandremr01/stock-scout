@@ -27,6 +27,7 @@ const messages = {
         'savedSimulations': 'Saved Simulations',
         'errorSimulation': 'Simulation API error',
         'simulationDescription': 'Select the field you want to be calculated and fill the others.',
+        'market': 'Market',
 
         'wDay': 'Day',
         'wType': 'Type',
@@ -62,6 +63,7 @@ const messages = {
         'wType': 'Tipo',
         'wQuantity': 'Quantdade',
         'name': 'Nome',
+        'market': 'Mercado',
         'wValue': 'Valor',
         'wSymbol': 'Ativo',
     }
