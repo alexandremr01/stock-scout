@@ -22,9 +22,17 @@ const messages = {
         'remove': 'Delete',
         'see': 'See',
         'clear': 'Clear',
+        'wallets': 'Wallets',
         'savedSimulations': 'Saved Simulations',
         'errorSimulation': 'Simulation API error',
-        'simulationDescription': 'Select the field you want to be calculated and fill the others.'
+        'simulationDescription': 'Select the field you want to be calculated and fill the others.',
+
+        'wDay': 'Day',
+        'wType': 'Type',
+        'wQuantity': 'Quantity',
+        'wValue': 'Value',
+        'wSymbol': 'Stock',
+
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -43,11 +51,17 @@ const messages = {
         'calculate': 'Calcular',
         'save': 'Salvar',
         'remove': 'Remover',
+        'wallets': 'Minhas Carteiras',
         'savedSimulations': 'Simulações salvas',
         'see': 'Visualizar',
         'clear': 'Limpa',
         'errorSimulation': 'Erro na API de simulação',
-        'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.'
+        'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.',
+        'wDay': 'Dia',
+        'wType': 'Tipo',
+        'wQuantity': 'Quantdade',
+        'wValue': 'Valor',
+        'wSymbol': 'Ativo',
     }
 };
 

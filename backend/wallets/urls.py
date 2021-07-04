@@ -7,6 +7,7 @@ router.register(r'wallets', views.WalletViewSet)
 # router.register(r'operations', views.OperationsViewSet)
 
 operation_list = views.OperationsViewSet.as_view({'get': 'list', 'post': 'create'})
+operation_delete = views.OperationsViewSet.as_view({'delete': 'destroy'})
 # router.register(r'wallets/<id>/operations', operation_list, basename='operation')
 
 
@@ -16,6 +17,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('phrases/', views.PhraseView.as_view()),
     path(r'wallets/<pk>/operations', operation_list, name='List Operations'),
+    path(r'wallets/<pk_wallet>/operations/<pk_op>', operation_delete, name='Delete Operations'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

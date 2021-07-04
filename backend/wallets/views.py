@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db import connection
 
 from .serializers import WalletSerializer, OperationSerializer
@@ -67,7 +67,6 @@ class OperationsViewSet(viewsets.ModelViewSet):
     def list(self, request, pk):
         wallet = Wallet.objects.filter(id=pk).first()
         print(wallet.name)
-        print("hers")
         queryset = Operations.objects.filter(wallet=wallet)
         serializer = OperationSerializer(queryset, many=True)
 
@@ -81,6 +80,10 @@ class OperationsViewSet(viewsets.ModelViewSet):
                          quantity=body['quantity'], value=body['value'], symbol=body['symbol'])
         sim.save()
         return Response(OperationSerializer(sim).data)
+
+    def destroy(self, request, pk_wallet, pk_op):
+        Operations.objects.filter(id=pk_op).delete()
+        return HttpResponse(status=200)
 
 
 class PhraseView(APIView):

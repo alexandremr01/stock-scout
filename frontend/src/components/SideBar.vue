@@ -26,7 +26,7 @@
           <b-icon-graph-up scale=".6" shift-v="-.6"></b-icon-graph-up>
           Dashboard</b-nav-item
         >
-        <b-nav-item to="wallets">
+        <b-nav-item to="wallets" v-if="$store.getters.isLoggedIn">
           <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
           Wallets</b-nav-item
         >

@@ -12,7 +12,7 @@ class OperationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Operations
-        fields = ('wallet_id', 'value', 'type', 'symbol', 'quantity', 'day')
+        fields = ('id', 'wallet_id', 'value', 'type', 'symbol', 'quantity', 'day')
 
     def create(self, validated_data):
         op = Operations(**validated_data)
