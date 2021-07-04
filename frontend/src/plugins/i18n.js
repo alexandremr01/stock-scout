@@ -28,11 +28,10 @@ const messages = {
         'errorSimulation': 'Simulation API error',
         'simulationDescription': 'Select the field you want to be calculated and fill the others.',
         'market': 'Market',
-
         'wDay': 'Day',
         'wType': 'Type',
         'wQuantity': 'Quantity',
-        'wValue': 'Value',
+        'wValue': 'Unit Value',
         'wSymbol': 'Stock',
 
     },
@@ -64,7 +63,7 @@ const messages = {
         'wQuantity': 'Quantdade',
         'name': 'Nome',
         'market': 'Mercado',
-        'wValue': 'Valor',
+        'wValue': 'Valor Unitário',
         'wSymbol': 'Ativo',
     }
 };

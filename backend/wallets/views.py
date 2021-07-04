@@ -5,7 +5,7 @@ from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
 from django.db import connection
-
+from apiwrapper.serializers import get_pseudo_current_stock_value
 from .serializers import WalletSerializer, OperationSerializer
 from .models import Wallet, Operations
 from users.models import Profile
@@ -42,15 +42,20 @@ class WalletViewSet(viewsets.ModelViewSet):
             GROUP BY symbol""", [pk, profile.id])
             rows = cursor.fetchall()
         resp = []
-        print(rows)
+        current_total_value = 0
         for r in rows:
             if r[3] == 0 or r[3] is None:
                 avg = 0
             else:
                 avg = r[2]/r[3]
-            # TODO: calculate current value for stock in "symbol"
-            resp.append({'symbol': r[0], 'quantity': r[1], 'avg_value': round(avg, 2), 'current': 0})
-        current_total_value = 0
+            values = get_pseudo_current_stock_value([r[0]])
+            str_value = values[r[0]]
+            try:
+                value = float(str_value)
+            except ValueError:
+                value = 0
+            current_total_value += value*r[1]
+            resp.append({'symbol': r[0], 'quantity': r[1], 'avg_value': round(avg, 2), 'current_unit': value, 'current_total': value*r[1]})
         return JsonResponse({'stocks': resp, 'current_total_value': current_total_value})
 
     def create(self, request, pk=None):

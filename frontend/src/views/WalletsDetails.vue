@@ -89,7 +89,7 @@
         </b-row>
 
         <b-row class="my-1" align-h="center">
-          <h3> Valor atual da carteira: {{currentTotalValue}} </h3>
+          <h3> Valor atual da carteira: {{this.toCurrency(currentTotalValue)}} </h3>
         </b-row>
       </b-row>
     </b-container>
@@ -204,9 +204,14 @@ export default {
           label: "Valor Médio de Compra"
         },
         {
-          key: 'current',
+          key: 'current_unit',
           sortable: true,
-          label: "Valor Atual"
+          label: "Valor Unitário Atual"
+        },
+        {
+          key: 'current_total',
+          sortable: true,
+          label: "Valor Unitário Total"
         },
       ]
     }
