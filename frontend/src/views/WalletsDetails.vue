@@ -4,7 +4,7 @@
 
     <b-nav-item to="/wallets"> <h2 align="left"> <b-icon-arrow-left-circle style="color: #47545D;">></b-icon-arrow-left-circle>  </h2> </b-nav-item>
 
-    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="!unauth && !loading">
+    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="!unauth && !firstLoading">
       <h1> {{$t('wallets')}}</h1>
 
       <b-row cols="12">
@@ -65,7 +65,7 @@
         <b-row class="my-1" align-h="center">
           <h3> Histórico de Operações </h3>
           <div class="container-fluid">
-            <b-table sticky-header="true"
+            <b-table sticky-header="200px"
                      no-border-collapse="true"
                      small fixed dark hover :items="opHistory" :fields="fields">
               <template #cell(actions)="row">
@@ -76,6 +76,10 @@
 
             </b-table>
           </div>
+        </b-row>
+
+        <b-row class="my-1" align-h="center">
+          <h3> Valor atual da carteira: {{currentTotalValue}} </h3>
         </b-row>
       </b-row>
     </b-container>
@@ -120,9 +124,11 @@ export default {
       value: 0,
       unauth: false,
       loading: true,
+      firstLoading: true,
       id: 0,
       symbol: '',
       opHistory: [],
+      currentTotalValue: 0,
       consolidated: [],
       operationTypes: ["Buy", "Sell"],
       fields:[
@@ -218,15 +224,19 @@ export default {
         else this.incorrect = true;
       }).finally(()=>{
         this.loading = false;
+        this.firstLoading = false;
       });
       Client(token).get('/api/wallets/' + this.id +  '/', {}).then((response) => {
         this.consolidated = response.data.stocks;
+        this.currentTotalValue = response.data.current_total_value;
       }).catch((error) => {
         if (error.response.status === 403)
           this.unauth = true;
         else this.incorrect = true;
       }).finally(()=>{
         this.loading = false;
+        this.firstLoading = false;
+
       });
     },
     async remove(item, index, button) {
