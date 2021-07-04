@@ -2,7 +2,7 @@
   <div class="outer">
     <b-container fluid class="maincontainer">
       <transition name="enable-sidebar">
-        <b-container fluid class="sidebar" v-if="this.homeState">
+        <b-container fluid class="sidebar p-0 m-0" v-if="this.homeState">
           <SideBar />
         </b-container>
       </transition>
@@ -14,7 +14,14 @@
         </b-container></transition
       >
 
-      <b-container fluid class="content">
+      <b-container
+        fluid
+        class="content"
+        :style="{
+          borderTopLeftRadius: this.bordersize,
+          borderBottomLeftRadius: this.bordersize,
+        }"
+      >
         <router-view></router-view>
       </b-container>
     </b-container>
@@ -29,10 +36,20 @@ export default {
     return {
       loginSignupState: false,
       homeState: false,
+      bordersize: "20px",
     };
   },
   components: {
     SideBar,
+  },
+  watch: {
+    $route() {
+      if (this.$route.path !== "/") {
+        this.bordersize = "0px";
+      } else {
+        this.bordersize = "20px";
+      }
+    },
   },
   mounted() {
     this.routeWatcher = this.$watch(
@@ -65,7 +82,6 @@ export default {
   align-content: flex-end;
   height: 92vh;
   width: 100%;
-  padding: 0px;
   border-radius: 20px;
 }
 
