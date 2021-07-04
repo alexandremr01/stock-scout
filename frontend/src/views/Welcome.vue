@@ -35,7 +35,7 @@ export default {
   border-radius: 20px;
   background: rgb(234, 243, 243);
   background: linear-gradient(
-    90deg,
+    to bottom right,
     rgba(234, 243, 243, 1) 0%,
     rgba(203, 214, 208, 1) 35%,
     rgba(190, 205, 206, 1) 100%
