@@ -1,8 +1,8 @@
 <template>
   <div id="Dashboard">
-    <b-container>
+    <b-container class="right-chart-container">
       <b-row>
-        <b-col cols="11">
+        <b-col cols="5">
           <v-select
             class="style-chooser"
             @input="searchStock"
@@ -13,7 +13,7 @@
           ></v-select>
         </b-col>
 
-        <b-col cols="1">
+        <b-col cols="2">
           <b-dropdown size="lm" variant="primary">
             <template #button-content>
               <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
@@ -41,36 +41,31 @@
         <!--        </datalist>-->
         <!--      </b-input-group>-->
         <!--      </b-col>-->
-
-        <b-col cols="5">
-          <b-button-group class="mt-2" size="lm">
-            <b-button
-              v-for="(btn, idx) in marketOptions.buttons"
-              :key="idx"
-              :pressed.sync="btn.state"
-              variant="primary"
-              @click="updateMarket(btn.value)"
-            >
-              <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{
-                btn.caption
-              }}
-            </b-button>
-          </b-button-group>
-        </b-col>
       </b-row>
     </b-container>
 
-    <b-row align-h="end">
-      <b-col cols="4">
-        <b-button variant="success" class="buyStock" size="lm">
-          <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon
-          >&nbsp;Buy </b-button
-        >&nbsp;
-        <b-button variant="danger" class="sellStock" size="lm">
-          <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
-        </b-button>
-      </b-col>
-    </b-row>
+    <b-button-group class="right-chart-options" size="lm">
+      <b-button
+        v-for="(btn, idx) in marketOptions.buttons"
+        :key="idx"
+        :pressed.sync="btn.state"
+        style="fontsize: 16px"
+        variant="primary"
+        @click="updateMarket(btn.value)"
+      >
+        <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
+      </b-button>
+    </b-button-group>
+
+    <div class="right-chart-buy-sell">
+    <b-button variant="success" class="buyStock" size="lm">
+      <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon
+      >&nbsp;Buy </b-button
+    >&nbsp;
+    <b-button variant="danger" class="sellStock" size="lm">
+      <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
+    </b-button>
+    </div>
 
     <b-button-group class="lineChartFrequencyOptions" size="lm">
       <b-button
@@ -88,7 +83,7 @@
     <div class="Chart">
       <lineChart
         ref="Chart"
-        width="75%"
+        width="70%"
         type="line"
         :options="lineChartOptions"
         :series="lineChartSeries"
@@ -99,7 +94,7 @@
     <div class="candlestickChart">
       <candlestickChart
         ref="candlestickChart"
-        width="75%"
+        width="70%"
         type="candlestick"
         :options="candlestickChartOptions"
         :series="candlestickChartSeries"
@@ -110,6 +105,24 @@
 </template>
 
 <style>
+.right-chart-container {
+  display: inline-block;
+  position: absolute;
+  left: 60%;
+  top: 10%;
+}
+.right-chart-options {
+  display: inline-block;
+  position: absolute;
+  left: 61%;
+  top: 15%;
+}
+.right-chart-buy-sell {
+  display: inline-block;
+  position: absolute;
+  top: 18%;
+  left: 87%;
+}
 .buyStock {
   display: inline-block;
   box-shadow: none !important;
@@ -121,15 +134,15 @@
 .Chart {
   display: inline-block;
   position: absolute;
-  top: 15%;
-  left: 26%;
-  width: 75%;
+  top: 25%;
+  left: 35%;
+  width: 70%;
 }
 .lineChartFrequencyOptions {
   display: inline-block;
   position: absolute;
   top: 70%;
-  left: 58%;
+  left: 68%;
 }
 .lineChartFrequencyOptionsButton {
   box-shadow: none !important;
@@ -137,9 +150,9 @@
 .candlestickChart {
   display: inline-block;
   position: absolute;
-  top: 15%;
-  left: 0%;
-  width: 75%;
+  top: 25%;
+  left: 14%;
+  width: 70%;
 }
 .apexcharts-tooltip {
   color: darkred;
@@ -148,9 +161,9 @@
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
-  background: #dfe5fb;
+  background: #fbfcfc;
   border: none;
-  color: #394066;
+  color: #6bbe0c;
   text-transform: lowercase;
   font-variant: small-caps;
 }
@@ -208,8 +221,8 @@ export default {
       },
       marketOptions: {
         buttons: [
-          { caption: "Bovespa", state: true, value: BOVESPA, flag: "br" },
-          { caption: "Nasdaq", state: false, value: NASDAQ, flag: "us" },
+          { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
+          { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
         ],
       },
       lineChartOptions: {
@@ -218,12 +231,15 @@ export default {
             show: false,
           },
         },
-        colors: ["#cc5d18"], // @todo
+        colors: ["#358C59"], // @todo
         dataLabels: {
-          enabled: true, // todo: add button to enable/disable
+          enabled: false, // todo: add button to enable/disable
           style: {
             fontSize: "12px",
           },
+        },
+        grid: {
+          borderColor: "#2f373c"
         },
         xaxis: {
           categories: [],
@@ -231,7 +247,7 @@ export default {
           labels: {
             format: "dd MMM",
             style: {
-              colors: "#ffffff",
+              colors: "#2f373c",
               fontSize: "16px",
             },
           },
@@ -240,14 +256,14 @@ export default {
           decimalsInFloat: 0,
           labels: {
             style: {
-              colors: "#ffffff",
+              colors: "#2f373c",
               fontSize: "16px",
             },
           },
           title: {
-            text: "Closing Price",
+            text: "Price",
             style: {
-              color: "#ffffff",
+              color: "#2f373c",
               fontSize: "18px",
             },
           },
@@ -266,7 +282,7 @@ export default {
           style: {
             fontSize: "18px",
             fontWeight: "bold",
-            color: "#ffffff",
+            color: "#2f373c",
           },
         },
         tooltip: {
@@ -295,23 +311,26 @@ export default {
           labels: {
             format: "dd MMM",
             style: {
-              colors: "#ffffff",
+              colors: "#2f373c",
               fontSize: "16px",
             },
           },
+        },
+        grid: {
+          borderColor: "#2f373c"
         },
         yaxis: {
           decimalsInFloat: 0,
           labels: {
             style: {
-              colors: "#ffffff",
+              colors: "#2f373c",
               fontSize: "16px",
             },
           },
           title: {
             text: "Price",
             style: {
-              color: "#ffffff",
+              color: "#2f373c",
               fontSize: "18px",
             },
           },
@@ -330,7 +349,7 @@ export default {
           style: {
             fontSize: "18px",
             fontWeight: "bold",
-            color: "#ffffff",
+            color: "#2f373c",
           },
         },
       },
