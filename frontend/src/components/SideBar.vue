@@ -9,6 +9,7 @@
         rounded="circle"
       ></b-img>
     </b-container>
+    Olá, {{ username }}
     <b-container fluid class="navigation">
       <b-nav vertical class="navigation">
         <b-nav-item to="/home">
@@ -17,10 +18,6 @@
             shift-v="-.6"
           ></b-icon-house-door-fill>
           Home</b-nav-item
-        >
-        <b-nav-item to="/profile">
-          <b-icon-person-fill scale=".6" shift-v="-.6"></b-icon-person-fill>
-          My Profile</b-nav-item
         >
         <b-nav-item to="/dashboard">
           <b-icon-graph-up scale=".6" shift-v="-.6"></b-icon-graph-up>
@@ -57,11 +54,14 @@
 </template>
 
 <script>
+import Client from "../repositories/Clients/AxiosClient";
+
 export default {
   data() {
     return {
       loginPage: false,
       signUpPage: false,
+      username: 'Guest'
     };
   },
   methods: {
@@ -71,6 +71,12 @@ export default {
     },
   },
   mounted() {
+    if (this.$store.getters.isLoggedIn){
+      const token = this.$store.state.token;
+      Client(token).get('/api/me/').then((response)=>{
+        this.username = response.data.name;
+      });
+    }
     this.routeWatcher = this.$watch(
       function () {
         return this.$route;
