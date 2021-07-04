@@ -16,9 +16,10 @@ export default {
 
 <style lang="scss">
 @import "./styles/common.scss";
+@import url("https://fonts.googleapis.com/css2?family=Antic&display=swap%27");
 
 #app {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: "Antic", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

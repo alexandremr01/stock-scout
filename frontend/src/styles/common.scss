@@ -1,13 +1,20 @@
 // Your variable overrides
+$lightBg:#e1e3e3;
+$darkBg:#2f373c;
+$lightBgAccent:#fbfcfc;
+$darkBgAccent:#c5c6c8;
+$lightFont:#fbfcfc;
+$darkFont: #252422;
 
 // pallete
-$pallete-main: #889399;
-$pallete-light-shades: #ecf2f2;
+$pallete-main: #fbfcfc;
+$pallete-light-shades: #7d8b9b;
 $pallete-light-accent: #918B76;
 $pallete-dark-accent: #806865;
 $pallete-dark-shades: #47545D;
 
 $primary: $pallete-main;
+$secondary: $darkBg;
 $info: $pallete-dark-shades;
 $success: #5ea766;
 $warning: #db972e;
@@ -15,6 +22,8 @@ $danger: #f44336;
 
 $body-bg: $pallete-dark-shades;
 $body-color: $pallete-light-shades;
+
+
 
   // Bootstrap and its default variables
 @import '../../node_modules/bootstrap/scss/bootstrap';

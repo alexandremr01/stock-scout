@@ -9,9 +9,10 @@
 
       <transition name="enable-sidetext"
         ><b-container fluid class="sidetext" v-if="this.loginSignupState">
-          <h1 v-if="this.$route.name === `login`">Welcome back!</h1>
-          <h1 v-if="this.$route.name === `signup`">Welcome Friend!</h1>
-        </b-container></transition>
+          <h1 v-if="this.$route.name === `login`">Welcome Back!</h1>
+          <h1 v-if="this.$route.name === `signup`">Welcome, Friend!</h1>
+        </b-container></transition
+      >
 
       <b-container fluid class="content">
         <router-view></router-view>
@@ -33,15 +34,20 @@ export default {
   components: {
     SideBar,
   },
-  mounted(){
+  mounted() {
     this.routeWatcher = this.$watch(
-        function () {
-          return this.$route;
-        },
-        function (route) {
-          this.loginSignupState = route.name === `login` || route.name === `signup`;
-          this.homeState = (route.name !== `login` && route.name !== `signup` && route.name !== `join` && route.name !== `welcome`);
-        }
+      function () {
+        return this.$route;
+      },
+      function (route) {
+        this.loginSignupState =
+          route.name === `login` || route.name === `signup`;
+        this.homeState =
+          route.name !== `login` &&
+          route.name !== `signup` &&
+          route.name !== `join` &&
+          route.name !== `welcome`;
+      }
     );
   },
 };
@@ -51,6 +57,7 @@ export default {
 <style scoped>
 .outer {
   padding: 50px;
+  background-color: #21272b;
 }
 
 .maincontainer {
@@ -58,35 +65,41 @@ export default {
   align-content: flex-end;
   height: 92vh;
   width: 100%;
-  padding: 20px;
+  padding: 0px;
   border-radius: 20px;
-  background-color: black;
 }
 
 .sidebar {
   width: 25%;
-  background-color: cornsilk;
+  background-color: #2f373c;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   transition-duration: 300ms;
   transition-property: width;
 }
 
 .sidetext {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   width: 45%;
   margin: auto;
-  background-color: black;
+  color: primary;
+  background-color: #2f373c;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   transition-duration: 300ms;
   transition-property: width;
 }
-
-/* .sidetext:hover {
-  width: 60%;
-} */
 
 .content {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: cadetblue;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: #e1e3e3;
 }
 
 .enable-sidebar-enter-active,

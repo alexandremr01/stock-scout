@@ -8,7 +8,7 @@
         ></b-img>
       </b-container>
       <b-container fluid class="navigation">
-        <b-nav vertical>
+        <b-nav vertical class="navigation">
           <b-nav-item to="home">
             <b-icon-house-door-fill
               scale=".6"
@@ -35,10 +35,20 @@
             ></b-icon-calculator-fill>
             Simulations</b-nav-item
           >
-          <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn"
-            >Log Out</b-nav-item
+          <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn">
+            <b-icon-arrow-return-left
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-arrow-return-left>
+            Log Out</b-nav-item
           >
-          <b-nav-item to="" v-if="!$store.getters.isLoggedIn">Back</b-nav-item>
+          <b-nav-item to="" v-if="!$store.getters.isLoggedIn">
+            <b-icon-arrow-return-left
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-arrow-return-left>
+            Back</b-nav-item
+          >
         </b-nav>
       </b-container>
     </div>
@@ -83,12 +93,11 @@ export default {
 <style scoped>
 .profile-picture {
   padding: 30px;
-  height: 25%;
+  height: 30%;
 }
 
 .navigation {
-  font-size: 20px;
-  height: 60%;
+  font-size: 1.4vw;
   flex-direction: row;
   display: flex;
   justify-content: center;

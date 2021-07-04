@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container fluid class="bloco bg-primary">
+    <b-container fluid class="bloco bg-secondary">
       <b-container class="title">
         <h1>Signup</h1>
       </b-container>

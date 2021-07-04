@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container class="bloco bg-primary">
+    <b-container class="bloco bg-secondary">
       <b-container class="title">
         <h1>Login</h1>
       </b-container>
@@ -87,7 +87,7 @@ export default {
       await TokenRepository.obtain(this.form.email, this.form.password)
         .then((response) => {
           this.$store.commit("updateToken", response.data.token);
-          this.$router.push('/home');
+          this.$router.push("/home");
         })
         .catch((error) => {
           console.log(error);
