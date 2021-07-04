@@ -6,6 +6,7 @@
 
     <br>
     <br>
+    <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
     <b-container class="bv-example-row bv-example-row-flex-cols">
       <b-row>
@@ -112,6 +113,7 @@ export default {
       selected: null,
       selectedSim: null,
       incorrect: false,
+      loading: false,
       simulations: [],
       fields: [
         {
@@ -236,6 +238,7 @@ export default {
         this.$router.push('login');
       } else {
         const token = this.$store.state.token;
+        this.loading = true;
         let {data} = Client(token).post('/api/simulations/', {
           initial_value: this.fromText(this.values.initial),
           monthly_contribution: this.fromText(this.values.monthly),
@@ -252,6 +255,7 @@ export default {
       }
     },
     async fetchSimulations() {
+      this.loading = true;
       if (this.$store.getters.isLoggedIn) {
         const token = this.$store.state.token;
         await Client(token).get('/api/simulations/', {}).then((response) => {
@@ -259,11 +263,12 @@ export default {
         }).catch((error) => {
           console.log(error)
           this.incorrect = true;
-        });
+        }).finally(()=>this.loading=false);
       }
     },
     async remove(item, index, button) {
       const token = this.$store.state.token;
+      this.loading = true;
       await Client(token).delete('/api/simulations/' + item.id + '/').then((response) => {
         this.fetchSimulations();
       }).catch((error) => {

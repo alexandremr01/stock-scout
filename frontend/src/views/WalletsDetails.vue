@@ -1,8 +1,10 @@
 <template>
   <div>
+    <b-spinner label="Loading..." v-if="loading"></b-spinner>
+
     <b-nav-item to="/wallets"> <h2 align="left"> <b-icon-arrow-left-circle style="color: #47545D;">></b-icon-arrow-left-circle>  </h2> </b-nav-item>
 
-    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="!unauth">
+    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="!unauth && !loading">
       <h1> {{$t('wallets')}}</h1>
 
       <b-row cols="12">
@@ -117,6 +119,7 @@ export default {
       quantity: 0,
       value: 0,
       unauth: false,
+      loading: true,
       id: 0,
       symbol: '',
       opHistory: [],
@@ -205,6 +208,7 @@ export default {
       });
     },
     fetchStocks(){
+      this.loading = true;
       const token = this.$store.state.token;
       Client(token).get('/api/wallets/' + this.id +  '/operations', {}).then((response) => {
         this.opHistory = response.data;
@@ -212,6 +216,8 @@ export default {
         if (error.response.status === 403)
           this.unauth = true;
         else this.incorrect = true;
+      }).finally(()=>{
+        this.loading = false;
       });
       Client(token).get('/api/wallets/' + this.id +  '/', {}).then((response) => {
         this.consolidated = response.data.stocks;
@@ -219,6 +225,8 @@ export default {
         if (error.response.status === 403)
           this.unauth = true;
         else this.incorrect = true;
+      }).finally(()=>{
+        this.loading = false;
       });
     },
     async remove(item, index, button) {
