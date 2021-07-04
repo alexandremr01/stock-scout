@@ -1,16 +1,22 @@
 <template>
-  <div>
-    <b-container fluid class="p-0">
+  <div class="sidebar-menu">
+    <container fluid class="p-0">
       <h1 class="stocktitle">Stock Scout</h1>
-    </b-container>
-    <b-container fluid class="profile-picture">
+    </container>
+
+    <container fluid class="logo">
       <b-img
         src="https://picsum.photos/125/125/?image=58"
         rounded="circle"
       ></b-img>
-    </b-container>
-    <b-container fluid class="navigation">
-      <b-nav vertical class="navigation">
+    </container>
+
+    <container>
+      <h5 class="user">Anthony</h5>
+    </container>
+
+    <container fluid class="navigation">
+      <b-nav vertical>
         <b-nav-item to="/home">
           <b-icon-house-door-fill
             scale=".6"
@@ -52,7 +58,7 @@
           Back</b-nav-item
         >
       </b-nav>
-    </b-container>
+    </container>
   </div>
 </template>
 
@@ -92,25 +98,34 @@ export default {
 </script>
 
 <style scoped>
-.stocktitle {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  font-size: 2.5vw;
+.sidebar-menu {
+  padding-top: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 50%;
+}
+
+.stocktitle {
+  font-size: 2.5vw;
   text-align: center;
 }
 
-.profile-picture {
-  padding-bottom: 30px;
-  height: 30%;
+.user {
+  font-size: 1.2vw;
+  text-align: center;
+  color: primary;
+}
+
+.logo {
 }
 
 .navigation {
   font-size: 1.6vw;
-  flex-direction: row;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-self: center;
   text-align: left;
 }
 </style>

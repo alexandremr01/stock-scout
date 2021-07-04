@@ -1,6 +1,16 @@
 <template>
   <div id="Dashboard">
-    <b-container class="right-chart-container">
+    <GraphCard
+      chartType="line"
+      stock="hello"
+      :categories="[1, 2, 3]"
+      :chartSeries="[
+        {
+          data: [1, 2, 3],
+        },
+      ]"
+    />
+    <!-- <b-container class="right-chart-container">
       <b-row>
         <b-col cols="5">
           <v-select
@@ -29,18 +39,6 @@
             </b-dropdown-item-button>
           </b-dropdown>
         </b-col>
-
-        <!--      <b-col cols="4">-->
-        <!--      <b-input-group size="lm" class="searchBar">-->
-        <!--        <b-input-group-prepend is-text>-->
-        <!--          <b-icon icon="search"></b-icon>-->
-        <!--        </b-input-group-prepend>-->
-        <!--        <b-form-input list="company-list" type="text" v-on:keyup.enter="searchStock" v-model="searchText" placeholder="search for stocks"></b-form-input>-->
-        <!--        <datalist id="company-list">-->
-        <!--          <option v-for="company in companies"> {{ company.name }} - {{company.symbol}} </option>-->
-        <!--        </datalist>-->
-        <!--      </b-input-group>-->
-        <!--      </b-col>-->
       </b-row>
     </b-container>
 
@@ -58,13 +56,13 @@
     </b-button-group>
 
     <div class="right-chart-buy-sell">
-    <b-button variant="success" class="buyStock" size="lm">
-      <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon
-      >&nbsp;Buy </b-button
-    >&nbsp;
-    <b-button variant="danger" class="sellStock" size="lm">
-      <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
-    </b-button>
+      <b-button variant="success" class="buyStock" size="lm">
+        <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon
+        >&nbsp;Buy </b-button
+      >&nbsp;
+      <b-button variant="danger" class="sellStock" size="lm">
+        <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
+      </b-button>
     </div>
 
     <b-button-group class="lineChartFrequencyOptions" size="lm">
@@ -100,7 +98,7 @@
         :series="candlestickChartSeries"
         class="candlestickChart"
       ></candlestickChart>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -183,12 +181,15 @@ import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 
+import GraphCard from "../components/GraphCard.vue";
+
 export default {
   name: "Dashboard",
   components: {
     lineChart: VueApexCharts,
     candlestickChart: VueApexCharts,
     vSelect,
+    GraphCard,
   },
   data: function () {
     return {
@@ -239,7 +240,7 @@ export default {
           },
         },
         grid: {
-          borderColor: "#2f373c"
+          borderColor: "#2f373c",
         },
         xaxis: {
           categories: [],
@@ -317,7 +318,7 @@ export default {
           },
         },
         grid: {
-          borderColor: "#2f373c"
+          borderColor: "#2f373c",
         },
         yaxis: {
           decimalsInFloat: 0,
