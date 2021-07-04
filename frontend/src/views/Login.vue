@@ -50,7 +50,7 @@
             </b-container>
             <b-container class="footer">
               <p>
-                New to Stock-Scout?
+                New to Stock Scout?
                 <b-link @click="toSignup">SignUp</b-link>
               </p>
             </b-container>
@@ -114,9 +114,6 @@ export default {
 .align-label {
   text-align: left;
   padding-bottom: 10px;
-}
-
-.form-input {
 }
 
 .button {

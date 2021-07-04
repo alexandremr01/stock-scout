@@ -74,13 +74,14 @@ export default {
 <style scoped>
 .outer {
   padding: 50px;
+  height: 100vh;
   background-color: #21272b;
 }
 
 .maincontainer {
   display: flex;
   align-content: flex-end;
-  height: 92vh;
+  height: 100%;
   width: 100%;
   border-radius: 20px;
 }
