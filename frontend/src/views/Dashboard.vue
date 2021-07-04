@@ -105,7 +105,7 @@
       ></lineChart>
     </div>
 
-    <div class="candlestickChart">
+    <!-- <div class="candlestickChart">
       <candlestickChart
         ref="candlestickChart"
         width="75%"
@@ -113,7 +113,7 @@
         :series="candlestickChartSeries"
         class="candlestickChart"
       ></candlestickChart>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -347,8 +347,29 @@ export default {
           },
         },
         tooltip: {
-          enabled: true
-        }
+          custom: function ({ seriesIndex, dataPointIndex, w }) {
+            const o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
+            const h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
+            const l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
+            const c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
+            return (
+              '<div class="apexcharts-tooltip-candlestick">' +
+              '<div>Open: <span class="value">' +
+              o + " USD" +
+              "</span></div>" +
+              '<div>High: <span class="value">' +
+              h + " USD" +
+              "</span></div>" +
+              '<div>Low: <span class="value">' +
+              l + " USD" +
+              "</span></div>" +
+              '<div>Close: <span class="value">' +
+              c + " USD" +
+              "</span></div>" +
+              "</div>"
+            );
+          },
+        },
       },
       lineChartSeries: [
         {
@@ -397,8 +418,6 @@ export default {
       this.lineChartOptions.xaxis.categories = date.reverse();
       this.lineChartSeries.data = openingPrice.reverse();
 
-      console.log(this.stockSymbol);
-
       this.$refs.Chart.updateOptions({
         series: [
           {
@@ -445,8 +464,7 @@ export default {
           newData = this.lineChartSeries.data;
           newCategories = this.lineChartOptions.xaxis.categories;
           newTooltip = this.lineChartOptions.tooltip;
-        }
-        else {
+        } else {
           newData = this.candlestickChartSeries.data;
           newCategories = this.candlestickChartOptions.xaxis.categories;
           newTooltip = this.candlestickChartOptions.tooltip;
@@ -471,8 +489,6 @@ export default {
     },
     searchStock: function () {
       this.stockSymbol = this.searchText.toUpperCase();
-      console.log(this.stockSymbol);
-      console.log(this.searchText);
       return this.renderChart(this.stockSymbol, this.stockFrequency);
     },
     lineChartFrequencyOnPress(i) {
