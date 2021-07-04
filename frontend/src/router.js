@@ -32,7 +32,12 @@ const router = new Router({
         {
             path: '/wallets',
             name: 'wallets',
-            component: () => import('./views/Wallets.vue')
+            component: () => import('./views/Wallets.vue'),
+        },
+        {
+            path: '/wallets/:id',
+            name: 'walletsdetails',
+            component: () => import('./views/WalletsDetails.vue'),
         },
         {
             path: '/login',

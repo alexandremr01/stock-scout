@@ -11,26 +11,26 @@
     </b-container>
     <b-container fluid class="navigation">
       <b-nav vertical class="navigation">
-        <b-nav-item to="home">
+        <b-nav-item to="/home">
           <b-icon-house-door-fill
             scale=".6"
             shift-v="-.6"
           ></b-icon-house-door-fill>
           Home</b-nav-item
         >
-        <b-nav-item to="profile">
+        <b-nav-item to="/profile">
           <b-icon-person-fill scale=".6" shift-v="-.6"></b-icon-person-fill>
           My Profile</b-nav-item
         >
-        <b-nav-item to="dashboard">
+        <b-nav-item to="/dashboard">
           <b-icon-graph-up scale=".6" shift-v="-.6"></b-icon-graph-up>
           Dashboard</b-nav-item
         >
-        <b-nav-item to="wallets" v-if="$store.getters.isLoggedIn">
+        <b-nav-item to="/wallets" v-if="$store.getters.isLoggedIn">
           <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
           Wallets</b-nav-item
         >
-        <b-nav-item to="simulations">
+        <b-nav-item to="/simulations">
           <b-icon-calculator-fill
             scale=".6"
             shift-v="-.6"

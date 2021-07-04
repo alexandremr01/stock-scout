@@ -22,6 +22,7 @@ const messages = {
         'remove': 'Delete',
         'see': 'See',
         'clear': 'Clear',
+        'name': 'Name',
         'wallets': 'Wallets',
         'savedSimulations': 'Saved Simulations',
         'errorSimulation': 'Simulation API error',
@@ -60,6 +61,7 @@ const messages = {
         'wDay': 'Dia',
         'wType': 'Tipo',
         'wQuantity': 'Quantdade',
+        'name': 'Nome',
         'wValue': 'Valor',
         'wSymbol': 'Ativo',
     }
