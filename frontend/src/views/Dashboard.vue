@@ -10,6 +10,24 @@
         },
       ]"
     />
+
+    <GraphCard
+      chartType="candlestick"
+      stock="hello"
+      :categories="[1, 2]"
+      :chartSeries="[{
+        data: [
+          {
+            x: 1,
+            y: [6593.34, 6600, 6582.63, 6600],
+          },
+          {
+            x: 2,
+            y: [6593.34, 6600, 4000, 3000],
+          }
+        ]
+      }]"
+    />
     <!-- <b-container class="right-chart-container">
       <b-row>
         <b-col cols="5">
