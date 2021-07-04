@@ -1,11 +1,13 @@
 from django.shortcuts import render
-from .models import StockTimeSeries, CoinQuotation
+from .models import CoinQuotation
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 
 from .api_client import hg_brasil_client
 from .serializers import get_or_update_stock_time_series, CoinQuotationSerializer
+
+from datetime import datetime, timedelta, timezone
 
 # Create your views here.
 class StockDetail(APIView):
