@@ -1,7 +1,22 @@
 <template>
   <div class="anthonybg">
-    <b-container fluid>
-      <b-button pill class="button" @click="toLogin">Continue</b-button>
+    <b-container fluid class="continuecontainer">
+      <b-container class="continuetext">
+        <h3>A melhor maneira de acompanhar seus investimentos.</h3>
+      </b-container>
+      <b-button pill class="button" @click="toLogin"
+        >Continuar
+        <svg width="16" height="16" fill="none" viewBox="0 0 21 20" role="img">
+          <g>
+            <path
+              d="M18.5 10H2.5M18.5 10L12 16.5M18.5 10L12 3.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="square"
+              stroke-linejoin="round"
+            ></path>
+          </g></svg
+      ></b-button>
     </b-container>
     <b-container fluid class="anthonycontainer">
       <img src="../assets/anthony-resized.png" class="anthony" />
@@ -54,12 +69,26 @@ export default {
   height: 100%;
 }
 
-.button {
-  width: 200px;
+.continuecontainer {
+  border-radius: 20px;
+  padding: 20px;
+  background: #fbfcfc;
   position: fixed;
   top: 50%;
   left: 30%;
   transform: translate(-50%, -50%);
+  width: 300px;
+  height: 250px;
+}
+
+.continuetext {
+  text-align: left;
+  color: black;
+  padding-bottom: 60px;
+}
+
+.button {
+  width: 80%;
 }
 
 .icon {
