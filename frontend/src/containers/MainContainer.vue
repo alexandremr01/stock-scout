@@ -1,9 +1,9 @@
 <template>
   <div class="outer">
-    <b-container fluid class="maincontainer">
+    <b-container fluid class="maincontainer p-0">
       <transition name="enable-sidebar">
         <b-container fluid class="sidebar p-0 m-0" v-if="this.homeState">
-          <SideBar />
+          <side-bar></side-bar>
         </b-container>
       </transition>
 
@@ -16,7 +16,7 @@
 
       <b-container
         fluid
-        class="content"
+        class="content p-0"
         :style="{
           borderTopLeftRadius: this.bordersize,
           borderBottomLeftRadius: this.bordersize,
@@ -47,7 +47,7 @@ export default {
       if (this.$route.path !== "/") {
         this.bordersize = "0px";
       } else {
-        this.bordersize = "20px";
+        thibordersize = "20px";
       }
     },
   },
@@ -129,6 +129,7 @@ export default {
 
 .enable-sidetext-enter-active,
 .enable-sidetext-leave-active {
+  transition-delay: 2s;
   transition: width 0.5s ease;
 }
 .enable-sidetext-enter,

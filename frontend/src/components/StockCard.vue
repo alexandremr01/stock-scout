@@ -42,6 +42,7 @@ export default {
 }
 
 .value {
+  color: black;
   text-align: left;
   margin: 0;
 }

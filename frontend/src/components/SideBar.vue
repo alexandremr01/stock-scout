@@ -15,8 +15,8 @@
           <b-icon-house-door-fill
             scale=".6"
             shift-v="-.6"
-          ></b-icon-house-door-fill
-          >Home</b-nav-item
+          ></b-icon-house-door-fill>
+          Home</b-nav-item
         >
         <b-nav-item to="profile">
           <b-icon-person-fill scale=".6" shift-v="-.6"></b-icon-person-fill>
