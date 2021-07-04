@@ -35,6 +35,10 @@
             ></b-icon-calculator-fill>
             Simulations</b-nav-item
           >
+          <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn"
+            >Log Out</b-nav-item
+          >
+          <b-nav-item to="" v-if="!$store.getters.isLoggedIn">Back</b-nav-item>
         </b-nav>
       </b-container>
     </div>
@@ -48,6 +52,12 @@ export default {
       loginPage: false,
       signUpPage: false,
     };
+  },
+  methods: {
+    logout() {
+      this.$store.commit("removeToken");
+      this.$router.push("/");
+    },
   },
   mounted() {
     this.routeWatcher = this.$watch(

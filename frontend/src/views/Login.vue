@@ -87,7 +87,7 @@ export default {
       await TokenRepository.obtain(this.form.email, this.form.password)
         .then((response) => {
           this.$store.commit("updateToken", response.data.token);
-          this.$emit("to-home");
+          this.$router.push('/home');
         })
         .catch((error) => {
           console.log(error);
@@ -95,11 +95,9 @@ export default {
         });
     },
     toSignup() {
-      this.$emit("to-login-signup");
       this.$router.push("/sign-up");
     },
     toDashboard() {
-      this.$emit("to-home");
       this.$router.push("/home");
     },
   },

@@ -21,7 +21,8 @@ const messages = {
         'save': 'Save',
         'remove': 'Delete',
         'see': 'See',
-        'savedSimulations': 'Saved Simulations - Click to restore',
+        'clear': 'Clear',
+        'savedSimulations': 'Saved Simulations',
         'errorSimulation': 'Simulation API error',
         'simulationDescription': 'Select the field you want to be calculated and fill the others.'
     },
@@ -44,6 +45,7 @@ const messages = {
         'remove': 'Remover',
         'savedSimulations': 'Simulações salvas',
         'see': 'Visualizar',
+        'clear': 'Limpa',
         'errorSimulation': 'Erro na API de simulação',
         'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.'
     }

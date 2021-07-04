@@ -9,17 +9,12 @@
 
       <transition name="enable-sidetext"
         ><b-container fluid class="sidetext" v-if="this.loginSignupState">
-          <h1 v-if="this.$route.name == `login`">Welcome back!</h1>
-          <h1 v-if="this.$route.name == `signup`">Welcome Friend!</h1>
-        </b-container></transition
-      >
+          <h1 v-if="this.$route.name === `login`">Welcome back!</h1>
+          <h1 v-if="this.$route.name === `signup`">Welcome Friend!</h1>
+        </b-container></transition>
 
       <b-container fluid class="content">
-        <router-view
-          @to-login-signup="changeState(`loginSignupPage`)"
-          @to-home="changeState(`homePage`)"
-          @to-join="changeState(`joinPage`)"
-        ></router-view>
+        <router-view></router-view>
       </b-container>
     </b-container>
   </div>
@@ -31,8 +26,6 @@ import SideBar from "../components/SideBar.vue";
 export default {
   data() {
     return {
-      sideBarStates: ["joinPage", "loginSignupPage", "dashboardPage"],
-      sideBarCurrentState: "joinPage",
       loginSignupState: false,
       homeState: false,
     };
@@ -40,21 +33,16 @@ export default {
   components: {
     SideBar,
   },
-  methods: {
-    changeState(toPage) {
-      if (toPage == "loginSignupPage") {
-        this.sideBarCurrentState = toPage;
-        this.loginSignupState = true;
-        this.homeState = false;
-      } else if (toPage == "homePage") {
-        this.sideBarCurrentState = toPage;
-        this.loginSignupState = false;
-        this.homeState = true;
-      } else {
-        this.loginSignupState = false;
-        this.homeState = false;
-      }
-    },
+  mounted(){
+    this.routeWatcher = this.$watch(
+        function () {
+          return this.$route;
+        },
+        function (route) {
+          this.loginSignupState = route.name === `login` || route.name === `signup`;
+          this.homeState = (route.name !== `login` && route.name !== `signup` && route.name !== `join` && route.name !== `welcome`);
+        }
+    );
   },
 };
 </script>

@@ -7,22 +7,26 @@
     <br>
     <br>
 
-    <b-container>
+    <b-container class="bv-example-row bv-example-row-flex-cols">
+      <b-row>
+
+    <b-col>
+      <b-container>
       <b-row class="my-1" align-h="start">
-        <b-col sm="3" align="left">
+        <b-col sm="4" align="left">
           {{$t('calculate')}}
         </b-col>
 
-        <b-col cols="3">
+        <b-col cols="8">
           <v-select class="style-chooser" @input="updateType" :options="calculationOptions" v-model="selectedSim"></v-select>
         </b-col>
       </b-row>
 
       <b-row class="my-1" v-for="input in inputs" :key="input.name">
-        <b-col sm="3" align="left">
+        <b-col sm="4" align="left">
           <label>{{$t(input.name)}}</label>
         </b-col>
-        <b-col sm="4">
+        <b-col sm="8">
           <b-form-input v-model="input.value" :readonly="selected===input.name" :formatter="input.formatter" @input="update"></b-form-input>
         </b-col>
       </b-row>
@@ -30,12 +34,17 @@
 <br><br>
     <b-container>
       <b-row cols="12">
-        <b-col cols="4">
-         <b-form-input v-model="simName" placeholder="Nome da simulação"></b-form-input>
+        <b-col cols="5">
+         <b-form-input v-model="simName" placeholder="Nome"></b-form-input>
         </b-col>
-        <b-col cols="4">
+        <b-col cols="3">
          <b-button variant="primary" @click="save">
             {{ $t('save') }}
+          </b-button>
+        </b-col>
+        <b-col cols="3">
+          <b-button variant="primary" @click="clean">
+            {{ $t('clear') }}
           </b-button>
         </b-col>
         <div v-if="incorrect">
@@ -44,22 +53,26 @@
       </b-row>
     </b-container>
 
-    <br><br>
+</b-col>
+        <b-col>
+          <div class="container-fluid">
+            <h2>  {{ $t('savedSimulations') }} </h2>
+            <b-table dark hover :items="simulations" :fields="fields">
+              <template #cell(actions)="row">
+                <b-button variant="primary" size="sm" @click="selectRow(row.item, row.index, $event.target)" class="mr-1">
+                  {{ $t('see') }}
+                </b-button>
+                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
+                  {{ $t('remove') }}
+                </b-button>
+              </template>
 
-    <div class="container-fluid">
-      <h2>  {{ $t('savedSimulations') }} </h2>
-      <b-table dark hover :items="simulations" :fields="fields">
-        <template #cell(actions)="row">
-          <b-button variant="primary" size="sm" @click="selectRow(row.item, row.index, $event.target)" class="mr-1">
-            {{ $t('see') }}
-          </b-button>
-          <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
-            {{ $t('remove') }}
-          </b-button>
-        </template>
+            </b-table>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
 
-      </b-table>
-    </div>
 
   </div>
 </template>
@@ -259,12 +272,19 @@ export default {
       });
     },
     selectRow(item){
-      console.log("lendo")
       this.values.initial = this.toCurrency(item.initial_value);
       this.values.monthly = this.toCurrency(item.monthly_contribution);
       this.values.interest = this.percentageFormat(item.interest_rate);
       this.values.time = item.time;
       this.values.final = this.toCurrency(item.final_amount);
+      this.inputs.forEach((v, i, a) => v.value = this.values[v.name])
+    },
+    clean(){
+      this.values.initial = null;
+      this.values.monthly = null;
+      this.values.interest = '6.00';
+      this.values.time = null;
+      this.values.final = null;
       this.inputs.forEach((v, i, a) => v.value = this.values[v.name])
     }
   }
