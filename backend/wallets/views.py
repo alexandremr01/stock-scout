@@ -33,7 +33,7 @@ class WalletViewSet(viewsets.ModelViewSet):
             cursor.execute("""
             SELECT symbol, 
                    SUM(CASE WHEN type = 'buy' THEN quantity ELSE -quantity END) quantity,
-                   SUM(CASE WHEN type = 'buy' THEN value END) paid_value,
+                   SUM(CASE WHEN type = 'buy' THEN value*quantity END) paid_value,
                    SUM(CASE WHEN type = 'buy' THEN quantity END) total_bought
             FROM wallets_operations 
             WHERE wallet_id = %s 
@@ -47,7 +47,8 @@ class WalletViewSet(viewsets.ModelViewSet):
                 avg = 0
             else:
                 avg = r[2]/r[3]
-            resp.append({'symbol': r[0], 'quantity': r[1], 'avg_value': avg})
+            # TODO: calculate current value for stock in "symbol"
+            resp.append({'symbol': r[0], 'quantity': r[1], 'avg_value': round(avg, 2), 'current': 0})
         return JsonResponse({'stocks': resp})
 
     def create(self, request, pk=None):

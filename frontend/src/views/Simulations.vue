@@ -57,7 +57,7 @@
         <b-col>
           <div class="container-fluid">
             <h2>  {{ $t('savedSimulations') }} </h2>
-            <b-table dark hover :items="simulations" :fields="fields">
+            <b-table small fixed sticky-header="true" dark hover :items="simulations" :fields="fields">
               <template #cell(actions)="row">
                 <b-button variant="primary" size="sm" @click="selectRow(row.item, row.index, $event.target)" class="mr-1">
                   {{ $t('see') }}

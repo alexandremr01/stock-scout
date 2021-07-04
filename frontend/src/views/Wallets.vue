@@ -4,7 +4,9 @@
 
     <b-container class="bv-example-row bv-example-row-flex-cols">
       <b-row cols="12">
-        <b-col cols="6">
+        <b-col cols="4">
+          <h3> Inserir Operação </h3>
+          <div class="container-fluid">
           <b-row class="my-1" align-h="start">
               <b-col sm="4" align="left">{{$t('wDay')}} </b-col>
               <b-col cols="8">     <b-form-datepicker id="example-datepicker" v-model="day" size="sm"></b-form-datepicker></b-col>
@@ -17,6 +19,7 @@
               <b-col sm="4" align="left">{{$t('wValue')}} </b-col>
             <b-col cols="8"> <b-form-input v-model="value" type="text" :formatter="currencyFormat"></b-form-input> </b-col>
           </b-row>
+<!--            TODO: mudar esse input?-->
           <b-row class="my-1" align-h="start">
               <b-col sm="4" align="left">{{$t('wSymbol')}} </b-col>
               <b-col cols="8"> <b-form-input v-model="symbol" type="text"></b-form-input> </b-col>
@@ -38,8 +41,25 @@
           <b-row class="my-1" align-h="center">
             <b-button @click="submit"> Submit </b-button>
           </b-row>
+          </div>
         </b-col>
-        <b-col cols="6">
+        <b-col cols="8">
+          <h3> Composição atual </h3>
+          <div class="container-fluid">
+            <b-table sticky-header="true"
+                     no-border-collapse="true"
+                     small  dark hover :items="consolidated" :fields="fieldsConsolidated">
+              <template #cell(actions)="row">
+                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
+                  {{ $t('remove') }}
+                </b-button>
+              </template>
+
+            </b-table>
+          </div>
+        </b-col>
+        <b-row class="my-1" align-h="center">
+          <h3> Histórico de Operações </h3>
           <div class="container-fluid">
             <b-table sticky-header="true"
                      no-border-collapse="true"
@@ -52,7 +72,7 @@
 
             </b-table>
           </div>
-        </b-col>
+        </b-row>
       </b-row>
     </b-container>
   </div>
@@ -91,6 +111,7 @@ export default {
       value: 0,
       symbol: '',
       opHistory: [],
+      consolidated: [],
       operationTypes: ["Buy", "Sell"],
       fields:[
         {
@@ -119,7 +140,28 @@ export default {
           label: "Dia"
         },
         { key: 'actions', label: '' }
-
+      ],
+      fieldsConsolidated:[
+        {
+          key: 'symbol',
+          sortable: true,
+          label: "Ação"
+        },
+        {
+          key: 'quantity',
+          sortable: true,
+          label: "Quantidade"
+        },
+        {
+          key: 'avg_value',
+          sortable: true,
+          label: "Valor Médio de Compra"
+        },
+        {
+          key: 'current',
+          sortable: true,
+          label: "Valor Atual"
+        },
       ]
     }
   },
@@ -157,6 +199,12 @@ export default {
       const token = this.$store.state.token;
       Client(token).get('/api/wallets/3/operations', {}).then((response) => {
         this.opHistory = response.data;
+      }).catch((error) => {
+        console.log(error)
+        this.incorrect = true;
+      });
+      Client(token).get('/api/wallets/3/', {}).then((response) => {
+        this.consolidated = response.data.stocks;
       }).catch((error) => {
         console.log(error)
         this.incorrect = true;
