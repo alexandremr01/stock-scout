@@ -1,9 +1,10 @@
 <template>
   <div>
     <b-nav-item to="/wallets"> <h2 align="left"> <b-icon-arrow-left-circle style="color: #47545D;">></b-icon-arrow-left-circle>  </h2> </b-nav-item>
-    <h1> {{$t('wallets')}}</h1>
 
-    <b-container class="bv-example-row bv-example-row-flex-cols">
+    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="!unauth">
+      <h1> {{$t('wallets')}}</h1>
+
       <b-row cols="12">
         <b-col cols="4">
           <h3> Inserir Operação </h3>
@@ -76,6 +77,10 @@
         </b-row>
       </b-row>
     </b-container>
+
+    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="unauth">
+      <h1> Unauthorized </h1>
+    </b-container>
   </div>
 </template>
 
@@ -103,7 +108,6 @@ export default {
   name: "Wallets",
   mounted(){
     this.id = this.$route.params.id
-    // TODO: unauthorized se o id não for do usuário
     this.fetchStocks()
   },
   data() {
@@ -112,6 +116,7 @@ export default {
       opType: "Buy",
       quantity: 0,
       value: 0,
+      unauth: false,
       id: 0,
       symbol: '',
       opHistory: [],
@@ -204,14 +209,16 @@ export default {
       Client(token).get('/api/wallets/' + this.id +  '/operations', {}).then((response) => {
         this.opHistory = response.data;
       }).catch((error) => {
-        console.log(error)
-        this.incorrect = true;
+        if (error.response.status === 403)
+          this.unauth = true;
+        else this.incorrect = true;
       });
       Client(token).get('/api/wallets/' + this.id +  '/', {}).then((response) => {
         this.consolidated = response.data.stocks;
       }).catch((error) => {
-        console.log(error)
-        this.incorrect = true;
+        if (error.response.status === 403)
+          this.unauth = true;
+        else this.incorrect = true;
       });
     },
     async remove(item, index, button) {

@@ -27,7 +27,8 @@ class WalletViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk):
         user = request.user
         profile = Profile.objects.filter(user=user).first()
-        queryset = Wallet.objects.filter(profile=profile)
+        if isAuthorized(request, pk) is False:
+            return HttpResponse(status=403)
         rows = []
         with connection.cursor() as cursor:
             cursor.execute("""
@@ -35,11 +36,11 @@ class WalletViewSet(viewsets.ModelViewSet):
                    SUM(CASE WHEN type = 'buy' THEN quantity ELSE -quantity END) quantity,
                    SUM(CASE WHEN type = 'buy' THEN value*quantity END) paid_value,
                    SUM(CASE WHEN type = 'buy' THEN quantity END) total_bought
-            FROM wallets_operations 
-            WHERE wallet_id = %s 
-            GROUP BY symbol""", [pk])
+            FROM wallets_operations op
+            JOIN wallets_wallet w ON w.id = op.wallet_id
+            WHERE wallet_id = %s AND w.profile_id = %s 
+            GROUP BY symbol""", [pk, profile.id])
             rows = cursor.fetchall()
-        serializer = WalletSerializer(queryset, many=True)
         resp = []
         print(rows)
         for r in rows:
@@ -66,11 +67,11 @@ class OperationsViewSet(viewsets.ModelViewSet):
     serializer_class = OperationSerializer
 
     def list(self, request, pk):
+        if isAuthorized(request, pk) is False:
+            return HttpResponse(status=403)
         wallet = Wallet.objects.filter(id=pk).first()
-        print(wallet.name)
         queryset = Operations.objects.filter(wallet=wallet)
         serializer = OperationSerializer(queryset, many=True)
-
         return Response(serializer.data)
 
     def create(self, request, pk):
@@ -83,6 +84,8 @@ class OperationsViewSet(viewsets.ModelViewSet):
         return Response(OperationSerializer(sim).data)
 
     def destroy(self, request, pk_wallet, pk_op):
+        if isAuthorized(request, pk_wallet) is False:
+            return HttpResponse(status=403)
         Operations.objects.filter(id=pk_op).delete()
         return HttpResponse(status=200)
 
@@ -102,3 +105,12 @@ class PhraseView(APIView):
             ]
         })
         return response
+
+def isAuthorized(request, wallet_id):
+    user = request.user
+    profile = Profile.objects.filter(user=user).first()
+    walletQs = Wallet.objects.filter(id=wallet_id)
+    if not walletQs:
+        return False
+    wallet = walletQs.first()
+    return wallet.profile.id == profile.id
