@@ -8,7 +8,6 @@ import i18n from '@/plugins/i18n';
 import FlagIcon from 'vue-flag-icon';
 import './registerServiceWorker'
 
-
 Vue.use(FlagIcon);
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
@@ -18,8 +17,6 @@ Vue.use(IconsPlugin)
 Vue.use(VueResource)
 
 Vue.config.productionTip = false
-
-export const bus = new Vue();
 
 new Vue({
   i18n,

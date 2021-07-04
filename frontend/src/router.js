@@ -16,11 +16,8 @@ const router = new Router({
         },
         {
             path: '/simulations',
-            name: 'simulation',
+            name: 'simulations',
             component: () => import('./views/Simulations.vue'),
-            meta: {
-                authRequired: true
-            }
         },
         {
             path: '/about',
@@ -31,6 +28,11 @@ const router = new Router({
             path: '/dashboard',
             name: 'dashboard',
             component: () => import('./views/Dashboard.vue')
+        },
+        {
+            path: '/wallets',
+            name: 'wallets',
+            component: () => import('./views/Wallets.vue')
         },
         {
             path: '/login',

@@ -9,11 +9,32 @@
       </b-container>
       <b-container fluid class="navigation">
         <b-nav vertical>
-          <b-nav-item to="home">Home</b-nav-item>
-          <b-nav-item to="profile">My Profile</b-nav-item>
-          <b-nav-item to="dashboard">Dashboard</b-nav-item>
-          <b-nav-item to="wallets">Wallets</b-nav-item>
-          <b-nav-item to="simulations">Simulations</b-nav-item>
+          <b-nav-item to="home">
+            <b-icon-house-door-fill
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-house-door-fill
+            >Home</b-nav-item
+          >
+          <b-nav-item to="profile">
+            <b-icon-person-fill scale=".6" shift-v="-.6"></b-icon-person-fill>
+            My Profile</b-nav-item
+          >
+          <b-nav-item to="dashboard">
+            <b-icon-graph-up scale=".6" shift-v="-.6"></b-icon-graph-up>
+            Dashboard</b-nav-item
+          >
+          <b-nav-item to="wallets">
+            <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
+            Wallets</b-nav-item
+          >
+          <b-nav-item to="simulations">
+            <b-icon-calculator-fill
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-calculator-fill>
+            Simulations</b-nav-item
+          >
         </b-nav>
       </b-container>
     </div>
@@ -56,10 +77,11 @@ export default {
 }
 
 .navigation {
+  font-size: 20px;
   height: 60%;
   flex-direction: row;
   display: flex;
   justify-content: center;
-  text-align: center;
+  text-align: left;
 }
 </style>
