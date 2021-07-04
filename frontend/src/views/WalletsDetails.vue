@@ -211,7 +211,7 @@ export default {
         {
           key: 'current_total',
           sortable: true,
-          label: "Valor Unitário Total"
+          label: "Valor Total Atual"
         },
       ]
     }
