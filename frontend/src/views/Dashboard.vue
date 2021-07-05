@@ -11,6 +11,7 @@
         },
       ]"
     /> -->
+    <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
     <GraphCard 
       v-for="chart in charts" 
@@ -132,6 +133,7 @@ export default {
       searchText: "",
       chartType: "line",
       charts: [],
+      loading: false,
       marketOptions: {
         buttons: [
           { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
@@ -145,10 +147,14 @@ export default {
       console.log(this.chartType);
       console.log(this.stockSymbol);
 
+      this.loading = true;
+
       let parsedSymbol = this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
       let { data } = await axios.get(
         "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
       );
+
+      this.loading = false;
 
       data = JSON.parse(data);
 

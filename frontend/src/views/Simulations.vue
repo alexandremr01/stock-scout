@@ -1,77 +1,68 @@
 <template>
-  <div>
-    <h1>{{$t('simulations')}}</h1>
-
-    {{$t('simulationDescription')}}
-
-    <br>
-    <br>
-    <b-spinner label="Loading..." v-if="loading"></b-spinner>
-
-    <b-container class="bv-example-row bv-example-row-flex-cols">
-      <b-row>
-
-    <b-col>
-      <b-container>
-      <b-row class="my-1" align-h="start">
-        <b-col sm="4" align="left">
-          {{$t('calculate')}}
-        </b-col>
-
-        <b-col cols="8">
-          <v-select class="style-chooser" @input="updateType" :options="calculationOptions" v-model="selectedSim"></v-select>
-        </b-col>
-      </b-row>
-
-      <b-row class="my-1" v-for="input in inputs" :key="input.name">
-        <b-col sm="4" align="left">
-          <label>{{$t(input.name)}}</label>
-        </b-col>
-        <b-col sm="8">
-          <b-form-input v-model="input.value" :readonly="selected===input.name" :formatter="input.formatter" @input="update"></b-form-input>
-        </b-col>
-      </b-row>
-    </b-container>
-<br><br>
-    <b-container>
-      <b-row cols="12">
-        <b-col cols="5">
-         <b-form-input v-model="simName" placeholder="Nome"></b-form-input>
-        </b-col>
-        <b-col cols="3">
-         <b-button variant="primary" @click="save">
-            {{ $t('save') }}
-          </b-button>
-        </b-col>
-        <b-col cols="3">
-          <b-button variant="primary" @click="clean">
-            {{ $t('clear') }}
-          </b-button>
-        </b-col>
-        <div v-if="incorrect">
-          {{ $t('errorSimulation') }}
-        </div>
-      </b-row>
+  <div class="big-box">
+    <b-container class="description">
+      <h1>{{$t('simulations')}}</h1>
+      <h3 class="text-primary">{{$t('simulationDescription')}}</h3>
     </b-container>
 
-</b-col>
-        <b-col>
-          <div class="container-fluid">
-            <h2>  {{ $t('savedSimulations') }} </h2>
-            <b-table small fixed sticky-header="true" dark hover :items="simulations" :fields="fields">
-              <template #cell(actions)="row">
-                <b-button variant="primary" size="sm" @click="selectRow(row.item, row.index, $event.target)" class="mr-1">
-                  {{ $t('see') }}
-                </b-button>
-                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
-                  {{ $t('remove') }}
-                </b-button>
-              </template>
+    <b-container class="box">
 
-            </b-table>
-          </div>
-        </b-col>
-      </b-row>
+      <b-spinner label="Loading..." v-if="loading"></b-spinner>
+
+      <b-container class="bv-example-row bv-example-row-flex-cols">
+        <b-row>
+          <b-col>
+            <b-container class="calculator">
+              <b-row class="my-2" align-h="start">
+              <b-col sm="4" align="left"><h2>{{$t('calculate')}}</h2></b-col>
+              <b-col cols="8"><v-select class="style-chooser" @input="updateType" :options="calculationOptions" v-model="selectedSim"></v-select></b-col>
+              </b-row>
+
+              <b-row class="my-2" v-for="input in inputs" :key="input.name">
+              <b-col sm="4" align="left"><h5>{{$t(input.name)}}</h5></b-col>
+              <b-col sm="8"><b-form-input v-model="input.value" :readonly="selected===input.name" :formatter="input.formatter" @input="update"></b-form-input></b-col>
+              </b-row>
+            </b-container>
+
+            <b-container class="buttons">
+              <b-row cols="12">
+                <b-col cols="5">
+                <b-form-input v-model="simName" placeholder="Nome"></b-form-input>
+                </b-col>
+                <b-col cols="3">
+                <b-button variant="primary" @click="save">
+                    {{ $t('save') }}
+                  </b-button>
+                </b-col>
+                <b-col cols="3">
+                  <b-button variant="primary" @click="clean">
+                    {{ $t('clear') }}
+                  </b-button>
+                </b-col>
+                <div v-if="incorrect">
+                  {{ $t('errorSimulation') }}
+                </div>
+              </b-row>
+            </b-container>
+          </b-col>
+          <b-col>
+            <div class="container-fluid saved-simulations">
+              <h2>  {{ $t('savedSimulations') }} </h2>
+              <b-table small fixed sticky-header="true" dark hover :items="simulations" :fields="fields">
+                <template #cell(actions)="row">
+                  <b-button variant="primary" size="sm" @click="selectRow(row.item, row.index, $event.target)" class="mr-1">
+                    {{ $t('see') }}
+                  </b-button>
+                  <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
+                    {{ $t('remove') }}
+                  </b-button>
+                </template>
+              </b-table>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
+
     </b-container>
 
 
@@ -92,6 +83,27 @@
 .style-chooser .vs__clear,
 .style-chooser .vs__open-indicator {
   fill: #394066;
+}
+.description {
+  padding: 50px;
+  background-color: lightblue;
+}
+.calculator {
+  background-color: lightcoral;
+}
+.buttons {
+  background-color: lightgreen;
+}
+.saved-simulations {
+  background-color: lightpink;
+}
+.box {
+  background-color: lightslategray;
+}
+.big-box {
+  width: 100%;
+  height: 100%;
+  background-color: lime;
 }
 </style>
 
@@ -119,14 +131,17 @@ export default {
         {
           key: 'name',
           sortable: true,
-          label: "Nome"
+          label: this.$t('name')
         },
         {
           key: 'created_at',
           sortable: true,
-          label: "Data de criação"
+          label: this.$t('created_at')
         },
-        { key: 'actions', label: 'Ações' }
+        {
+          key: 'actions',
+          label: this.$t('actions')
+        }
 
       ],
       calculationOptions: [
@@ -292,6 +307,6 @@ export default {
       this.values.final = null;
       this.inputs.forEach((v, i, a) => v.value = this.values[v.name])
     }
-  }
+  },
 };
 </script>

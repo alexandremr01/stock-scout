@@ -4,7 +4,7 @@
 
     <b-container class="bv-example-row bv-example-row-flex-cols">
           <div class="container-fluid">
-            <b-table sticky-header="true" no-border-collapse="true" dark hover :items="wallets" :fields="fields">
+            <b-table sticky-header="true" no-border-collapse dark hover :items="wallets" :fields="fields">
               <template #cell(actions)="row">
                 <b-button variant="primary" size="sm" @click="$router.push('wallets/'+ row.item.id)" class="mr-1">
                   {{ $t('see') }}
@@ -17,7 +17,7 @@
           </div>
     </b-container>
 
-    <h3> Criar nova </h3>
+    <h3> {{ $t('createNew') }} </h3>
     <div class="container-fluid">
       <b-row class="my-1" align-h="start">
         <b-row cols="12">
