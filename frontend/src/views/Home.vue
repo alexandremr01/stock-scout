@@ -73,9 +73,8 @@ export default {
 
           this.selic = indexes["selic"] + " %";
           this.cdi = indexes["cdi"] + " %";
-          this.ibovespa = this.toCurrency(indexes["ibovespa"]);
-          this.nasdaq = this.toCurrency(indexes["nasdaq"]);
-          this.ibovespa = this.toCurrency(indexes["ibovespa"]);
+          this.nasdaq = indexes["nasdaq"];
+          this.ibovespa = indexes["ibovespa"];
 
           this.usd = this.toCurrency(usd["sell"]);
           this.usd_var = usd["variation"] + " %";

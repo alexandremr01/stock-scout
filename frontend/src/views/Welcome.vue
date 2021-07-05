@@ -102,10 +102,13 @@ export default {
 }
 
 .logo {
+  background: white;
+  border-radius: 50%;
   position: absolute;
-  top: 50px;
+  padding: 10px;
+  top: 60px;
   left: 60px;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 }
 </style>

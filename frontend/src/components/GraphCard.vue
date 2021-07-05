@@ -13,7 +13,7 @@
         :series="this.chartSeries"
       />
     </container>
-    <container class="frequency-options">
+    <container v-if="this.marketType != 'WALLET'" class="frequency-options">
       <b-button-group class="frequencyOptions" size="lm">
         <b-button
           v-for="(btn, idx) in frequencyOptions.buttons"
@@ -207,7 +207,6 @@ export default {
       );
     },
     changeChartData(xaxisData, yaxisData) {
-      console.log("ala");
       this.$refs.chart.updateOptions({
         series: [
           {
@@ -221,7 +220,7 @@ export default {
     },
   },
   components: { VueApexCharts },
-  props: ["chartType", "stock", "categories", "chartSeries", "id"],
+  props: ["chartType", "stock", "categories", "chartSeries", "id", "marketType"],
   created() {
     if (this.chartType == "line") {
       this.lineOptions.xaxis.categories = this.categories;
@@ -254,8 +253,5 @@ export default {
   align-self: center;
   width: 100%;
   height: auto;
-}
-
-.frequency-options {
 }
 </style>

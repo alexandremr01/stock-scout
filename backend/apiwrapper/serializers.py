@@ -97,6 +97,7 @@ def get_or_update_taxes():
         data_taxes = hgbr_json["results"]["taxes"][0]
         data_coins = hgbr_json["results"]["currencies"]
         data_stocks = hgbr_json["results"]["stocks"]
+        print(hgbr_json["results"])
         index = Index(date=datetime.now().date(), cdi=data_taxes["cdi"], selic=data_taxes["selic"],
                       usd=data_coins["USD"]["sell"], eur=data_coins["EUR"]["sell"],
                       ibovespa=data_stocks["IBOVESPA"]["points"] , nasdaq=data_stocks["NASDAQ"]["points"],
@@ -106,13 +107,26 @@ def get_or_update_taxes():
     return index
 
 # json to map
-def get_daily_history(symbol):
-    time_series = get_or_update_stock_time_series(symbol, 'DAY')
+def get_daily_history(symbols):
+    daily_histories = {}
 
-    daily_hist = {}
+    for symbol in symbols:
+        time_series = get_or_update_stock_time_series(symbol, 'DAY')
+        daily_hist = {}
+        for daily_intel in eval(time_series.data):
+            daily_hist[daily_intel['Date']] = daily_intel['close']
+        daily_histories[symbol] = daily_hist
+
+    time_series = get_or_update_stock_time_series('IBM', 'DAY')
+    days = []
     for daily_intel in eval(time_series.data):
-        daily_hist[daily_intel['Date']] = daily_intel['close']
-    return daily_hist
+        days.append(daily_intel['Date'])
+    increasing_days = []
+    original_len = len(days)
+    for i in range(original_len):
+        increasing_days.append(days.pop())
+
+    return increasing_days, daily_histories
 
 def get_pseudo_current_stock_value(symbols):
     values = {}

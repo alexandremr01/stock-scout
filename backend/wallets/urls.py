@@ -4,6 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'wallets', views.WalletViewSet)
+wallet_history = views.WalletViewSet.as_view({'get': 'history'})
 # router.register(r'operations', views.OperationsViewSet)
 
 operation_list = views.OperationsViewSet.as_view({'get': 'list', 'post': 'create'})
@@ -16,6 +17,7 @@ operation_delete = views.OperationsViewSet.as_view({'delete': 'destroy'})
 urlpatterns = [
     path('', include(router.urls)),
     path('phrases/', views.PhraseView.as_view()),
+    path(r'wallets/<pk>/history', wallet_history, name='List Wallet History'),
     path(r'wallets/<pk>/operations', operation_list, name='List Operations'),
     path(r'wallets/<pk_wallet>/operations/<pk_op>', operation_delete, name='Delete Operations'),
 

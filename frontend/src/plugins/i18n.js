@@ -76,7 +76,7 @@ const messages = {
         'simulationDescription': 'Selecione o valor que você deseja que seja calculado e digite os demais.',
         'wDay': 'Dia',
         'wType': 'Tipo',
-        'wQuantity': 'Quantdade',
+        'wQuantity': 'Quantidade',
         'name': 'Nome',
         'market': 'Mercado',
         'wValue': 'Valor Unitário',

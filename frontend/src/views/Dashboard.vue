@@ -67,6 +67,7 @@
         ref="charts"
         :key="chart.id"
         :chartType="chart.type"
+        :marketType="chart.marketType"
         :stock="chart.stockName"
         :categories="chart.categories"
         :chartSeries="chart.series"
@@ -107,7 +108,6 @@ import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 const WALLET = "WALLET";
-const INDEX = "INDEX";
 
 import GraphCard from "../components/GraphCard.vue";
 import Client from "../repositories/Clients/AxiosClient";
@@ -130,14 +130,6 @@ export default {
       searchText: "",
       chartType: "line",
       chartCounter: 0,
-      indexOptions: [
-        { name: "Selic" },
-        { name: "USD" },
-        { name: "EUR" },
-        { name: "Nasdaq" },
-        { name: "Ibovespa" },
-        { name: "Bitcoin" },
-      ],
       charts: [],
       loading: false,
       error: false,
@@ -150,89 +142,103 @@ export default {
       otherMarketOptions: {
         buttons: [
           { caption: "WALLET", state: false, value: WALLET, icon: "wallet" },
-          { caption: "INDEX", state: false, value: INDEX, icon: "server" },
         ],
       },
     };
   },
   methods: {
     getStockData: async function () {
-      console.log(this.chartType);
-      console.log(this.stockSymbol);
-
       this.loading = true;
-
-      let parsedSymbol =
-        this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
-      axios
-        .get(
-          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
+      if (this.market === NASDAQ || this.market === BOVESPA){
+        let parsedSymbol = this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
+        axios.get(
+            "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
         )
-        .then((response) => {
-          let data = response.data;
-          this.loading = false;
-
-          data = JSON.parse(data);
-
-          if (this.chartType == "line") {
-            let dateArray = [];
-            let closingPriceArray = [];
-
-            data.forEach((dataElement) => {
-              const date = dataElement.Date;
-              const closingPrice = dataElement.close;
-
-              dateArray.push(date);
-              closingPriceArray.push(closingPrice);
+            .then((response) => {
+              let data = response.data;
+              this.loading = false;
+              let parsedData = JSON.parse(data);
+              this.parseData(parsedData, this.stockSymbol, this.market);
+            })
+            .catch(() => {
+              this.error = true;
+              this.loading = false;
             });
-            this.charts.push({
-              type: this.chartType,
-              stockName: this.stockSymbol,
-              categories: dateArray,
-              series: [
-                {
-                  data: closingPriceArray,
-                },
-              ],
-              id: this.chartCounter,
+      } else if (this.market === WALLET){
+        let walletID = this.searchText;
+        const token = this.$store.state.token;
+        Client(token).get("/api/wallets/" + walletID + "/history")
+            .then((response) => {
+              let data = response.data;
+              this.loading = false;
+              let walletName = this.wallets.filter(x => x.symbol==this.searchText)[0].name;
+              let parsedData = JSON.parse(data).map((x) => {return {Date: x.day, close: x.value}});
+              this.parseData(parsedData, walletName, this.market);
+            })
+            .catch(() => {
+              this.error = true;
+              this.loading = false;
             });
-          }
+      }
 
-          if (this.chartType == "candlestick") {
-            let dateArray = [];
-            let dataArray = [];
+    },
+    parseData(data, title, marketType){
+      if (this.chartType == "line") {
+        let dateArray = [];
+        let closingPriceArray = [];
 
-            data.forEach((dataElement) => {
-              const date = dataElement.Date;
-              const openingPrice = dataElement.open;
-              const closingPrice = dataElement.close;
-              const highPrice = dataElement.high;
-              const lowPrice = dataElement.low;
+        data.forEach((dataElement) => {
+          const date = dataElement.Date;
+          const closingPrice = dataElement.close;
 
-              dateArray.push(date);
-              dataArray.push({
-                x: date,
-                y: [openingPrice, highPrice, lowPrice, closingPrice],
-              });
-            });
-            this.charts.push({
-              type: this.chartType,
-              stockName: this.stockSymbol,
-              categories: dateArray,
-              series: [
-                {
-                  data: dataArray,
-                },
-              ],
-              id: this.chartCounter,
-            });
-          }
-          this.chartCounter += 1;
-        })
-        .catch(() => {
-          this.error = true;
-          this.loading = false;
+          dateArray.push(date);
+          closingPriceArray.push(closingPrice);
         });
+        this.charts.push({
+          type: this.chartType,
+          marketType: marketType,
+          stockName: title,
+          categories: dateArray,
+          series: [
+            {
+              data: closingPriceArray,
+            },
+          ],
+          id: this.chartCounter,
+        });
+      }
+
+      if (this.chartType == "candlestick") {
+        let dateArray = [];
+        let dataArray = [];
+
+        data.forEach((dataElement) => {
+          const date = dataElement.Date;
+          const openingPrice = dataElement.open;
+          const closingPrice = dataElement.close;
+          const highPrice = dataElement.high;
+          const lowPrice = dataElement.low;
+
+          dateArray.push(date);
+          dataArray.push({
+            x: date,
+            y: [openingPrice, highPrice, lowPrice, closingPrice],
+          });
+        });
+        this.charts.push({
+          type: this.chartType,
+          marketType: marketType,
+          stockName: title,
+          categories: dateArray,
+          series: [
+            {
+              data: dataArray,
+            },
+          ],
+          id: this.chartCounter,
+        });
+      }
+      this.chartCounter += 1;
     },
     searchStock: function () {
       this.stockSymbol = this.searchText.toUpperCase();
@@ -299,7 +305,7 @@ export default {
       Client(token)
         .get("/api/wallets/", {})
         .then((response) => {
-          this.wallets = response.data;
+          this.wallets = response.data.map((x) => {return {name: x.name, symbol: x.id}});
         })
         .catch(() => {
           this.incorrect = true;
@@ -315,8 +321,6 @@ export default {
         this.companies = nasdaqCompanies;
       } else if (val === WALLET) {
         this.companies = this.wallets;
-      } else if (val === INDEX) {
-        this.companies = this.indexOptions;
       }
       this.marketOptions.buttons.forEach((btn, index) =>
         btn.value != val ? (btn.state = false) : null
@@ -324,6 +328,7 @@ export default {
       this.otherMarketOptions.buttons.forEach((btn, index) =>
         btn.value != val ? (btn.state = false) : null
       );
+      this.searchText = '';
     },
   },
 };
@@ -366,8 +371,7 @@ export default {
   flex-direction: column;
   justify-content: space-evenly;
 }
-.stocksearch {
-}
+
 .stockselection {
   display: flex;
   flex-direction: row;
@@ -390,25 +394,6 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-
-/* 
-.dashboardcontainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: blue;
-  width: 100%;
-  height: 100%;
-}
-
-.graphcontainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  background: red;
-  width: 100%;
-  height: auto;
-} */
 
 .apexcharts-tooltip {
   color: rgb(0, 0, 0);
