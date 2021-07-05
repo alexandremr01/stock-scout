@@ -81,13 +81,22 @@ def get_or_update_coin_quotations(currency):
     return coin_quotation
 
 # json to map
-def get_daily_history(symbol):
-    time_series = get_or_update_stock_time_series(symbol, 'DAY')
+def get_daily_history(symbols):
+    daily_histories = {}
+    time_series = None
 
-    daily_hist = {}
+    for symbol in symbols:
+        time_series = get_or_update_stock_time_series(symbol, 'DAY')
+
+        daily_hist = {}
+        for daily_intel in eval(time_series.data):
+            daily_hist[daily_intel['Date']] = daily_intel['close']
+        daily_histories[symbol] = daily_hist
+    days = []
     for daily_intel in eval(time_series.data):
-        daily_hist[daily_intel['Date']] = daily_intel['close']
-    return daily_hist
+        days.append(daily_intel['Date'])
+
+    return days, daily_histories
 
 def get_pseudo_current_stock_value(symbols):
     values = {}

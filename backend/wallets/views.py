@@ -5,17 +5,19 @@ from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
 from django.db import connection
-from apiwrapper.serializers import get_pseudo_current_stock_value
+from apiwrapper.serializers import get_pseudo_current_stock_value, get_daily_history
 from .serializers import WalletSerializer, OperationSerializer
 from .models import Wallet, Operations
 from users.models import Profile
 from rest_framework.response import Response
 import json
+from datetime import datetime
 
 
 class WalletViewSet(viewsets.ModelViewSet):
     queryset = Wallet.objects.all().order_by('name')
     serializer_class = WalletSerializer
+    permission_classes = (permissions.AllowAny,)
 
     def list(self, request):
         user = request.user
@@ -66,6 +68,40 @@ class WalletViewSet(viewsets.ModelViewSet):
         wallet = Wallet(profile=profile, name=body['name'])
         wallet.save()
         return Response(WalletSerializer(wallet).data)
+
+    def history(self, request, pk):
+        # if isAuthorized(request, pk) is False:
+        #     return HttpResponse(status=403)
+        wallet = Wallet.objects.filter(id=pk).first()
+        operations = Operations.objects.filter(wallet=wallet).order_by('day')
+
+        symbols = []
+        for op in operations:
+            symbols.append(op.symbol)
+        days, histories = get_daily_history(symbols)
+
+        op_iter = 0
+        obtained_symbols = {}
+        wallet_history = []
+        for day in days:
+            while op_iter < len(operations) and operations[op_iter].day <= datetime.strptime(day, '%Y-%m-%d').date():
+                op = operations[op_iter]
+                if not obtained_symbols.has_key(op.symbol):
+                    obtained_symbols[op.symbol] = 0
+                if op.type == 'buy':
+                    obtained_symbols[op.symbol] += op.quantity
+                else:
+                    obtained_symbols[op.symbol] -= op.quantity
+                if obtained_symbols[op.symbol] == 0:
+                    obtained_symbols.pop(op.symbol)
+                op_iter += 1
+
+            day_value = 0
+            for symbol, quantity in obtained_symbols:
+                if histories[symbol].has_key(day):
+                    day_value += quantity*float(histories[symbol][day])
+            wallet_history.append({'day': day, 'value': str(day_value)})
+        return Response(json.dumps(wallet_history))
 
 
 class OperationsViewSet(viewsets.ModelViewSet):
