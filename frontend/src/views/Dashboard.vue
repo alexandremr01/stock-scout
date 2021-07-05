@@ -58,7 +58,15 @@
         </div>
       </div>
       <div class="addbutton">
-        <b-button variant="primary" @click="getStockData()">Add</b-button>
+        <b-button variant="primary" @click="getStockData()">
+          <b-icon 
+            icon="plus-square"
+            >
+            </b-icon> Add
+          </b-button>
+      </div>
+      <div class="loadingicon">
+        <b-spinner label="Loading..." v-if="loading"></b-spinner>
       </div>
     </div>
     <div class="middlecontainer">
@@ -79,7 +87,7 @@
     </div>
     <div class="extremecontainer"></div>
 
-    <b-spinner label="Loading..." v-if="loading"></b-spinner>
+    
   </div>
 </template>
 
@@ -363,6 +371,7 @@ export default {
 }
 
 .addgraphform {
+  /* background: lightblue; */
   padding-left: 5%;
   padding-right: 5%;
   height: 100%;
@@ -378,23 +387,39 @@ export default {
   justify-content: center;
 }
 .stocktype {
+  /* background: lightcoral; */
   align-self: center;
-  width: 80%;
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 .graphtype {
-  width: 20%;
+  /* background: lightgreen; */
+  width: 60%;
   align-self: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 }
 .addbutton {
-  padding-left: 5%;
-  padding-right: 5%;
+  /* background: lightslategray; */
+  padding-left: 7%;
+  padding-right: 7%;
   height: 100%;
   width: 20%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
+.loadingicon{
+  /* background: lime; */
+  height: 100%;
+  width: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .apexcharts-tooltip {
   color: rgb(0, 0, 0);
 }
