@@ -1,18 +1,17 @@
 <template>
   <div class="card-bg">
-    <container class="remove-button">
+    <b-container class="remove-button">
       <b-button>Remove </b-button>
-    </container>
-    <container class="chart">
+    </b-container>
+    <b-container class="chart">
       <vue-apex-charts
-        ref=""
         width="100%"
         :type="this.chartType"
         :options="this.chartType === `line` ? lineOptions : candlestickOptions"
         :series="this.chartSeries"
       />
-    </container>
-    <container class="frequency-options"></container>
+    </b-container>
+    <b-container class="frequency-options"></b-container>
   </div>
 </template>
 
