@@ -80,7 +80,6 @@ export default {
 
 .maincontainer {
   display: flex;
-  align-content: flex-end;
   height: 100%;
   width: 100%;
   border-radius: 20px;
