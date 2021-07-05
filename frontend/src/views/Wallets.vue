@@ -13,7 +13,8 @@
                 :fields="fields"
                 >
                 <template #cell(actions)="row">
-                  <b-button 
+                  <b-button
+                    pill 
                     variant="primary" 
                     size="sm" 
                     @click="$router.push('wallets/'+ row.item.id)" 
@@ -21,7 +22,8 @@
                     >
                     {{ $t('see') }}
                   </b-button>
-                  <b-button 
+                  <b-button
+                    pill 
                     variant="danger" 
                     size="sm" 
                     @click="remove(row.item, row.index, $event.target)" 
@@ -47,7 +49,7 @@
             <b-form-input v-model="walletName" placeholder="Nome"></b-form-input>
           </b-col>
           <b-col cols="3">
-            <b-button variant="primary" @click="submit" class="text-dark">
+            <b-button pill variant="primary" @click="submit" class="text-dark">
               {{ $t('save') }}
             </b-button>
           </b-col>

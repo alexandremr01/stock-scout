@@ -69,7 +69,7 @@
             </b-row>
 
             <b-row class="my-1" align-h="center">
-              <b-button @click="submit" class="bg-success text-primary"> {{$t('insert')}}  </b-button>
+              <b-button pill @click="submit" class="bg-success text-primary"> {{$t('insert')}}  </b-button>
             </b-row>
           </div>
         </b-container>
@@ -102,7 +102,7 @@
                      no-border-collapse
                      small fixed dark hover :items="opHistory" :fields="fields">
               <template #cell(actions)="row">
-                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
+                <b-button pill variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
                   {{ $t('remove') }}
                 </b-button>
               </template>
