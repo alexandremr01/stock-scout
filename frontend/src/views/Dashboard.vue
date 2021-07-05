@@ -1,15 +1,29 @@
 <template>
-  <div id="Dashboard">
-    <GraphCard
-      chartType="line"
-      stock="hello"
-      :categories="[1, 2, 3]"
-      :chartSeries="[
-        {
-          data: [1, 2, 3],
-        },
-      ]"
-    />
+  <div id="Dashboard" class="dashboardcontainer">
+    <container class="addGraph"></container>
+    <container class="graphcontainer">
+      <GraphCard
+        chartType="line"
+        stock="hello"
+        :categories="[1, 2, 3]"
+        :chartSeries="[
+          {
+            data: [1, 2, 3],
+          },
+        ]"
+      />
+      <GraphCard
+        chartType="line"
+        stock="hello"
+        :categories="[1, 2, 3]"
+        :chartSeries="[
+          {
+            data: [1, 2, 3],
+          },
+        ]"
+      />
+    </container>
+
     <!-- <b-container class="right-chart-container">
       <b-row>
         <b-col cols="5">
@@ -60,7 +74,57 @@
         <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon
         >&nbsp;Buy </b-button
       >&nbsp;
-      <b-button variant="danger" class="sellStock" size="lm">
+    <b-form @submit="onSubmit" class="form-input">
+          <b-form-group
+            class="align-label"
+            id="input-group-1"
+            label-for="input-1"
+          >
+            <b-form-input
+              id="input-1"
+              v-model="form.email"
+              placeholder="Enter email"
+              required
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            class="align-label"
+            id="input-group-2"
+            label-for="input-2"
+          >
+            <b-form-input
+              id="input-2"
+              v-model="form.password"
+              placeholder="Enter password"
+              type="password"
+              required
+            ></b-form-input>
+          </b-form-group>
+
+          <div v-if="incorrect">Usuário ou senha incorreto.</div>
+
+          <b-container vertical>
+            <b-container class="buttons">
+              <b-button pill type="submit" variant="success" class="button"
+                >Login</b-button
+              >
+              <b-button
+                pill
+                @click="toDashboard"
+                variant="success"
+                class="button"
+                >Guest Login</b-button
+              >
+            </b-container>
+            <b-container class="footer">
+              <p>
+                New to Stock Scout?
+                <b-link @click="toSignup">SignUp</b-link>
+              </p>
+            </b-container>
+          </b-container>
+        </b-form>  <b-button variant="danger" class="sellStock" size="lm">
         <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
       </b-button>
     </div>
@@ -101,76 +165,6 @@
     </div> -->
   </div>
 </template>
-
-<style>
-.right-chart-container {
-  display: inline-block;
-  position: absolute;
-  left: 60%;
-  top: 10%;
-}
-.right-chart-options {
-  display: inline-block;
-  position: absolute;
-  left: 61%;
-  top: 15%;
-}
-.right-chart-buy-sell {
-  display: inline-block;
-  position: absolute;
-  top: 18%;
-  left: 87%;
-}
-.buyStock {
-  display: inline-block;
-  box-shadow: none !important;
-}
-.sellStock {
-  display: inline-block;
-  box-shadow: none !important;
-}
-.Chart {
-  display: inline-block;
-  position: absolute;
-  top: 25%;
-  left: 35%;
-  width: 70%;
-}
-.lineChartFrequencyOptions {
-  display: inline-block;
-  position: absolute;
-  top: 70%;
-  left: 68%;
-}
-.lineChartFrequencyOptionsButton {
-  box-shadow: none !important;
-}
-.candlestickChart {
-  display: inline-block;
-  position: absolute;
-  top: 25%;
-  left: 14%;
-  width: 70%;
-}
-.apexcharts-tooltip {
-  color: darkred;
-}
-
-.style-chooser .vs__search::placeholder,
-.style-chooser .vs__dropdown-toggle,
-.style-chooser .vs__dropdown-menu {
-  background: #fbfcfc;
-  border: none;
-  color: #6bbe0c;
-  text-transform: lowercase;
-  font-variant: small-caps;
-}
-
-.style-chooser .vs__clear,
-.style-chooser .vs__open-indicator {
-  fill: #394066;
-}
-</style>
 
 <script>
 import axios from "axios";
@@ -470,3 +464,91 @@ export default {
   },
 };
 </script>
+
+<style>
+.dashboardcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: blue;
+  width: 100%;
+  height: 100%;
+}
+
+.graphcontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background: red;
+  width: 100%;
+  height: auto;
+}
+
+.right-chart-container {
+  display: inline-block;
+  position: absolute;
+  left: 60%;
+  top: 10%;
+}
+.right-chart-options {
+  display: inline-block;
+  position: absolute;
+  left: 61%;
+  top: 15%;
+}
+.right-chart-buy-sell {
+  display: inline-block;
+  position: absolute;
+  top: 18%;
+  left: 87%;
+}
+.buyStock {
+  display: inline-block;
+  box-shadow: none !important;
+}
+.sellStock {
+  display: inline-block;
+  box-shadow: none !important;
+}
+.Chart {
+  display: inline-block;
+  position: absolute;
+  top: 25%;
+  left: 35%;
+  width: 70%;
+}
+.lineChartFrequencyOptions {
+  display: inline-block;
+  position: absolute;
+  top: 70%;
+  left: 68%;
+}
+.lineChartFrequencyOptionsButton {
+  box-shadow: none !important;
+}
+.candlestickChart {
+  display: inline-block;
+  position: absolute;
+  top: 25%;
+  left: 14%;
+  width: 70%;
+}
+.apexcharts-tooltip {
+  color: darkred;
+}
+
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+  background: #fbfcfc;
+  border: none;
+  color: #6bbe0c;
+  text-transform: lowercase;
+  font-variant: small-caps;
+}
+
+.style-chooser .vs__clear,
+.style-chooser .vs__open-indicator {
+  fill: #394066;
+}
+</style>

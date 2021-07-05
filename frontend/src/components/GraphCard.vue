@@ -1,17 +1,31 @@
 <template>
   <div class="card-bg">
     <container class="remove-button">
-      <b-button>Remove </b-button>
+      <b-button pill @click="removeChart">
+        <b-icon icon="x-circle-fill"></b-icon>
+      </b-button>
     </container>
     <container class="chart">
       <vue-apex-charts
-        width="100%"
         :type="this.chartType"
         :options="this.chartType === `line` ? lineOptions : candlestickOptions"
         :series="this.chartSeries"
       />
     </container>
-    <container class="frequency-options"></container>
+    <container class="frequency-options">
+      <b-button-group class="frequencyOptions" size="lm">
+        <b-button
+          v-for="(btn, idx) in frequencyOptions.buttons"
+          :key="idx"
+          :pressed.sync="btn.state"
+          variant="primary"
+          @click="frequencyOnPress(idx)"
+          class="frequencyOptionsButton"
+        >
+          <b-icon :icon="btn.icon"></b-icon>&nbsp;{{ btn.caption }}
+        </b-button>
+      </b-button-group>
+    </container>
   </div>
 </template>
 
@@ -149,7 +163,45 @@ export default {
           },
         },
       },
+      frequencyOptions: {
+        buttons: [
+          {
+            caption: "Daily",
+            state: true,
+            frequency: "DAY",
+            icon: "calendar3-event",
+          },
+          {
+            caption: "Weekly",
+            state: false,
+            frequency: "WEEK",
+            icon: "calendar3-week",
+          },
+          {
+            caption: "Monthly",
+            state: false,
+            frequency: "MONTH",
+            icon: "calendar3",
+          },
+        ],
+      },
     };
+  },
+  methods: {
+    removeChart() {
+      this.$emit("removeChart");
+    },
+    frequencyOnPress(i) {
+      this.lineChartFrequencyOptions.buttons.forEach(
+        (btn, index) => (btn.state = i === index)
+      );
+      this.lineChartFrequencyOptions.buttons.forEach((btn, index) =>
+        i === index ? this.changeChartFrequency(btn.frequency) : null
+      );
+      this.lineChartFrequencyOptions.buttons.forEach((btn, index) =>
+        i === index ? (this.stockFrequency = btn.frequency) : null
+      );
+    },
   },
   components: { VueApexCharts },
   props: ["chartType", "stock", "categories", "chartSeries"],
@@ -167,16 +219,19 @@ export default {
     rgba(203, 214, 208, 1) 35%,
     rgba(190, 205, 206, 1) 100%
   );
-  padding: 0;
+  padding: 10px;
   box-shadow: 10px 10px 2px 1px rgba(0, 0, 0, 0.2);
-  height: 500px;
-  width: 500px;
+  border-radius: 20px;
 }
 
 .remove-button {
+  align-self: flex-end;
 }
 
 .chart {
+  align-self: center;
+  width: 100%;
+  height: auto;
 }
 
 .frequency-options {

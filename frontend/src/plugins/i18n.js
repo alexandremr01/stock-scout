@@ -27,13 +27,20 @@ const messages = {
         'savedSimulations': 'Saved Simulations',
         'errorSimulation': 'Simulation API error',
         'simulationDescription': 'Select the field you want to be calculated and fill the others.',
-
+        'market': 'Market',
         'wDay': 'Day',
         'wType': 'Type',
         'wQuantity': 'Quantity',
-        'wValue': 'Value',
+        'wValue': 'Unit Value',
         'wSymbol': 'Stock',
-
+        'hello': 'Hello',
+        'opHistory': 'Operations History',
+        'currentComposition': 'Current Composition',
+        'opInsert': 'Insert Operation',
+        'insert': 'Insert',
+        'createNew': 'Create New',
+        'created_at': 'Created at',
+        'actions': 'Actions',
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -62,8 +69,17 @@ const messages = {
         'wType': 'Tipo',
         'wQuantity': 'Quantdade',
         'name': 'Nome',
-        'wValue': 'Valor',
+        'market': 'Mercado',
+        'wValue': 'Valor Unitário',
+        'hello': 'Olá',
         'wSymbol': 'Ativo',
+        'opHistory': 'Histórico de Operações',
+        'currentComposition': 'Composição Atual',
+        'opInsert': 'Inserir Operação',
+        'insert': 'Inserir',
+        'createNew': 'Criar Nova',
+        'created_at': 'Criado em',
+        'actions': 'Ações',
     }
 };
 
