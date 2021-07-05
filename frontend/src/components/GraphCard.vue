@@ -7,6 +7,7 @@
     </container>
     <container class="chart">
       <vue-apex-charts
+        ref="chart"
         :type="this.chartType"
         :options="this.chartType === `line` ? lineOptions : candlestickOptions"
         :series="this.chartSeries"
@@ -190,20 +191,26 @@ export default {
   },
   methods: {
     removeChart() {
-      console.log(this.id);
       this.$emit("remove", this.id);
     },
     frequencyOnPress(i) {
-      this.lineChartFrequencyOptions.buttons.forEach(
-        (btn, index) => (btn.state = i === index)
+      let frequency = [];
+      this.frequencyOptions.buttons.forEach(
+        (btn, index) => (btn.state = i === index) ? frequency = btn.frequency : null
       );
-      this.lineChartFrequencyOptions.buttons.forEach((btn, index) =>
-        i === index ? this.changeChartFrequency(btn.frequency) : null
-      );
-      this.lineChartFrequencyOptions.buttons.forEach((btn, index) =>
-        i === index ? (this.stockFrequency = btn.frequency) : null
-      );
+      this.$emit("changeFrequency", this.id, this.chartType, this.stock, frequency);
     },
+    changeChartData(xaxisData, yaxisData) {
+      console.log("ala")
+      this.$refs.chart.updateOptions({
+        series: [{
+          data: yaxisData
+        }],
+        xaxis: {
+          categories: xaxisData
+        }
+      });
+    }
   },
   components: { VueApexCharts },
   props: ["chartType", "stock", "categories", "chartSeries", "id"],
