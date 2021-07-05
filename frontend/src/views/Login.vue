@@ -51,7 +51,7 @@
             <b-container class="footer">
               <p>
                 New to Stock Scout?
-                <b-link @click="toSignup">SignUp</b-link>
+                <b-link @click="toSignup">Signup</b-link>
               </p>
             </b-container>
           </b-container>

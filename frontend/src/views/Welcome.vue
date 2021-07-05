@@ -1,5 +1,6 @@
 <template>
   <div class="anthonybg">
+    <img src="../assets/logo.png" class="logo" />
     <div class="anthonyphoto">
       <container class="continuecontainer">
         <container class="continuetext">
@@ -98,5 +99,13 @@ export default {
 
 .icon {
   width: 100%;
+}
+
+.logo {
+  position: absolute;
+  top: 50px;
+  left: 60px;
+  width: 80px;
+  height: 80px;
 }
 </style>

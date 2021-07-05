@@ -60,63 +60,6 @@
       <div class="addbutton">
         <b-button variant="primary" @click="getStockData()">Add</b-button>
       </div>
-      <!-- 
-      <b-container class="mt-5">
-        <b-row>
-          <b-col cols="5">
-            <v-select
-              class="style-chooser"
-              @input="searchStock"
-              :options="companies"
-              v-model="searchText"
-              :reduce="(x) => x.symbol"
-              label="name"
-            ></v-select>
-          </b-col>
-        </b-row>
-      </b-container>
-
-      <b-button
-        variant="primary"
-        style="fontsize: 16px; width: 135px"
-        @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
-      >
-        <div v-if="chartType == 'line'">
-          <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-          Line
-        </div>
-        <div v-else>
-          <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-          Candlestick
-        </div>
-      </b-button>
-
-      <b-button-group class="mt-5" size="lm">
-        <b-button
-          v-for="(btn, idx) in marketOptions.buttons"
-          :key="idx"
-          :pressed.sync="btn.state"
-          style="fontsize: 16px"
-          variant="primary"
-          @click="updateMarket(btn.value)"
-        >
-          <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
-        </b-button>
-        <b-button
-          v-for="(btn, idx) in otherMarketOptions.buttons"
-          :key="idx + 2"
-          :pressed.sync="btn.state"
-          style="fontsize: 16px"
-          variant="primary"
-          @click="updateMarket(btn.value)"
-        >
-          <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
-        </b-button>
-      </b-button-group>
-
-      <b-col cols="2">
-        <b-button variant="primary" @click="getStockData()">Add</b-button>
-      </b-col> -->
     </div>
     <div class="middlecontainer">
       <GraphCard
@@ -409,7 +352,6 @@ export default {
   height: 60%;
   display: flex;
   flex-direction: row;
-  align-content: stretch;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;

@@ -239,8 +239,9 @@ export default {
   display: flex;
   flex-direction: column;
   background: white;
+  width: 400px;
+  height: auto;
   padding: 10px;
-  flex-grow: 0.33;
   box-shadow: 10px 10px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 }
