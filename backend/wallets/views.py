@@ -100,6 +100,8 @@ class WalletViewSet(viewsets.ModelViewSet):
         op_iter = 0
         obtained_symbols = {}
         wallet_history = []
+
+        started = False
         for day in days:
             while op_iter < len(operations) and operations[op_iter].day <= datetime.strptime(day, '%Y-%m-%d').date():
                 op = operations[op_iter]
@@ -117,7 +119,10 @@ class WalletViewSet(viewsets.ModelViewSet):
             for symbol, quantity in obtained_symbols.items():
                 if day in histories[symbol]:
                     day_value += quantity*float(histories[symbol][day])
-            wallet_history.append({'day': day, 'value': str(round(day_value, 2))})
+            if day_value > 0 and not started:
+                started = True
+            if started:
+                wallet_history.append({'day': day, 'value': str(round(day_value, 2))})
         decreasing_history = []
         original_len = len(wallet_history)
         for i in range(original_len):

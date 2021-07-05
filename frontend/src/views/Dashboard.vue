@@ -150,7 +150,6 @@ export default {
       otherMarketOptions: {
         buttons: [
           { caption: "WALLET", state: false, value: WALLET, icon: "wallet" },
-          { caption: "INDEX", state: false, value: INDEX, icon: "server" },
         ],
       },
     };
@@ -161,78 +160,93 @@ export default {
       console.log(this.stockSymbol);
 
       this.loading = true;
-
-      let parsedSymbol =
-        this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
-      axios
-        .get(
-          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
+      if (this.market === NASDAQ || this.market === BOVESPA){
+        let parsedSymbol = this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
+        axios.get(
+            "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
         )
-        .then((response) => {
-          let data = response.data;
-          this.loading = false;
-
-          data = JSON.parse(data);
-
-          if (this.chartType == "line") {
-            let dateArray = [];
-            let closingPriceArray = [];
-
-            data.forEach((dataElement) => {
-              const date = dataElement.Date;
-              const closingPrice = dataElement.close;
-
-              dateArray.push(date);
-              closingPriceArray.push(closingPrice);
+            .then((response) => {
+              let data = response.data;
+              this.loading = false;
+              let parsedData = JSON.parse(data);
+              this.parseData(parsedData);
+            })
+            .catch(() => {
+              this.error = true;
+              this.loading = false;
             });
-            this.charts.push({
-              type: this.chartType,
-              stockName: this.stockSymbol,
-              categories: dateArray,
-              series: [
-                {
-                  data: closingPriceArray,
-                },
-              ],
-              id: this.chartCounter,
+      } else if (this.market == WALLET){
+        let walletID = this.searchText;
+        const token = this.$store.state.token;
+        Client(token).get("/api/wallets/" + walletID + "/history")
+            .then((response) => {
+              let data = response.data;
+              this.loading = false;
+              let parsedData = JSON.parse(data).map((x) => {return {Date: x.day, close: x.value}});
+              this.parseData(parsedData);
+            })
+            .catch(() => {
+              this.error = true;
+              this.loading = false;
             });
-          }
+      }
 
-          if (this.chartType == "candlestick") {
-            let dateArray = [];
-            let dataArray = [];
+    },
+    parseData(data){
+      if (this.chartType == "line") {
+        let dateArray = [];
+        let closingPriceArray = [];
 
-            data.forEach((dataElement) => {
-              const date = dataElement.Date;
-              const openingPrice = dataElement.open;
-              const closingPrice = dataElement.close;
-              const highPrice = dataElement.high;
-              const lowPrice = dataElement.low;
+        data.forEach((dataElement) => {
+          const date = dataElement.Date;
+          const closingPrice = dataElement.close;
 
-              dateArray.push(date);
-              dataArray.push({
-                x: date,
-                y: [openingPrice, highPrice, lowPrice, closingPrice],
-              });
-            });
-            this.charts.push({
-              type: this.chartType,
-              stockName: this.stockSymbol,
-              categories: dateArray,
-              series: [
-                {
-                  data: dataArray,
-                },
-              ],
-              id: this.chartCounter,
-            });
-          }
-          this.chartCounter += 1;
-        })
-        .catch(() => {
-          this.error = true;
-          this.loading = false;
+          dateArray.push(date);
+          closingPriceArray.push(closingPrice);
         });
+        this.charts.push({
+          type: this.chartType,
+          stockName: this.stockSymbol,
+          categories: dateArray,
+          series: [
+            {
+              data: closingPriceArray,
+            },
+          ],
+          id: this.chartCounter,
+        });
+      }
+
+      if (this.chartType == "candlestick") {
+        let dateArray = [];
+        let dataArray = [];
+
+        data.forEach((dataElement) => {
+          const date = dataElement.Date;
+          const openingPrice = dataElement.open;
+          const closingPrice = dataElement.close;
+          const highPrice = dataElement.high;
+          const lowPrice = dataElement.low;
+
+          dateArray.push(date);
+          dataArray.push({
+            x: date,
+            y: [openingPrice, highPrice, lowPrice, closingPrice],
+          });
+        });
+        this.charts.push({
+          type: this.chartType,
+          stockName: this.stockSymbol,
+          categories: dateArray,
+          series: [
+            {
+              data: dataArray,
+            },
+          ],
+          id: this.chartCounter,
+        });
+      }
+      this.chartCounter += 1;
     },
     searchStock: function () {
       this.stockSymbol = this.searchText.toUpperCase();
@@ -299,7 +313,7 @@ export default {
       Client(token)
         .get("/api/wallets/", {})
         .then((response) => {
-          this.wallets = response.data;
+          this.wallets = response.data.map((x) => {return {name: x.name, symbol: x.id}});
         })
         .catch(() => {
           this.incorrect = true;
