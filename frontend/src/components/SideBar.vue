@@ -1,75 +1,79 @@
 <template>
   <div class="sidebar-menu">
-    <b-container fluid class="p-0">
-      <h1 class="stocktitle">Stock Scout</h1>
-    </b-container>
+    <div class="extremecontainer">
+      <b-container fluid class="p-0">
+        <h1 class="stocktitle">Stock Scout</h1>
+      </b-container>
 
-    <b-container fluid class="logo">
-      <img class="logo" src="../assets/logo.png" />
-    </b-container>
+      <b-container fluid class="logo">
+        <img class="logo" src="../assets/logo-border.png" />
+      </b-container>
 
-    <div class="flagcontainer">
-      <div class="flag"></div>
-      <div class="flagtext">{{ $t("hello") }}, {{ username }}</div>
-      <div class="flag">
-        <b-dropdown>
-          <template #button-content>
-            <flag :iso="selectedFlag" v-bind:squared="false" />
-          </template>
-          <div>
-            <b-dropdown-item
-              v-for="entry in languages"
-              :key="entry.title"
-              @click="changeLocale(entry)"
-            >
-              <flag :iso="entry.flag" v-bind:squared="false" />
-              {{ entry.title }}
-            </b-dropdown-item>
-          </div>
-        </b-dropdown>
+      <div class="flagcontainer">
+        <div class="flag"></div>
+        <div class="flagtext">{{ $t("hello") }}, {{ username }}</div>
+        <div class="flag">
+          <b-dropdown>
+            <template #button-content>
+              <flag :iso="selectedFlag" v-bind:squared="false" />
+            </template>
+            <div>
+              <b-dropdown-item
+                v-for="entry in languages"
+                :key="entry.title"
+                @click="changeLocale(entry)"
+              >
+                <flag :iso="entry.flag" v-bind:squared="false" />
+                {{ entry.title }}
+              </b-dropdown-item>
+            </div>
+          </b-dropdown>
+        </div>
       </div>
     </div>
-
-    <b-container fluid class="navigation">
-      <b-nav vertical class="navigation">
-        <b-nav-item to="/home">
-          <b-icon-house-door-fill
-            scale=".6"
-            shift-v="-.6"
-          ></b-icon-house-door-fill>
-          Home</b-nav-item
-        >
-        <b-nav-item to="/dashboard">
-          <b-icon-graph-up scale=".6" shift-v="-.6"></b-icon-graph-up>
-          Dashboard</b-nav-item
-        >
-        <b-nav-item to="/wallets" v-if="$store.getters.isLoggedIn">
-          <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
-          Wallets</b-nav-item
-        >
-        <b-nav-item to="/simulations">
-          <b-icon-calculator-fill
-            scale=".6"
-            shift-v="-.6"
-          ></b-icon-calculator-fill>
-          Simulations</b-nav-item
-        >
-        <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn">
-          <b-icon-arrow-return-left
-            scale=".6"
-            shift-v="-.6"
-          ></b-icon-arrow-return-left>
-          Log Out</b-nav-item
-        >
-        <b-nav-item to="" v-if="!$store.getters.isLoggedIn">
-          <b-icon-arrow-return-left
-            scale=".6"
-            shift-v="-.6"
-          ></b-icon-arrow-return-left>
-          Back</b-nav-item
-        >
-      </b-nav>
-    </b-container>
+    <div class="middlecontainer">
+      <b-container fluid class="navigation">
+        <b-nav vertical class="navigation">
+          <b-nav-item to="/home">
+            <b-icon-house-door-fill
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-house-door-fill>
+            Home</b-nav-item
+          >
+          <b-nav-item to="/dashboard">
+            <b-icon-graph-up scale=".6" shift-v="-.6"></b-icon-graph-up>
+            Dashboard</b-nav-item
+          >
+          <b-nav-item to="/wallets" v-if="$store.getters.isLoggedIn">
+            <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
+            Wallets</b-nav-item
+          >
+          <b-nav-item to="/simulations">
+            <b-icon-calculator-fill
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-calculator-fill>
+            Simulations</b-nav-item
+          >
+          <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn">
+            <b-icon-arrow-return-left
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-arrow-return-left>
+            Log Out</b-nav-item
+          >
+          <b-nav-item to="" v-if="!$store.getters.isLoggedIn">
+            <b-icon-arrow-return-left
+              scale=".6"
+              shift-v="-.6"
+            ></b-icon-arrow-return-left>
+            Back</b-nav-item
+          >
+        </b-nav>
+      </b-container>
+    </div>
+    <div class="extremecontainer"></div>
   </div>
 </template>
 
@@ -141,16 +145,44 @@ export default {
 </script>
 
 <style scoped>
+.sidebar-menu {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.extremecontainer {
+  /* background: red; */
+  width: 100%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.middlecontainer {
+  /* background: blue; */
+  width: 100%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .stocktitle {
-  padding-top: 30px;
-  font-size: 2.5vw;
+  /* background: blue; */
+  color: white;
+  font-size: 2vw;
   display: flex;
   justify-content: center;
   text-align: center;
 }
 
 .navigation {
-  font-size: 1.6vw;
+  font-size: 1.5vw;
   flex-direction: row;
   display: flex;
   justify-content: center;
@@ -158,6 +190,7 @@ export default {
 }
 
 .flagcontainer {
+  /* background: yellow; */
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -175,6 +208,7 @@ export default {
 }
 
 .logo {
+  /* background: green; */
   width: 70%;
 }
 </style>

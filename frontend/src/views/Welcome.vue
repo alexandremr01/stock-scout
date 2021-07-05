@@ -1,6 +1,6 @@
 <template>
   <div class="anthonybg">
-    <img src="../assets/logo.png" class="logo" />
+    <img src="../assets/logo-border.png" class="logo" />
     <div class="anthonyphoto">
       <container class="continuecontainer">
         <container class="continuetext">
@@ -102,13 +102,11 @@ export default {
 }
 
 .logo {
-  background: white;
-  border-radius: 50%;
   position: absolute;
   padding: 10px;
   top: 60px;
   left: 60px;
-  width: 70px;
-  height: 70px;
+  width: 90px;
+  height: 90px;
 }
 </style>
