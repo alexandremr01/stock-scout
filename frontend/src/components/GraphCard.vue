@@ -190,7 +190,8 @@ export default {
   },
   methods: {
     removeChart() {
-      this.$emit("removeChart");
+      console.log(this.id);
+      this.$emit("remove", this.id);
     },
     frequencyOnPress(i) {
       this.lineChartFrequencyOptions.buttons.forEach(
@@ -205,7 +206,7 @@ export default {
     },
   },
   components: { VueApexCharts },
-  props: ["chartType", "stock", "categories", "chartSeries"],
+  props: ["chartType", "stock", "categories", "chartSeries", "id"],
   created() {
     if (this.chartType == "line") {
       this.lineOptions.xaxis.categories = this.categories;

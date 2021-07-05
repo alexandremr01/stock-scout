@@ -19,6 +19,8 @@
       :stock="chart.stockName"
       :categories="chart.categories"
       :chartSeries="chart.series"
+      :id="chart.id"
+      v-on:remove="removeChart"
     >
     </GraphCard>
 
@@ -83,6 +85,10 @@
       >
         <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
       </b-button>
+      <b-button>
+        <b-icon icon="wallet" style="fontsize: 16px" variant="primary"></b-icon>
+        Wallet
+      </b-button>
     </b-button-group>
 
     <b-col cols="2">
@@ -115,6 +121,7 @@ import bovespaCompanies from "../data/bovespa.json";
 import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
+const WALLET = "WALLET";
 
 import GraphCard from "../components/GraphCard.vue";
 
@@ -132,8 +139,10 @@ export default {
       stockFrequency: "DAY", // initial value
       searchText: "",
       chartType: "line",
+      chartCounter: 0,
       charts: [],
       loading: false,
+      error: false,
       marketOptions: {
         buttons: [
           { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
@@ -151,56 +160,73 @@ export default {
 
       let parsedSymbol =
         this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
-      let { data } = await axios.get(
-        "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
-      );
+      axios.get("/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency)
+        .then((response) => {
+          let data = response.data;
+          this.loading = false;
 
-      this.loading = false;
+          data = JSON.parse(data);
 
-      data = JSON.parse(data);
+          if (this.chartType == "line") {
+            let dateArray = [];
+            let closingPriceArray = [];
 
-      if (this.chartType == "line") {
-        let dateArray = [];
-        let closingPriceArray = [];
+            data.forEach((dataElement) => {
+              const date = dataElement.Date;
+              const closingPrice = dataElement.close;
 
-        data.forEach((dataElement) => {
-          const date = dataElement.Date;
-          const closingPrice = dataElement.close;
+              dateArray.push(date);
+              closingPriceArray.push(closingPrice);
+            });
+            this.charts.push({
+              type: this.chartType,
+              stockName: this.stockSymbol,
+              categories: dateArray,
+              series: [
+                {
+                  data: closingPriceArray,
+                },
+              ],
+              id: this.chartCounter,
+            });
+          }
 
-          dateArray.push(date);
-          closingPriceArray.push(closingPrice);
+          if (this.chartType == "candlestick") {
+            let dateArray = [];
+            let dataArray = [];
+
+            data.forEach((dataElement) => {
+              const date = dataElement.Date;
+              const openingPrice = dataElement.open;
+              const closingPrice = dataElement.close;
+              const highPrice = dataElement.high;
+              const lowPrice = dataElement.low;
+
+              dateArray.push(date);
+              dataArray.push({
+                x: date,
+                y: [openingPrice, highPrice, lowPrice, closingPrice],
+              });
+            });
+            this.charts.push({
+              type: this.chartType,
+              stockName: this.stockSymbol,
+              categories: dateArray,
+              series: [
+                {
+                  data: dataArray,
+                },
+              ],
+              id: this.chartCounter,
+            });
+          }
+
+          chartCounter += 1;
+        })
+        .catch(() => {
+          this.error = true;
+          this.loading = false;
         });
-        this.charts.push({
-          type: this.chartType,
-          stockName: this.stockSymbol,
-          categories: dateArray,
-          series: [
-            {
-              data: closingPriceArray,
-            },
-          ],
-        });
-      }
-
-      console.log(this.charts);
-      // let dateArray = [];
-      // let closingPriceArray = [];
-      // let candlestickArray = [];
-
-      // data.forEach((dataElement) => {
-      //   const date = dataElement.Date;
-      //   const openingPrice = dataElement.open;
-      //   const closingPrice = dataElement.close;
-      //   const highPrice = dataElement.high;
-      //   const lowPrice = dataElement.low;
-
-      //   dateArray.push(date);
-      //   closingPriceArray.push(closingPrice);
-      //   candlestickArray.push({
-      //     x: date,
-      //     y: [openingPrice, highPrice, lowPrice, closingPrice],
-      //   });
-      // });
     },
     searchStock: function () {
       this.stockSymbol = this.searchText.toUpperCase();
@@ -211,6 +237,9 @@ export default {
     updateMarket(mkt) {
       this.market = mkt;
     },
+    removeChart(id) {
+      console.log(id);
+    }
   },
   watch: {
     // a computed getter
