@@ -67,6 +67,7 @@
         ref="charts"
         :key="chart.id"
         :chartType="chart.type"
+        :marketType="chart.marketType"
         :stock="chart.stockName"
         :categories="chart.categories"
         :chartSeries="chart.series"
@@ -157,7 +158,7 @@ export default {
               let data = response.data;
               this.loading = false;
               let parsedData = JSON.parse(data);
-              this.parseData(parsedData, this.stockSymbol);
+              this.parseData(parsedData, this.stockSymbol, this.market);
             })
             .catch(() => {
               this.error = true;
@@ -172,7 +173,7 @@ export default {
               this.loading = false;
               let walletName = this.wallets.filter(x => x.symbol==this.searchText)[0].name;
               let parsedData = JSON.parse(data).map((x) => {return {Date: x.day, close: x.value}});
-              this.parseData(parsedData, walletName);
+              this.parseData(parsedData, walletName, this.market);
             })
             .catch(() => {
               this.error = true;
@@ -181,7 +182,7 @@ export default {
       }
 
     },
-    parseData(data, title){
+    parseData(data, title, marketType){
       if (this.chartType == "line") {
         let dateArray = [];
         let closingPriceArray = [];
@@ -195,6 +196,7 @@ export default {
         });
         this.charts.push({
           type: this.chartType,
+          marketType: marketType,
           stockName: title,
           categories: dateArray,
           series: [
@@ -225,6 +227,7 @@ export default {
         });
         this.charts.push({
           type: this.chartType,
+          marketType: marketType,
           stockName: title,
           categories: dateArray,
           series: [
