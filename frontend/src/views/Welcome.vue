@@ -108,7 +108,7 @@ export default {
   padding: 10px;
   top: 60px;
   left: 60px;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 }
 </style>
