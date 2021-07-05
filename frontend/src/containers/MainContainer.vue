@@ -3,7 +3,7 @@
     <b-container fluid class="maincontainer p-0">
       <transition name="enable-sidebar">
         <b-container fluid class="sidebar p-0 m-0" v-if="this.homeState">
-          <side-bar></side-bar>
+          <side-bar v-on:refresh="updateAll"></side-bar>
         </b-container>
       </transition>
 
@@ -22,7 +22,7 @@
           borderBottomLeftRadius: this.bordersize,
         }"
       >
-        <router-view></router-view>
+        <router-view :key="count"></router-view>
       </b-container>
     </b-container>
   </div>
@@ -36,6 +36,7 @@ export default {
     return {
       loginSignupState: false,
       homeState: false,
+      count: 0,
       bordersize: "20px",
     };
   },
@@ -47,9 +48,14 @@ export default {
       if (this.$route.path !== "/") {
         this.bordersize = "0px";
       } else {
-        thibordersize = "20px";
+        this.bordersize = "20px";
       }
     },
+  },
+  methods: {
+    updateAll(){
+      this.count ++;
+    }
   },
   mounted() {
     this.routeWatcher = this.$watch(

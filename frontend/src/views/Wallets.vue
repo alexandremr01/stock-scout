@@ -74,16 +74,16 @@ export default {
         {
           key: 'name',
           sortable: true,
-          label: "Nome"
+          label: this.$t("name")
         },
         {
           key: 'created_at',
           sortable: true,
-          label: "Criada em"
+          label: this.$t("created_at")
         },
         {
           key: 'actions',
-          label: "Ações"
+          label: this.$t("actions")
         },
       ]
     }

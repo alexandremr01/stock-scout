@@ -41,6 +41,15 @@ const messages = {
         'createNew': 'Create New',
         'created_at': 'Created at',
         'actions': 'Actions',
+        'quantity': 'Quantity',
+        'buyAvgValue': 'Buy Average Value',
+        'currentUnitValue': "Current Unit Value",
+        'currentTotalValue': "Current Total Value",
+        'day': "Day",
+        'type': "Type",
+        'stock': "Stock",
+        'value': "Value",
+        'homeMessage': "The World Today",
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -80,6 +89,15 @@ const messages = {
         'createNew': 'Criar Nova',
         'created_at': 'Criado em',
         'actions': 'Ações',
+        'quantity': 'Quantidade',
+        'buyAvgValue': 'Valor Médio de Compra',
+        'currentUnitValue': "Valor Unitário Atual",
+        'currentTotalValue': "Valor Total Atual",
+        'day': "Dia",
+        'type': "Tipo",
+        'stock': "Ação",
+        'value': "Valor",
+        'homeMessage': "O Mundo Hoje",
     }
 };
 

@@ -1,7 +1,7 @@
 <template>
   <div class="homecontainer">
     <div class="extremecontainer">
-      <h1>O mundo hoje</h1>
+      <h1>{{$t('homeMessage')}}</h1>
     </div>
     <div class="middlecontainer">
       <StockCard

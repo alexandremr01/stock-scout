@@ -162,27 +162,27 @@ export default {
         {
           key: 'value',
           sortable: true,
-          label: "Valor"
+          label:  this.$t('value')
         },
         {
           key: 'type',
           sortable: true,
-          label: "Tipo"
+          label:  this.$t('type')
         },
         {
           key: 'symbol',
           sortable: true,
-          label: "Ação"
+          label:  this.$t('stock')
         },
         {
           key: 'quantity',
           sortable: true,
-          label: "Quantidade"
+          label:  this.$t('quantity')
         },
         {
           key: 'day',
           sortable: true,
-          label: "Dia"
+          label:  this.$t('day')
         },
         { key: 'actions', label: '' }
       ],
@@ -190,27 +190,27 @@ export default {
         {
           key: 'symbol',
           sortable: true,
-          label: "Ação"
+          label: this.$t('actions')
         },
         {
           key: 'quantity',
           sortable: true,
-          label: "Quantidade"
+          label: this.$t('quantity')
         },
         {
           key: 'avg_value',
           sortable: true,
-          label: "Valor Médio de Compra"
+          label: this.$t('buyAvgValue')
         },
         {
           key: 'current_unit',
           sortable: true,
-          label: "Valor Unitário Atual"
+          label: this.$t('currentUnitValue')
         },
         {
           key: 'current_total',
           sortable: true,
-          label: "Valor Total Atual"
+          label: this.$t('currentTotalValue')
         },
       ]
     }
