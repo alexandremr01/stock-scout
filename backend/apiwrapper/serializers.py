@@ -97,6 +97,7 @@ def get_or_update_taxes():
         data_taxes = hgbr_json["results"]["taxes"][0]
         data_coins = hgbr_json["results"]["currencies"]
         data_stocks = hgbr_json["results"]["stocks"]
+        print(hgbr_json["results"])
         index = Index(date=datetime.now().date(), cdi=data_taxes["cdi"], selic=data_taxes["selic"],
                       usd=data_coins["USD"]["sell"], eur=data_coins["EUR"]["sell"],
                       ibovespa=data_stocks["IBOVESPA"]["points"] , nasdaq=data_stocks["NASDAQ"]["points"],

@@ -169,21 +169,26 @@ export default {
               let data = response.data;
               this.loading = false;
               let parsedData = JSON.parse(data);
-              this.parseData(parsedData);
+              this.parseData(parsedData, this.stockSymbol);
             })
             .catch(() => {
               this.error = true;
               this.loading = false;
             });
-      } else if (this.market == WALLET){
+      } else if (this.market === WALLET){
         let walletID = this.searchText;
         const token = this.$store.state.token;
+        console.log("aqui")
         Client(token).get("/api/wallets/" + walletID + "/history")
             .then((response) => {
               let data = response.data;
               this.loading = false;
+              console.log(this.searchText)
+              console.log(this.wallets)
+              let walletName = this.wallets.filter(x => x.symbol==this.searchText)[0].name;
+              console.log(walletName)
               let parsedData = JSON.parse(data).map((x) => {return {Date: x.day, close: x.value}});
-              this.parseData(parsedData);
+              this.parseData(parsedData, walletName);
             })
             .catch(() => {
               this.error = true;
@@ -192,7 +197,7 @@ export default {
       }
 
     },
-    parseData(data){
+    parseData(data, title){
       if (this.chartType == "line") {
         let dateArray = [];
         let closingPriceArray = [];
@@ -206,7 +211,7 @@ export default {
         });
         this.charts.push({
           type: this.chartType,
-          stockName: this.stockSymbol,
+          stockName: title,
           categories: dateArray,
           series: [
             {
@@ -236,7 +241,7 @@ export default {
         });
         this.charts.push({
           type: this.chartType,
-          stockName: this.stockSymbol,
+          stockName: title,
           categories: dateArray,
           series: [
             {
