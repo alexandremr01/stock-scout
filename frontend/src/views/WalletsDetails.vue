@@ -261,8 +261,8 @@ export default {
         this.firstLoading = false;
       });
       let currency = (i18n.locale === 'pt-br') ? 'BRL' : 'USD';
-
-      Client(token).get('/api/wallets/' + this.id +  '/?currency=' + currency, {}).then((response) => {
+      console.log(currency)
+       Client(token).get('/api/wallets/' + this.id +  '/?currency=' + currency, {}).then((response) => {
         this.consolidated = response.data.stocks;
         this.currentTotalValue = response.data.current_total_value;
       }).catch((error) => {

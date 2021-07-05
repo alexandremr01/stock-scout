@@ -103,12 +103,16 @@ const WALLET = "WALLET";
 const INDEX = "INDEX";
 
 import GraphCard from "../components/GraphCard.vue";
+import Client from "../repositories/Clients/AxiosClient";
 
 export default {
   name: "Dashboard",
   components: {
     vSelect,
     GraphCard,
+  },
+  mounted(){
+    this.fetchWallets()
   },
   data: function () {
     return {
@@ -119,6 +123,14 @@ export default {
       searchText: "",
       chartType: "line",
       chartCounter: 0,
+      indexOptions: [
+        {name: "Selic"},
+        {name: "USD"},
+        {name: "EUR"},
+        {name: "Nasdaq"},
+        {name: "Ibovespa"},
+        {name: "Bitcoin"},
+      ],
       charts: [],
       loading: false,
       error: false,
@@ -277,6 +289,14 @@ export default {
           }
         });
     },
+    fetchWallets(){
+      const token = this.$store.state.token;
+      Client(token).get('/api/wallets/', {}).then((response) => {
+        this.wallets = response.data;
+      }).catch(() => {
+        this.incorrect = true;
+      });
+    }
   },
   watch: {
     // a computed getter
@@ -286,9 +306,9 @@ export default {
       } else if (val === NASDAQ) {
         this.companies = nasdaqCompanies;
       } else if (val === WALLET) {
-        // todo
+        this.companies = this.wallets;
       } else if (val === INDEX) {
-        // todo
+        this.companies = this.indexOptions;
       }
       this.marketOptions.buttons.forEach((btn, index) =>
         btn.value != val ? (btn.state = false) : null
