@@ -26,25 +26,23 @@
             label="name"
           ></v-select>
         </b-col>
-
-        <b-col cols="2">
-          <b-dropdown size="lm" variant="primary">
-            <template #button-content>
-              <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
-              Visualization
-            </template>
-            <b-dropdown-item-button @click="updateChartType('line')">
-              <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-              Line
-            </b-dropdown-item-button>
-            <b-dropdown-item-button @click="updateChartType('candlestick')">
-              <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-              Candlestick
-            </b-dropdown-item-button>
-          </b-dropdown>
-        </b-col>
       </b-row>
     </b-container>
+
+    <b-button
+      variant="primary"
+      style="fontsize: 16px; width: 135px;"
+      @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
+    >
+      <div v-if="chartType == 'line'">
+        <b-icon icon="graph-up" aria-hidden="true"></b-icon>
+        Line
+      </div>
+      <div v-else>
+        <b-icon icon="align-middle" aria-hidden="true"></b-icon>
+        Candlestick
+      </div>
+    </b-button>
 
     <b-button-group class="mt-5" size="lm">
       <b-button
@@ -262,10 +260,10 @@ export default {
         this.companies = this.indexOptions;
       }
       this.marketOptions.buttons.forEach((btn, index) =>
-          btn.value != val ? (btn.state = false) : null
+        btn.value != val ? (btn.state = false) : null
       );
       this.otherMarketOptions.buttons.forEach((btn, index) =>
-          btn.value != val ? (btn.state = false) : null
+        btn.value != val ? (btn.state = false) : null
       );
     },
   },
