@@ -1,11 +1,12 @@
 <template>
-  <div class="big-box">
-    <b-container fluid class="description">
-      <h1 class="text-secondary">{{ $t("simulations") }}</h1>
-      <h3 class="text-secondary">{{ $t("simulationDescription") }}</h3>
-    </b-container>
-
-    <div fluid class="box">
+  <div class="simulationscontainer">
+    <div class="extremecontainer">
+      <b-container fluid class="description">
+        <h1 class="text-secondary">{{ $t("simulations") }}</h1>
+        <h3 class="text-secondary">{{ $t("simulationDescription") }}</h3>
+      </b-container>
+    </div>
+    <div class="middlecontainer">
       <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
       <b-container fluid class="calculator bg-secondary text-primary">
@@ -100,6 +101,7 @@
         </b-table>
       </b-container>
     </div>
+    <div class="extremecontainer"></div>
   </div>
 </template>
 
@@ -119,45 +121,45 @@
   fill: #394066;
 }
 
-.description {
-  height: 20%;
-  width: 100%;
-  padding: 50px;
-}
 .calculator {
-  height: 500px;
-  width: 800px;
+  width: 40%;
+  height: 100%;
   display: flex;
-  margin-right: 5%;
   flex-direction: column;
   border-radius: 20px;
   justify-content: space-evenly;
 }
 
-.buttons {
-}
-
-.big-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 100%;
-  height: 100%;
-}
-
 .saved-simulations {
   padding: 20px;
-  max-width: 50%;
-  height: auto;
+  width: 40%;
+  height: 100%;
   border-radius: 20px;
 }
 
-.box {
+.simulationscontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.extremecontainer {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.middlecontainer {
+  width: 100%;
+  height: 60%;
   display: flex;
   flex-direction: row;
-  padding: 20px;
   justify-content: space-around;
-  width: 100%;
+  align-items: center;
 }
 </style>
 

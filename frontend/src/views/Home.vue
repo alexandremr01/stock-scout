@@ -1,10 +1,9 @@
 <template>
   <div class="homecontainer">
-    <b-container class="description">
+    <div class="extremecontainer">
       <h3>Cotação das principais moedas para o real</h3>
-    </b-container>
-
-    <b-container class="cardcontainer">
+    </div>
+    <div class="middlecontainer">
       <StockCard
         stockname="BTC"
         description="Bitcoin"
@@ -53,7 +52,8 @@
         value="$ 34,639"
         variation="3.29 %"
       />
-    </b-container>
+    </div>
+    <div class="extremescontainer"></div>
   </div>
 </template>
 
@@ -69,22 +69,26 @@ export default {
 .homecontainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   height: 100%;
   width: 100%;
 }
 
-.cardcontainer {
+.extremecontainer {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.middlecontainer {
   width: 100%;
   height: 80%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   flex-flow: row wrap;
-  align-items: flex-start;
-}
-
-.description {
-  padding: 10%;
-  height: 20%;
+  align-items: center;
 }
 </style>
