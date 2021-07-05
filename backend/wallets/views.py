@@ -116,7 +116,6 @@ class WalletViewSet(viewsets.ModelViewSet):
             day_value = 0
             for symbol, quantity in obtained_symbols.items():
                 if day in histories[symbol]:
-                    if symbol = ''
                     day_value += quantity*float(histories[symbol][day])
             wallet_history.append({'day': day, 'value': str(round(day_value, 2))})
         decreasing_history = []

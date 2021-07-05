@@ -324,6 +324,7 @@ export default {
       this.otherMarketOptions.buttons.forEach((btn, index) =>
         btn.value != val ? (btn.state = false) : null
       );
+      this.searchText = '';
     },
   },
 };

@@ -49,7 +49,7 @@
                     :key="idx"
                     :pressed.sync="btn.state"
                     variant="primary"
-                    @click="market=btn.value">
+                    @click="updateMarket(btn.value)">
                   <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
                 </b-button>
               </b-button-group>
@@ -196,7 +196,6 @@ export default {
       opType: "Buy",
       quantity: 0,
       value: 0,
-      searchText: '',
       companies: bovespaCompanies,
       unauth: false,
       loading: true,
@@ -338,6 +337,13 @@ export default {
         this.incorrect = true;
       });
     },
+    updateMarket(val){
+      this.market = val;
+      this.marketOptions.buttons.forEach((btn) =>
+          btn.value !== val ? (btn.state = false) : null
+      );
+      this.symbol = '';
+    }
   },
   watch: {
     market: function (val) {
