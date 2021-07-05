@@ -340,57 +340,8 @@ export default {
   height: auto;
 }
 
-.right-chart-container {
-  display: inline-block;
-  position: absolute;
-  left: 60%;
-  top: 10%;
-}
-.right-chart-options {
-  display: inline-block;
-  position: absolute;
-  left: 61%;
-  top: 15%;
-}
-.right-chart-buy-sell {
-  display: inline-block;
-  position: absolute;
-  top: 18%;
-  left: 87%;
-}
-.buyStock {
-  display: inline-block;
-  box-shadow: none !important;
-}
-.sellStock {
-  display: inline-block;
-  box-shadow: none !important;
-}
-.Chart {
-  display: inline-block;
-  position: absolute;
-  top: 25%;
-  left: 35%;
-  width: 70%;
-}
-.lineChartFrequencyOptions {
-  display: inline-block;
-  position: absolute;
-  top: 70%;
-  left: 68%;
-}
-.lineChartFrequencyOptionsButton {
-  box-shadow: none !important;
-}
-.candlestickChart {
-  display: inline-block;
-  position: absolute;
-  top: 25%;
-  left: 14%;
-  width: 70%;
-}
 .apexcharts-tooltip {
-  color: darkred;
+  color: rgb(0, 0, 0);
 }
 
 .style-chooser .vs__search::placeholder,
