@@ -99,7 +99,7 @@ export default {
       i18n.locale = locale.language;
       this.selectedFlag = locale.flag;
       localStorage.setItem("locale", JSON.stringify(locale));
-      this.$emit('refresh');
+      this.$emit("refresh");
     },
   },
   mounted() {

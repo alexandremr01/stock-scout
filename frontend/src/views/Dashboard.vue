@@ -1,72 +1,77 @@
 <template>
   <div id="Dashboard" class="dashboardcontainer">
     <div class="extremecontainer">
-      <div class="addgraphform">
-        <div class="stocksearch">
-          <v-select
-            class="style-chooser"
-            @input="searchStock"
-            :options="companies"
-            v-model="searchText"
-            :reduce="(x) => x.symbol"
-            label="name"
-          ></v-select>
-        </div>
-        <div class="stockselection">
-          <div class="stocktype">
-            <b-button-group>
-              <b-button
-                v-for="(btn, idx) in marketOptions.buttons"
-                :key="idx"
-                :pressed.sync="btn.state"
-                style="fontsize: 16px"
-                variant="primary"
-                @click="updateMarket(btn.value)"
-              >
-                <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{
-                  btn.caption
-                }}
-              </b-button>
-              <b-button
-                v-for="(btn, idx) in otherMarketOptions.buttons"
-                :key="idx + 2"
-                :pressed.sync="btn.state"
-                style="fontsize: 16px"
-                variant="primary"
-                @click="updateMarket(btn.value)"
-              >
-                <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
-              </b-button>
-            </b-button-group>
+      <div :class="[`topcontainer`, `bg-secondary`]">
+        <div class="addgraphform">
+          <div class="stocksearch">
+            <v-select
+              class="style-chooser"
+              @input="searchStock"
+              :options="companies"
+              v-model="searchText"
+              :reduce="(x) => x.symbol"
+              label="name"
+            ></v-select>
           </div>
-          <div class="graphtype">
-            <b-button
-              variant="primary"
-              style="fontsize: 16px; width: 135px"
-              @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
-            >
-              <div v-if="chartType == 'line'">
-                <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-                Line
-              </div>
-              <div v-else>
-                <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-                Candlestick
-              </div>
+          <div class="stockselection">
+            <div class="stocktype">
+              <b-button-group>
+                <b-button
+                  v-for="(btn, idx) in marketOptions.buttons"
+                  :key="idx"
+                  :pressed.sync="btn.state"
+                  style="fontsize: 16px"
+                  variant="primary"
+                  @click="updateMarket(btn.value)"
+                >
+                  <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{
+                    btn.caption
+                  }}
+                </b-button>
+                <b-button
+                  v-for="(btn, idx) in otherMarketOptions.buttons"
+                  :key="idx + 2"
+                  :pressed.sync="btn.state"
+                  style="fontsize: 16px"
+                  variant="primary"
+                  @click="updateMarket(btn.value)"
+                >
+                  <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
+                </b-button>
+              </b-button-group>
+            </div>
+            <div class="graphtype">
+              <b-button
+                variant="primary"
+                style="fontsize: 16px; width: 135px"
+                @click="
+                  chartType = chartType === 'line' ? 'candlestick' : 'line'
+                "
+              >
+                <div v-if="chartType == 'line'">
+                  <b-icon icon="graph-up" aria-hidden="true"></b-icon>
+                  Line
+                </div>
+                <div v-else>
+                  <b-icon icon="align-middle" aria-hidden="true"></b-icon>
+                  Candlestick
+                </div>
+              </b-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="addselection">
+          <div class="addbutton">
+            <b-button variant="primary" @click="getStockData()">
+              <b-icon icon="plus-square"> </b-icon> Add
             </b-button>
           </div>
+
+          <div class="loadingicon">
+            <b-spinner label="Loading..." v-if="loading"></b-spinner>
+          </div>
         </div>
-      </div>
-      <div class="addbutton">
-        <b-button variant="primary" @click="getStockData()">
-          <b-icon 
-            icon="plus-square"
-            >
-            </b-icon> Add
-          </b-button>
-      </div>
-      <div class="loadingicon">
-        <b-spinner label="Loading..." v-if="loading"></b-spinner>
       </div>
     </div>
     <div class="middlecontainer">
@@ -86,8 +91,6 @@
       </GraphCard>
     </div>
     <div class="extremecontainer"></div>
-
-    
   </div>
 </template>
 
@@ -157,40 +160,49 @@ export default {
   methods: {
     getStockData: async function () {
       this.loading = true;
-      if (this.market === NASDAQ || this.market === BOVESPA){
-        let parsedSymbol = this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
-        axios.get(
-            "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
-        )
-            .then((response) => {
-              let data = response.data;
-              this.loading = false;
-              let parsedData = JSON.parse(data);
-              this.parseData(parsedData, this.stockSymbol, this.market);
-            })
-            .catch(() => {
-              this.error = true;
-              this.loading = false;
-            });
-      } else if (this.market === WALLET){
+      if (this.market === NASDAQ || this.market === BOVESPA) {
+        let parsedSymbol =
+          this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
+        axios
+          .get(
+            "/api/stocks/?symbol=" +
+              parsedSymbol +
+              "&freq=" +
+              this.stockFrequency
+          )
+          .then((response) => {
+            let data = response.data;
+            this.loading = false;
+            let parsedData = JSON.parse(data);
+            this.parseData(parsedData, this.stockSymbol, this.market);
+          })
+          .catch(() => {
+            this.error = true;
+            this.loading = false;
+          });
+      } else if (this.market === WALLET) {
         let walletID = this.searchText;
         const token = this.$store.state.token;
-        Client(token).get("/api/wallets/" + walletID + "/history")
-            .then((response) => {
-              let data = response.data;
-              this.loading = false;
-              let walletName = this.wallets.filter(x => x.symbol==this.searchText)[0].name;
-              let parsedData = JSON.parse(data).map((x) => {return {Date: x.day, close: x.value}});
-              this.parseData(parsedData, walletName, this.market);
-            })
-            .catch(() => {
-              this.error = true;
-              this.loading = false;
+        Client(token)
+          .get("/api/wallets/" + walletID + "/history")
+          .then((response) => {
+            let data = response.data;
+            this.loading = false;
+            let walletName = this.wallets.filter(
+              (x) => x.symbol == this.searchText
+            )[0].name;
+            let parsedData = JSON.parse(data).map((x) => {
+              return { Date: x.day, close: x.value };
             });
+            this.parseData(parsedData, walletName, this.market);
+          })
+          .catch(() => {
+            this.error = true;
+            this.loading = false;
+          });
       }
-
     },
-    parseData(data, title, marketType){
+    parseData(data, title, marketType) {
       if (this.chartType == "line") {
         let dateArray = [];
         let closingPriceArray = [];
@@ -313,7 +325,9 @@ export default {
       Client(token)
         .get("/api/wallets/", {})
         .then((response) => {
-          this.wallets = response.data.map((x) => {return {name: x.name, symbol: x.id}});
+          this.wallets = response.data.map((x) => {
+            return { name: x.name, symbol: x.id };
+          });
         })
         .catch(() => {
           this.incorrect = true;
@@ -336,7 +350,7 @@ export default {
       this.otherMarketOptions.buttons.forEach((btn, index) =>
         btn.value != val ? (btn.state = false) : null
       );
-      this.searchText = '';
+      this.searchText = "";
     },
   },
 };
@@ -354,7 +368,13 @@ export default {
 .extremecontainer {
   width: 100%;
   height: 20%;
+}
+
+.topcontainer {
+  width: 90%;
+  height: 90%;
   display: flex;
+  border-radius: 20px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -371,7 +391,6 @@ export default {
 }
 
 .addgraphform {
-  /* background: lightblue; */
   padding-left: 5%;
   padding-right: 5%;
   height: 100%;
@@ -384,41 +403,35 @@ export default {
 .stockselection {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
 }
 .stocktype {
-  /* background: lightcoral; */
-  align-self: center;
-  width: 40%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
 }
 .graphtype {
-  /* background: lightgreen; */
-  width: 60%;
-  align-self: center;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
 }
-.addbutton {
-  /* background: lightslategray; */
-  padding-left: 7%;
-  padding-right: 7%;
+
+.addselection {
   height: 100%;
   width: 20%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
-.loadingicon{
-  /* background: lime; */
-  height: 100%;
-  width: 5%;
+
+.addbutton {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: 100%;
+  width: 50%;
+}
+.loadingicon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 30%;
 }
 .apexcharts-tooltip {
   color: rgb(0, 0, 0);

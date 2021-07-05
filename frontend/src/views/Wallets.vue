@@ -2,55 +2,61 @@
   <div class="big-box-wallet">
     <b-container class="small-box">
       <b-container fluid class="title-wallet">
-        <h1 class="text-secondary">{{$t('wallets')}}</h1>
+        <h1 class="text-secondary">{{ $t("wallets") }}</h1>
       </b-container>
 
       <b-container fluid class="wallet-list bg-secondary text-primary">
-              <b-table 
-                sticky-header="true" 
-                no-border-collapse dark hover 
-                :items="wallets" 
-                :fields="fields"
-                >
-                <template #cell(actions)="row">
-                  <b-button
-                    pill 
-                    variant="primary" 
-                    size="sm" 
-                    @click="$router.push('wallets/'+ row.item.id)" 
-                    class="mr-1 text-dark"
-                    >
-                    {{ $t('see') }}
-                  </b-button>
-                  <b-button
-                    pill 
-                    variant="danger" 
-                    size="sm" 
-                    @click="remove(row.item, row.index, $event.target)" 
-                    class="mr-1"
-                    >
-                    {{ $t('remove') }}
-                  </b-button>
-                </template>
-              </b-table>
+        <b-table
+          sticky-header="true"
+          no-border-collapse
+          dark
+          hover
+          :items="wallets"
+          :fields="fields"
+        >
+          <template #cell(actions)="row">
+            <b-button
+              pill
+              variant="primary"
+              size="sm"
+              @click="$router.push('wallets/' + row.item.id)"
+              class="mr-1 text-dark"
+            >
+              {{ $t("see") }}
+            </b-button>
+            <b-button
+              pill
+              variant="danger"
+              size="sm"
+              @click="remove(row.item, row.index, $event.target)"
+              class="mr-1"
+            >
+              {{ $t("remove") }}
+            </b-button>
+          </template>
+        </b-table>
       </b-container>
     </b-container>
 
-
     <b-container fluid class="pt-5 title-wallet">
-      <h2 class="text-secondary">{{ $t('createNew') }}</h2>
+      <h2 class="text-secondary">{{ $t("createNew") }}</h2>
     </b-container>
 
     <div class="container-fluid">
       <b-row class="my-1" align-h="center">
         <b-row cols="12">
-          <b-col cols="3" align-self="center"><h3 class="text-dark">{{$t('name')}}</h3></b-col>
+          <b-col cols="3" align-self="center"
+            ><h3 class="text-dark">{{ $t("name") }}</h3></b-col
+          >
           <b-col cols="6">
-            <b-form-input v-model="walletName" placeholder="Nome"></b-form-input>
+            <b-form-input
+              v-model="walletName"
+              placeholder="Nome"
+            ></b-form-input>
           </b-col>
           <b-col cols="3">
             <b-button pill variant="primary" @click="submit" class="text-dark">
-              {{ $t('save') }}
+              {{ $t("save") }}
             </b-button>
           </b-col>
         </b-row>
@@ -98,12 +104,12 @@
 </style>
 
 <script>
-import i18n from '@/plugins/i18n';
+import i18n from "@/plugins/i18n";
 import Client from "../repositories/Clients/AxiosClient";
 export default {
   name: "Wallets",
-  mounted(){
-    this.fetchStocks()
+  mounted() {
+    this.fetchStocks();
   },
   data() {
     return {
@@ -111,58 +117,67 @@ export default {
       opType: "Buy",
       quantity: 0,
       value: 0,
-      walletName: '',
-      symbol: '',
+      walletName: "",
+      symbol: "",
       wallets: [],
-      fields:[
+      fields: [
         {
-          key: 'name',
+          key: "name",
           sortable: true,
-          label: this.$t("name")
+          label: this.$t("name"),
         },
         {
-          key: 'created_at',
+          key: "created_at",
           sortable: true,
-          label: this.$t("created_at")
+          label: this.$t("created_at"),
         },
         {
-          key: 'actions',
-          label: this.$t("actions")
+          key: "actions",
+          label: this.$t("actions"),
         },
-      ]
-    }
+      ],
+    };
   },
   methods: {
-    submit(){
+    submit() {
       const token = this.$store.state.token;
-      console.log(this.walletName)
-      let {data} = Client(token).post('/api/wallets/', {
-        name: this.walletName,
-      }).then((response) => {
-        this.fetchStocks();
-      }).catch((error) => {
-        console.log(error)
-        this.incorrect = true;
-      });
+      console.log(this.walletName);
+      let { data } = Client(token)
+        .post("/api/wallets/", {
+          name: this.walletName,
+        })
+        .then((response) => {
+          this.fetchStocks();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.incorrect = true;
+        });
     },
-    fetchStocks(){
+    fetchStocks() {
       const token = this.$store.state.token;
-      Client(token).get('/api/wallets/', {}).then((response) => {
-        this.wallets = response.data;
-      }).catch((error) => {
-        console.log(error)
-        this.incorrect = true;
-      });
+      Client(token)
+        .get("/api/wallets/", {})
+        .then((response) => {
+          this.wallets = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.incorrect = true;
+        });
     },
     async remove(item, index, button) {
       const token = this.$store.state.token;
-      await Client(token).delete('/api/wallets/' + item.id + '/').then((response) => {
-        this.fetchStocks();
-      }).catch((error) => {
-        console.log(error)
-        this.incorrect = true;
-      });
+      await Client(token)
+        .delete("/api/wallets/" + item.id + "/")
+        .then((response) => {
+          this.fetchStocks();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.incorrect = true;
+        });
     },
-  }
+  },
 };
 </script>
