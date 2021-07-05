@@ -104,7 +104,7 @@ class WalletViewSet(viewsets.ModelViewSet):
         for day in days:
             while op_iter < len(operations) and operations[op_iter].day <= datetime.strptime(day, '%Y-%m-%d').date():
                 op = operations[op_iter]
-                if not obtained_symbols.has_key(op.symbol):
+                if not op.symbol in obtained_symbols:
                     obtained_symbols[op.symbol] = 0
                 if op.type == 'buy':
                     obtained_symbols[op.symbol] += op.quantity
@@ -115,11 +115,15 @@ class WalletViewSet(viewsets.ModelViewSet):
                 op_iter += 1
 
             day_value = 0
-            for symbol, quantity in obtained_symbols:
-                if histories[symbol].has_key(day):
+            for symbol, quantity in obtained_symbols.items():
+                if day in histories[symbol]:
                     day_value += quantity*float(histories[symbol][day])
-            wallet_history.append({'day': day, 'value': str(day_value)})
-        return Response(json.dumps(wallet_history))
+            wallet_history.append({'day': day, 'value': str(round(day_value, 2))})
+        decreasing_history = []
+        original_len = len(wallet_history)
+        for i in range(original_len):
+            decreasing_history.append(wallet_history.pop())
+        return Response(json.dumps(decreasing_history))
 
 
 class OperationsViewSet(viewsets.ModelViewSet):

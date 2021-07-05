@@ -18,8 +18,6 @@ class Operations(models.Model):
     quantity = models.IntegerField()
     day = models.DateField()
     created_at = models.DateField(auto_now_add=True)
-    def __str__(self):
-        return self.name
 
     class Meta:
         verbose_name_plural = "Operations"
