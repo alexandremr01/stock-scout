@@ -57,9 +57,15 @@
       >
         <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
       </b-button>
-      <b-button>
-        <b-icon icon="wallet" style="fontsize: 16px" variant="primary"></b-icon>
-        Wallet
+      <b-button
+        v-for="(btn, idx) in otherMarketOptions.buttons"
+        :key="idx + 2"
+        :pressed.sync="btn.state"
+        style="fontsize: 16px"
+        variant="primary"
+        @click="updateMarket(btn.value)"
+      >
+        <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
       </b-button>
     </b-button-group>
 
@@ -94,6 +100,7 @@ import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 const WALLET = "WALLET";
+const INDEX = "INDEX";
 
 import GraphCard from "../components/GraphCard.vue";
 
@@ -119,6 +126,12 @@ export default {
         buttons: [
           { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
           { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
+        ],
+      },
+      otherMarketOptions: {
+        buttons: [
+          { caption: "WALLET", state: false, value: WALLET, icon: "wallet" },
+          { caption: "INDEX", state: false, value: INDEX, icon: "server" },
         ],
       },
     };
@@ -219,10 +232,23 @@ export default {
   watch: {
     // a computed getter
     market: function (val) {
-      this.companies = val === BOVESPA ? bovespaCompanies : nasdaqCompanies;
+      if (val === BOVESPA) {
+        this.companies = bovespaCompanies;
+      } else if (val === NASDAQ) {
+        this.companies = nasdaqCompanies;
+      } else if (val === WALLET) {
+        // todo
+      } else if (val === INDEX) {
+        // todo
+      }
+      this.marketOptions.buttons.forEach((btn, index) =>
+          btn.value != val ? (btn.state = false) : null
+      );
+      this.otherMarketOptions.buttons.forEach((btn, index) =>
+          btn.value != val ? (btn.state = false) : null
+      );
     },
   },
-  beforeMount() {},
 };
 </script>
 
