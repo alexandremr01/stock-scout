@@ -6,6 +6,14 @@ $darkBgAccent:#c5c6c8;
 $lightFont:#fbfcfc;
 $darkFont: #252422;
 
+// $color1: #e63946;
+// $color2: #f1faee;
+// $color3: #a8dadc;
+// $color4: #457b9d;
+// $color5: #1d3557;
+
+
+
 // pallete
 $pallete-main: #fbfcfc;
 $pallete-light-shades: #7d8b9b;
@@ -14,11 +22,13 @@ $pallete-dark-accent: #806865;
 $pallete-dark-shades: #47545D;
 
 $primary: $pallete-main;
-$secondary: $darkBg;
-$info: $pallete-dark-shades;
+$secondary: #2f373c;
 $success: #5ea766;
+$info: $pallete-dark-shades;
 $warning: #db972e;
 $danger: #f44336;
+$light: white;
+$dark:  black;
 
 $body-bg: $pallete-dark-shades;
 $body-color: $pallete-light-shades;
