@@ -1,19 +1,10 @@
 <template>
   <div id="Dashboard">
-    <!-- <GraphCard
-      chartType="line"
-      stock="hello"
-      :categories="[1, 2, 3]"
-      :chartSeries="[
-        {
-          data: [1, 2, 3],
-        },
-      ]"
-    /> -->
     <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
     <GraphCard
       v-for="chart in charts"
+      ref="charts"
       :key="chart.id"
       :chartType="chart.type"
       :stock="chart.stockName"
@@ -21,26 +12,9 @@
       :chartSeries="chart.series"
       :id="chart.id"
       v-on:remove="removeChart"
+      v-on:changeFrequency="changeChartFrequency"
     >
     </GraphCard>
-
-    <!-- <GraphCard
-      chartType="candlestick"
-      stock="hello"
-      :categories="[1, 2]"
-      :chartSeries="[{
-        data: [
-          {
-            x: 1,
-            y: [6593.34, 6600, 6582.63, 6600],
-          },
-          {
-            x: 2,
-            y: [6593.34, 6600, 4000, 3000],
-          }
-        ]
-      }]"
-    /> -->
 
     <b-container class="mt-5">
       <b-row>
@@ -54,25 +28,23 @@
             label="name"
           ></v-select>
         </b-col>
-
-        <b-col cols="2">
-          <b-dropdown size="lm" variant="primary">
-            <template #button-content>
-              <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
-              Visualization
-            </template>
-            <b-dropdown-item-button @click="updateChartType('line')">
-              <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-              Line
-            </b-dropdown-item-button>
-            <b-dropdown-item-button @click="updateChartType('candlestick')">
-              <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-              Candlestick
-            </b-dropdown-item-button>
-          </b-dropdown>
-        </b-col>
       </b-row>
     </b-container>
+
+    <b-button
+      variant="primary"
+      style="fontsize: 16px; width: 135px"
+      @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
+    >
+      <div v-if="chartType == 'line'">
+        <b-icon icon="graph-up" aria-hidden="true"></b-icon>
+        Line
+      </div>
+      <div v-else>
+        <b-icon icon="align-middle" aria-hidden="true"></b-icon>
+        Candlestick
+      </div>
+    </b-button>
 
     <b-button-group class="mt-5" size="lm">
       <b-button
@@ -85,9 +57,15 @@
       >
         <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
       </b-button>
-      <b-button>
-        <b-icon icon="wallet" style="fontsize: 16px" variant="primary"></b-icon>
-        Wallet
+      <b-button
+        v-for="(btn, idx) in otherMarketOptions.buttons"
+        :key="idx + 2"
+        :pressed.sync="btn.state"
+        style="fontsize: 16px"
+        variant="primary"
+        @click="updateMarket(btn.value)"
+      >
+        <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
       </b-button>
     </b-button-group>
 
@@ -122,14 +100,19 @@ import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 const WALLET = "WALLET";
+const INDEX = "INDEX";
 
 import GraphCard from "../components/GraphCard.vue";
+import Client from "../repositories/Clients/AxiosClient";
 
 export default {
   name: "Dashboard",
   components: {
     vSelect,
     GraphCard,
+  },
+  mounted(){
+    this.fetchWallets()
   },
   data: function () {
     return {
@@ -140,6 +123,14 @@ export default {
       searchText: "",
       chartType: "line",
       chartCounter: 0,
+      indexOptions: [
+        {name: "Selic"},
+        {name: "USD"},
+        {name: "EUR"},
+        {name: "Nasdaq"},
+        {name: "Ibovespa"},
+        {name: "Bitcoin"},
+      ],
       charts: [],
       loading: false,
       error: false,
@@ -147,6 +138,12 @@ export default {
         buttons: [
           { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
           { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
+        ],
+      },
+      otherMarketOptions: {
+        buttons: [
+          { caption: "WALLET", state: false, value: WALLET, icon: "wallet" },
+          { caption: "INDEX", state: false, value: INDEX, icon: "server" },
         ],
       },
     };
@@ -160,7 +157,10 @@ export default {
 
       let parsedSymbol =
         this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
-      axios.get("/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency)
+      axios
+        .get(
+          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
+        )
         .then((response) => {
           let data = response.data;
           this.loading = false;
@@ -220,8 +220,7 @@ export default {
               id: this.chartCounter,
             });
           }
-
-          chartCounter += 1;
+          this.chartCounter += 1;
         })
         .catch(() => {
           this.error = true;
@@ -238,16 +237,87 @@ export default {
       this.market = mkt;
     },
     removeChart(id) {
-      console.log(id);
+      let index = this.charts.findIndex((chart) => chart.id === id);
+      this.charts.splice(index, 1);
+    },
+    changeChartFrequency(id, chartType, stock, frequency) {
+      let parsedSymbol = stock + (this.market === BOVESPA ? ".SA" : "");
+      
+      this.loading = true;
+      axios
+        .get(
+          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + frequency
+        )
+        .then((response) => {
+          this.loading = false;
+          
+          let data = response.data;
+          data = JSON.parse(data);
+
+          if (chartType == "line") {
+            let dateArray = [];
+            let closingPriceArray = [];
+
+            data.forEach((dataElement) => {
+              const date = dataElement.Date;
+              const closingPrice = dataElement.close;
+
+              dateArray.push(date);
+              closingPriceArray.push(closingPrice);
+            });
+            this.$refs.charts[id].changeChartData(dateArray, closingPriceArray);
+          }
+
+          if (chartType == "candlestick") {
+            let dateArray = [];
+            let dataArray = [];
+
+            data.forEach((dataElement) => {
+              const date = dataElement.Date;
+              const openingPrice = dataElement.open;
+              const closingPrice = dataElement.close;
+              const highPrice = dataElement.high;
+              const lowPrice = dataElement.low;
+
+              dateArray.push(date);
+              dataArray.push({
+                x: date,
+                y: [openingPrice, highPrice, lowPrice, closingPrice],
+              });
+            });
+            this.$refs.charts[id].changeChartData(dateArray, dataArray);
+          }
+        });
+    },
+    fetchWallets(){
+      const token = this.$store.state.token;
+      Client(token).get('/api/wallets/', {}).then((response) => {
+        this.wallets = response.data;
+      }).catch(() => {
+        this.incorrect = true;
+      });
     }
   },
   watch: {
     // a computed getter
     market: function (val) {
-      this.companies = val === BOVESPA ? bovespaCompanies : nasdaqCompanies;
+      if (val === BOVESPA) {
+        this.companies = bovespaCompanies;
+      } else if (val === NASDAQ) {
+        this.companies = nasdaqCompanies;
+      } else if (val === WALLET) {
+        this.companies = this.wallets;
+      } else if (val === INDEX) {
+        this.companies = this.indexOptions;
+      }
+      this.marketOptions.buttons.forEach((btn, index) =>
+        btn.value != val ? (btn.state = false) : null
+      );
+      this.otherMarketOptions.buttons.forEach((btn, index) =>
+        btn.value != val ? (btn.state = false) : null
+      );
     },
   },
-  beforeMount() {},
 };
 </script>
 
@@ -270,57 +340,8 @@ export default {
   height: auto;
 }
 
-.right-chart-container {
-  display: inline-block;
-  position: absolute;
-  left: 60%;
-  top: 10%;
-}
-.right-chart-options {
-  display: inline-block;
-  position: absolute;
-  left: 61%;
-  top: 15%;
-}
-.right-chart-buy-sell {
-  display: inline-block;
-  position: absolute;
-  top: 18%;
-  left: 87%;
-}
-.buyStock {
-  display: inline-block;
-  box-shadow: none !important;
-}
-.sellStock {
-  display: inline-block;
-  box-shadow: none !important;
-}
-.Chart {
-  display: inline-block;
-  position: absolute;
-  top: 25%;
-  left: 35%;
-  width: 70%;
-}
-.lineChartFrequencyOptions {
-  display: inline-block;
-  position: absolute;
-  top: 70%;
-  left: 68%;
-}
-.lineChartFrequencyOptionsButton {
-  box-shadow: none !important;
-}
-.candlestickChart {
-  display: inline-block;
-  position: absolute;
-  top: 25%;
-  left: 14%;
-  width: 70%;
-}
 .apexcharts-tooltip {
-  color: darkred;
+  color: rgb(0, 0, 0);
 }
 
 .style-chooser .vs__search::placeholder,

@@ -1,34 +1,36 @@
 <template>
   <div class="sidebar-menu">
-    <container fluid class="p-0">
+    <b-container fluid class="p-0">
       <h1 class="stocktitle">Stock Scout</h1>
-    </container>
+    </b-container>
 
-    <container fluid class="logo">
-      <b-img
-        src="https://picsum.photos/125/125/?image=58"
-        rounded="circle"
-      ></b-img>
-    </container>
+    <b-container fluid class="logo">
+      <img class="logo" src="../assets/logo.png" />
+    </b-container>
 
-    <b-dropdown>
-      <template #button-content>
-        <flag :iso="selectedFlag" v-bind:squared="false" />
-      </template>
-      <div>
-        <b-dropdown-item
-          v-for="entry in languages"
-          :key="entry.title"
-          @click="changeLocale(entry)"
-        >
-          <flag :iso="entry.flag" v-bind:squared="false" /> {{ entry.title }}
-        </b-dropdown-item>
+    <div class="flagcontainer">
+      <div class="flag"></div>
+      <div class="flagtext">{{ $t("hello") }}, {{ username }}</div>
+      <div class="flag">
+        <b-dropdown>
+          <template #button-content>
+            <flag :iso="selectedFlag" v-bind:squared="false" />
+          </template>
+          <div>
+            <b-dropdown-item
+              v-for="entry in languages"
+              :key="entry.title"
+              @click="changeLocale(entry)"
+            >
+              <flag :iso="entry.flag" v-bind:squared="false" />
+              {{ entry.title }}
+            </b-dropdown-item>
+          </div>
+        </b-dropdown>
       </div>
-    </b-dropdown>
-    <br />
-    {{ $t("hello") }}, {{ username }}
+    </div>
 
-    <container fluid class="navigation">
+    <b-container fluid class="navigation">
       <b-nav vertical class="navigation">
         <b-nav-item to="/home">
           <b-icon-house-door-fill
@@ -67,7 +69,7 @@
           Back</b-nav-item
         >
       </b-nav>
-    </container>
+    </b-container>
   </div>
 </template>
 
@@ -97,13 +99,17 @@ export default {
       i18n.locale = locale.language;
       this.selectedFlag = locale.flag;
       localStorage.setItem("locale", JSON.stringify(locale));
+      this.$emit('refresh');
     },
   },
   mounted() {
     let savedLocale = localStorage.getItem("locale");
     if (savedLocale != null) {
       let parsedLocale = JSON.parse(savedLocale);
-      if (parsedLocale != null) this.changeLocale(parsedLocale);
+      if (parsedLocale != null) {
+        i18n.locale = parsedLocale.language;
+        this.selectedFlag = parsedLocale.flag;
+      }
     }
 
     if (this.$store.getters.isLoggedIn) {
@@ -135,34 +141,40 @@ export default {
 </script>
 
 <style scoped>
-.sidebar-menu {
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50%;
-}
-
 .stocktitle {
+  padding-top: 30px;
   font-size: 2.5vw;
+  display: flex;
+  justify-content: center;
   text-align: center;
-}
-
-.user {
-  font-size: 1.2vw;
-  text-align: center;
-  color: primary;
-}
-
-.logo {
 }
 
 .navigation {
   font-size: 1.6vw;
+  flex-direction: row;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-self: center;
   text-align: left;
+}
+
+.flagcontainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+}
+
+.flag {
+  width: 30%;
+}
+
+.flagtext {
+  align-self: center;
+  width: 40%;
+}
+
+.logo {
+  width: 70%;
 }
 </style>

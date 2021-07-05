@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('stocks/', views.StockDetail.as_view()),
-    path('coins/', views.CoinDetail.as_view())
+    path('coins/', views.CoinDetail.as_view()),
+    path('index/', views.IndexesDetail.as_view())
 ]
