@@ -1,7 +1,7 @@
 import json
 
 from rest_framework import serializers
-from .models import StockTimeSeries, CoinQuotation
+from .models import StockTimeSeries, CoinQuotation, Index
 from .api_client import alpha_vantage_client, hg_brasil_client
 
 from datetime import datetime, timedelta, timezone
@@ -10,6 +10,11 @@ class CoinQuotationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoinQuotation
         fields = ['buy', 'sell', 'variation']
+
+class IndexSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Index
+        fields = ['selic', 'cdi', 'date', 'usd', 'eur', 'ibovespa', 'nasdaq', 'bitcoin']
 
 # json to json
 def alphav_to_ss(alphav_data, freq):
@@ -79,6 +84,26 @@ def get_or_update_coin_quotations(currency):
         coin_quotation.save()
 
     return coin_quotation
+
+def get_or_update_taxes():
+    query = Index.objects.filter(date=datetime.now().date())
+    index = None
+
+    if query.exists():
+        index = query[0]
+
+    if not query.exists() or datetime.now(timezone.utc) - index.last_modified < timedelta(hours=1):
+        hgbr_json = hg_brasil_client()
+        data_taxes = hgbr_json["results"]["taxes"][0]
+        data_coins = hgbr_json["results"]["currencies"]
+        data_stocks = hgbr_json["results"]["stocks"]
+        index = Index(date=datetime.now().date(), cdi=data_taxes["cdi"], selic=data_taxes["selic"],
+                      usd=data_coins["USD"]["sell"], eur=data_coins["EUR"]["sell"],
+                      ibovespa=data_stocks["IBOVESPA"]["points"] , nasdaq=data_stocks["NASDAQ"]["points"],
+                      bitcoin=data_coins["BTC"]["sell"])
+        index.save()
+
+    return index
 
 # json to map
 def get_daily_history(symbol):

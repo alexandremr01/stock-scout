@@ -1,57 +1,47 @@
 <template>
   <div class="homecontainer">
     <b-container class="description">
-      <h3>Cotação das principais moedas para o real</h3>
+      <h1>O mundo hoje</h1>
     </b-container>
 
     <b-container class="cardcontainer">
       <StockCard
-        stockname="BTC"
+        stockname="Selic"
+        description="Selic"
+        :value="selic"
+      />
+      <StockCard
+        stockname="CDI"
         description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
+        :value="cdi"
+      />
+      <StockCard
+        stockname="BOVA"
+        description="Ibovespa"
+        :value="ibovespa"
+      />
+      <StockCard
+        stockname="NASDAQ"
+        description="Nasdaq"
+        :value="nasdaq"
+      />
+      <StockCard
+        stockname="USD"
+        description="Dólar"
+        :value="usd"
+        :variation="usd_var"
+      />
+      <StockCard
+        stockname="EUR"
+        description="Euro"
+        :value="eur"
+        :variation="eur_var"
       />
       <StockCard
         stockname="BTC"
         description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        value="$ 34,639"
-        variation="3.29 %"
+        :value="btc"
+        :variation="btc_var"
       />
     </b-container>
   </div>
@@ -59,10 +49,62 @@
 
 <script>
 import StockCard from "../components/StockCard.vue";
+import Client from "../repositories/Clients/AxiosClient";
+import axios from "axios";
 
 export default {
   components: { StockCard },
   name: "Home",
+  mounted(){
+    this.fetchData();
+  },
+  data(){
+    return {
+      indexes: {},
+      selic: 0.0,
+      cdi: 0.0,
+      ibovespa: 0.0,
+      usd: 0.0,
+      btc: 0.0,
+      eur: 0.0,
+      nasdaq: 0.0,
+      usd_var: 0.0,
+      eur_var: 0.0,
+      btc_var: 0.0,
+    }
+  },
+  methods: {
+    fetchData(){
+      axios.get('/api/index/').then((response) => {
+        let indexes = response.data['indexes'];
+        let usd = response.data['usd'];
+        let eur = response.data['eur'];
+        let bitcoin = response.data['btc'];
+
+        this.selic = indexes['selic'] + ' %';
+        this.cdi = indexes['cdi'] + ' %';
+        this.ibovespa = this.toCurrency(indexes['ibovespa']);
+        this.nasdaq = this.toCurrency(indexes['nasdaq']);
+        this.ibovespa = this.toCurrency(indexes['ibovespa']);
+
+        this.usd = this.toCurrency(usd['sell']);
+        this.usd_var = usd['variation'] + ' %';
+        this.btc = this.toCurrency(bitcoin['sell']);
+        this.btc_var = bitcoin['variation'] + ' %';
+        this.eur = this.toCurrency(eur['sell']);
+        this.eur_var = eur['variation'] + ' %';
+
+      }).catch(() => {
+        this.incorrect = true;
+      });
+    },
+    toCurrency(n) {
+      return Number(n).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
+    },
+  }
 };
 </script>
 <style scoped>

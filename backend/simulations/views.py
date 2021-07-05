@@ -32,4 +32,3 @@ class SimulationViewSet(viewsets.ModelViewSet):
             final_amount = body['final_amount'], time = body['time'])
         sim.save()
         return Response(SimulationSerializer(sim).data)
-        # return Response(SimulationSerializer(sim, .data)

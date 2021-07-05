@@ -26,3 +26,15 @@ class CoinQuotation(models.Model):
     variation = models.FloatField()
 
     last_modified = models.DateTimeField(auto_now=True)
+
+class Index(models.Model):
+    date = models.DateField()
+
+    selic = models.FloatField()
+    cdi = models.FloatField()
+    ibovespa = models.FloatField()
+    nasdaq = models.FloatField()
+    bitcoin = models.FloatField()
+    eur = models.FloatField()
+    usd = models.FloatField()
+    last_modified = models.DateTimeField(auto_now=True)
