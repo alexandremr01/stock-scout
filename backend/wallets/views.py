@@ -5,7 +5,7 @@ from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
 from django.db import connection
-from apiwrapper.serializers import get_pseudo_current_stock_value
+from apiwrapper.serializers import get_pseudo_current_stock_value, get_or_update_coin_quotations
 from .serializers import WalletSerializer, OperationSerializer
 from .models import Wallet, Operations
 from users.models import Profile
@@ -30,6 +30,10 @@ class WalletViewSet(viewsets.ModelViewSet):
         if isAuthorized(request, pk) is False:
             return HttpResponse(status=403)
         rows = []
+        currency = request.query_params.get('currency')
+        if currency is None:
+            currency = 'BRL'
+
         with connection.cursor() as cursor:
             cursor.execute("""
             SELECT symbol, 
@@ -54,7 +58,21 @@ class WalletViewSet(viewsets.ModelViewSet):
                 value = float(str_value)
             except ValueError:
                 value = 0
+
+            usd_value_s = get_or_update_coin_quotations('USD')
+            try:
+                usd_value = float(usd_value_s.sell)
+            except ValueError:
+                usd_value = 0
+
+            if is_brl(r[0]) and currency == "USD":
+                value = round(value/usd_value, 2)
+            elif not is_brl(r[0]) and currency == "BRL":
+                value = round(value*usd_value, 2)
+
+
             current_total_value += value*r[1]
+
             resp.append({'symbol': r[0], 'quantity': r[1], 'avg_value': round(avg, 2), 'current_unit': value, 'current_total': value*r[1]})
         return JsonResponse({'stocks': resp, 'current_total_value': current_total_value})
 
@@ -120,3 +138,9 @@ def isAuthorized(request, wallet_id):
         return False
     wallet = walletQs.first()
     return wallet.profile.id == profile.id
+
+def is_brl(symbol):
+    parts = symbol.split('.')
+    if len(parts) < 2:
+        return False
+    return parts[1] == "SA"

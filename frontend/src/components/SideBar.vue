@@ -96,14 +96,18 @@ export default {
     changeLocale(locale) {
       i18n.locale = locale.language;
       this.selectedFlag = locale.flag;
-      localStorage.setItem("locale", JSON.stringify(locale));
-    },
+      localStorage.setItem('locale', JSON.stringify(locale));
+      this.$router.go();
+    }
   },
   mounted() {
     let savedLocale = localStorage.getItem("locale");
     if (savedLocale != null) {
       let parsedLocale = JSON.parse(savedLocale);
-      if (parsedLocale != null) this.changeLocale(parsedLocale);
+      if (parsedLocale != null) {
+        i18n.locale = parsedLocale.language;
+        this.selectedFlag = parsedLocale.flag;
+      }
     }
 
     if (this.$store.getters.isLoggedIn) {

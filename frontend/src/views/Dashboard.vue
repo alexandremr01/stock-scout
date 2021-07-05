@@ -1,15 +1,5 @@
 <template>
   <div id="Dashboard">
-    <!-- <GraphCard
-      chartType="line"
-      stock="hello"
-      :categories="[1, 2, 3]"
-      :chartSeries="[
-        {
-          data: [1, 2, 3],
-        },
-      ]"
-    /> -->
     <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
     <GraphCard
@@ -23,24 +13,6 @@
       v-on:remove="removeChart"
     >
     </GraphCard>
-
-    <!-- <GraphCard
-      chartType="candlestick"
-      stock="hello"
-      :categories="[1, 2]"
-      :chartSeries="[{
-        data: [
-          {
-            x: 1,
-            y: [6593.34, 6600, 6582.63, 6600],
-          },
-          {
-            x: 2,
-            y: [6593.34, 6600, 4000, 3000],
-          }
-        ]
-      }]"
-    /> -->
 
     <b-container class="mt-5">
       <b-row>
@@ -223,8 +195,7 @@ export default {
               id: this.chartCounter,
             });
           }
-
-          chartCounter += 1;
+          this.chartCounter += 1;
         })
         .catch(() => {
           this.error = true;
@@ -241,7 +212,8 @@ export default {
       this.market = mkt;
     },
     removeChart(id) {
-      console.log(id);
+      let index = this.charts.findIndex((chart) => chart.id === id);
+      this.charts.splice(index, 1);
     },
   },
   watch: {

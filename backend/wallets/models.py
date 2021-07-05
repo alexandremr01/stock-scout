@@ -10,14 +10,6 @@ class Wallet(models.Model):
     def __str__(self):
         return self.name
 
-class Asset(models.Model):
-    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
-    name = models.CharField(max_length=60)
-    unit_value  = models.DecimalField(decimal_places=2, max_digits=11)
-    created_at = models.DateField(auto_now_add=True)
-    def __str__(self):
-        return self.name
-
 class Operations(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     value = models.DecimalField(decimal_places=2, max_digits=11)
@@ -28,3 +20,6 @@ class Operations(models.Model):
     created_at = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "Operations"
