@@ -142,9 +142,9 @@
       </b-container>
     </b-container>
     <b-container class="bv-example-row bv-example-row-flex-cols" v-if="unauth">
-      <h1>Unauthorized</h1>
+      <h1 class="text-secondary">{{ $t('unauth') }}</h1>
     </b-container>
-    <b-container fluid class="ccontainer">
+    <b-container fluid class="ccontainer" v-if="!unauth && !firstLoading">
       <b-row class="mt-3" align-h="center">
         <b-col class="pl-4" cols="12">
           <b-container class="centerBox bg-secondary">

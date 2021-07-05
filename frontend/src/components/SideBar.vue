@@ -47,14 +47,14 @@
           >
           <b-nav-item to="/wallets" v-if="$store.getters.isLoggedIn">
             <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
-            Wallets</b-nav-item
+            {{$t('wallets')}}</b-nav-item
           >
           <b-nav-item to="/simulations">
             <b-icon-calculator-fill
               scale=".6"
               shift-v="-.6"
             ></b-icon-calculator-fill>
-            Simulations</b-nav-item
+            {{$t('simulations')}}</b-nav-item
           >
           <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn">
             <b-icon-arrow-return-left

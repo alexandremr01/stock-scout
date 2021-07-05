@@ -4,7 +4,7 @@
     <div class="anthonyphoto">
       <container class="continuecontainer">
         <container class="continuetext">
-          <h3>A melhor maneira de acompanhar seus investimentos.</h3>
+          <h3>{{$t("welcomeMessage")}} </h3>
         </container>
         <b-button pill class="button" @click="toLogin"
           >Continuar

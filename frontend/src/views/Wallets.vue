@@ -45,16 +45,13 @@
     <div class="container-fluid">
       <b-row class="my-1" align-h="center">
         <b-row cols="12">
-          <b-col cols="3" align-self="center"
-            ><h3 class="text-dark">{{ $t("name") }}</h3></b-col
-          >
-          <b-col cols="6">
+          <b-col cols="8">
             <b-form-input
               v-model="walletName"
-              placeholder="Nome"
+              :placeholder="$t('name')"
             ></b-form-input>
           </b-col>
-          <b-col cols="3">
+          <b-col cols="4">
             <b-button pill variant="primary" @click="submit" class="text-dark">
               {{ $t("save") }}
             </b-button>
