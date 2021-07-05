@@ -123,7 +123,6 @@ import Client from "../repositories/Clients/AxiosClient";
 import bovespaCompanies from "../data/bovespa.json";
 import nasdaqCompanies from "../data/nasdaq.json";
 import vSelect from "vue-select";
-import VueApexCharts from "vue-apexcharts";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 export default {
@@ -241,7 +240,7 @@ export default {
         quantity: this.quantity,
         value: this.fromText(this.value),
         symbol: parsedSymbol,
-      }).then((response) => {
+      }).then(() => {
         this.fetchStocks();
       }).catch((error) => {
         console.log(error)
@@ -261,7 +260,9 @@ export default {
         this.loading = false;
         this.firstLoading = false;
       });
-      Client(token).get('/api/wallets/' + this.id +  '/', {}).then((response) => {
+      let currency = (i18n.locale === 'pt-br') ? 'BRL' : 'USD';
+
+      Client(token).get('/api/wallets/' + this.id +  '/?currency=' + currency, {}).then((response) => {
         this.consolidated = response.data.stocks;
         this.currentTotalValue = response.data.current_total_value;
       }).catch((error) => {
@@ -271,12 +272,11 @@ export default {
       }).finally(()=>{
         this.loading = false;
         this.firstLoading = false;
-
       });
     },
-    async remove(item, index, button) {
+    async remove(item) {
       const token = this.$store.state.token;
-      await Client(token).delete('/api/wallets/' + this.id +  '/operations/' + item.id).then((response) => {
+      await Client(token).delete('/api/wallets/' + this.id +  '/operations/' + item.id).then(() => {
         this.fetchStocks();
       }).catch((error) => {
         console.log(error)

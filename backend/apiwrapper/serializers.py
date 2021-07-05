@@ -65,16 +65,16 @@ def get_or_update_coin_quotations(currency):
     
     if not query.exists():
         hgbr_json = hg_brasil_client()
-        data = hgbr_json["results"]["currencies"][coin_quotation.name]
-        coin_quotation.buy = data["buy"]
-        coin_quotation.sell = data["sell"]
-        coin_quotation.variation = data["variation"]
+        data = hgbr_json["results"]["currencies"][currency]
+        coin_quotation = CoinQuotation(name=currency, buy=data["buy"], sell=data["sell"], variation=data["variation"])
         coin_quotation.save()
 
     if datetime.now(timezone.utc) - coin_quotation.last_modified < timedelta(minutes=15):
         hgbr_json = hg_brasil_client()
         data = hgbr_json["results"]["currencies"][coin_quotation.name]
-        coin_quotation = CoinQuotation(name=currency, buy=data["buy"], sell=data["sell"], variation=data["variation"])
+        coin_quotation.buy = data["buy"]
+        coin_quotation.sell = data["sell"]
+        coin_quotation.variation = data["variation"]
         coin_quotation.save()
 
     return coin_quotation
