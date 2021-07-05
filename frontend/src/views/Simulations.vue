@@ -131,14 +131,17 @@ export default {
         {
           key: 'name',
           sortable: true,
-          label: "Nome"
+          label: this.$t('name')
         },
         {
           key: 'created_at',
           sortable: true,
-          label: "Data de criação"
+          label: this.$t('created_at')
         },
-        { key: 'actions', label: 'Ações' }
+        {
+          key: 'actions',
+          label: this.$t('actions')
+        }
 
       ],
       calculationOptions: [
@@ -304,6 +307,6 @@ export default {
       this.values.final = null;
       this.inputs.forEach((v, i, a) => v.value = this.values[v.name])
     }
-  }
+  },
 };
 </script>

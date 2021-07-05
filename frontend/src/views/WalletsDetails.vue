@@ -9,7 +9,7 @@
 
       <b-row cols="12">
         <b-col cols="6">
-          <h3> Inserir Operação </h3>
+          <h3> {{$t('opInsert')}}  </h3>
           <div class="container-fluid">
           <b-row class="my-1" align-h="start">
               <b-col sm="3" align="left">{{$t('wDay')}} </b-col>
@@ -59,12 +59,12 @@
             </b-form-group>
           </b-row>
           <b-row class="my-1" align-h="center">
-            <b-button @click="submit"> Submit </b-button>
+            <b-button @click="submit"> {{$t('insert')}}  </b-button>
           </b-row>
           </div>
         </b-col>
         <b-col cols="6">
-          <h3> Composição atual </h3>
+          <h3> {{$t('currentComposition')}} </h3>
           <div class="container-fluid">
             <b-table sticky-header="true"
                      no-border-collapse
@@ -73,7 +73,7 @@
           </div>
         </b-col>
         <b-row class="my-1" align-h="center">
-          <h3> Histórico de Operações </h3>
+          <h3> {{$t('opHistory')}} </h3>
           <div class="container-fluid">
             <b-table sticky-header="200px"
                      no-border-collapse
@@ -89,7 +89,7 @@
         </b-row>
 
         <b-row class="my-1" align-h="center">
-          <h3> Valor atual da carteira: {{currentTotalValue}} </h3>
+          <h3> Valor atual da carteira: {{this.toCurrency(currentTotalValue)}} </h3>
         </b-row>
       </b-row>
     </b-container>
@@ -204,9 +204,14 @@ export default {
           label: "Valor Médio de Compra"
         },
         {
-          key: 'current',
+          key: 'current_unit',
           sortable: true,
-          label: "Valor Atual"
+          label: "Valor Unitário Atual"
+        },
+        {
+          key: 'current_total',
+          sortable: true,
+          label: "Valor Total Atual"
         },
       ]
     }

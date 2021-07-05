@@ -9,7 +9,21 @@
         rounded="circle"
       ></b-img>
     </b-container>
-    Olá, {{ username }}
+
+
+        <b-dropdown>
+          <template #button-content>
+            <flag :iso="selectedFlag" v-bind:squared=false />
+          </template>
+          <div>
+            <b-dropdown-item v-for="entry in languages" :key="entry.title" @click="changeLocale(entry)">
+              <flag :iso="entry.flag" v-bind:squared=false /> {{entry.title}}
+            </b-dropdown-item>
+          </div>
+        </b-dropdown>
+    <br>
+    {{ $t('hello')}}, {{ username }}
+
     <b-container fluid class="navigation">
       <b-nav vertical class="navigation">
         <b-nav-item to="/home">
@@ -55,13 +69,19 @@
 
 <script>
 import Client from "../repositories/Clients/AxiosClient";
+import i18n from '@/plugins/i18n';
 
 export default {
   data() {
     return {
       loginPage: false,
       signUpPage: false,
-      username: 'Guest'
+      username: 'Guest',
+      languages: [
+        { flag: 'us', language: 'en', title: 'English' },
+        { flag: 'br', language: 'pt-br', title: 'Português' }
+      ],
+      selectedFlag:  'us'
     };
   },
   methods: {
@@ -69,8 +89,19 @@ export default {
       this.$store.commit("removeToken");
       this.$router.push("/");
     },
+    changeLocale(locale) {
+      i18n.locale = locale.language;
+      this.selectedFlag = locale.flag;
+      localStorage.setItem('locale', JSON.stringify(locale));
+    }
   },
   mounted() {
+    let savedLocale = localStorage.getItem('locale');
+    if (savedLocale != null) {
+      let parsedLocale = JSON.parse(savedLocale);
+      if (parsedLocale != null)  this.changeLocale(parsedLocale)
+    }
+
     if (this.$store.getters.isLoggedIn){
       const token = this.$store.state.token;
       Client(token).get('/api/me/').then((response)=>{
