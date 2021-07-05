@@ -1,24 +1,8 @@
 <template>
-  <div id="Dashboard">
-    <b-spinner label="Loading..." v-if="loading"></b-spinner>
-
-    <GraphCard
-      v-for="chart in charts"
-      ref="charts"
-      :key="chart.id"
-      :chartType="chart.type"
-      :stock="chart.stockName"
-      :categories="chart.categories"
-      :chartSeries="chart.series"
-      :id="chart.id"
-      v-on:remove="removeChart"
-      v-on:changeFrequency="changeChartFrequency"
-    >
-    </GraphCard>
-
-    <b-container class="mt-5">
-      <b-row>
-        <b-col cols="5">
+  <div id="Dashboard" class="dashboardcontainer">
+    <div class="extremecontainer">
+      <div class="addgraphform">
+        <div class="stocksearch">
           <v-select
             class="style-chooser"
             @input="searchStock"
@@ -27,51 +11,74 @@
             :reduce="(x) => x.symbol"
             label="name"
           ></v-select>
-        </b-col>
-      </b-row>
-    </b-container>
-
-    <b-button
-      variant="primary"
-      style="fontsize: 16px; width: 135px"
-      @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
-    >
-      <div v-if="chartType == 'line'">
-        <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-        Line
+        </div>
+        <div class="stockselection">
+          <div class="stocktype">
+            <b-button-group>
+              <b-button
+                v-for="(btn, idx) in marketOptions.buttons"
+                :key="idx"
+                :pressed.sync="btn.state"
+                style="fontsize: 16px"
+                variant="primary"
+                @click="updateMarket(btn.value)"
+              >
+                <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{
+                  btn.caption
+                }}
+              </b-button>
+              <b-button
+                v-for="(btn, idx) in otherMarketOptions.buttons"
+                :key="idx + 2"
+                :pressed.sync="btn.state"
+                style="fontsize: 16px"
+                variant="primary"
+                @click="updateMarket(btn.value)"
+              >
+                <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
+              </b-button>
+            </b-button-group>
+          </div>
+          <div class="graphtype">
+            <b-button
+              variant="primary"
+              style="fontsize: 16px; width: 135px"
+              @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
+            >
+              <div v-if="chartType == 'line'">
+                <b-icon icon="graph-up" aria-hidden="true"></b-icon>
+                Line
+              </div>
+              <div v-else>
+                <b-icon icon="align-middle" aria-hidden="true"></b-icon>
+                Candlestick
+              </div>
+            </b-button>
+          </div>
+        </div>
       </div>
-      <div v-else>
-        <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-        Candlestick
+      <div class="addbutton">
+        <b-button variant="primary" @click="getStockData()">Add</b-button>
       </div>
-    </b-button>
-
-    <b-button-group class="mt-5" size="lm">
-      <b-button
-        v-for="(btn, idx) in marketOptions.buttons"
-        :key="idx"
-        :pressed.sync="btn.state"
-        style="fontsize: 16px"
-        variant="primary"
-        @click="updateMarket(btn.value)"
+    </div>
+    <div class="middlecontainer">
+      <GraphCard
+        v-for="chart in charts"
+        ref="charts"
+        :key="chart.id"
+        :chartType="chart.type"
+        :stock="chart.stockName"
+        :categories="chart.categories"
+        :chartSeries="chart.series"
+        :id="chart.id"
+        v-on:remove="removeChart"
+        v-on:changeFrequency="changeChartFrequency"
       >
-        <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
-      </b-button>
-      <b-button
-        v-for="(btn, idx) in otherMarketOptions.buttons"
-        :key="idx + 2"
-        :pressed.sync="btn.state"
-        style="fontsize: 16px"
-        variant="primary"
-        @click="updateMarket(btn.value)"
-      >
-        <b-icon :icon="btn.icon"></b-icon> {{ btn.caption }}
-      </b-button>
-    </b-button-group>
+      </GraphCard>
+    </div>
+    <div class="extremecontainer"></div>
 
-    <b-col cols="2">
-      <b-button variant="primary" @click="getStockData()">Add</b-button>
-    </b-col>
+    <b-spinner label="Loading..." v-if="loading"></b-spinner>
   </div>
 </template>
 
@@ -111,8 +118,8 @@ export default {
     vSelect,
     GraphCard,
   },
-  mounted(){
-    this.fetchWallets()
+  mounted() {
+    this.fetchWallets();
   },
   data: function () {
     return {
@@ -124,12 +131,12 @@ export default {
       chartType: "line",
       chartCounter: 0,
       indexOptions: [
-        {name: "Selic"},
-        {name: "USD"},
-        {name: "EUR"},
-        {name: "Nasdaq"},
-        {name: "Ibovespa"},
-        {name: "Bitcoin"},
+        { name: "Selic" },
+        { name: "USD" },
+        { name: "EUR" },
+        { name: "Nasdaq" },
+        { name: "Ibovespa" },
+        { name: "Bitcoin" },
       ],
       charts: [],
       loading: false,
@@ -242,15 +249,13 @@ export default {
     },
     changeChartFrequency(id, chartType, stock, frequency) {
       let parsedSymbol = stock + (this.market === BOVESPA ? ".SA" : "");
-      
+
       this.loading = true;
       axios
-        .get(
-          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + frequency
-        )
+        .get("/api/stocks/?symbol=" + parsedSymbol + "&freq=" + frequency)
         .then((response) => {
           this.loading = false;
-          
+
           let data = response.data;
           data = JSON.parse(data);
 
@@ -289,14 +294,17 @@ export default {
           }
         });
     },
-    fetchWallets(){
+    fetchWallets() {
       const token = this.$store.state.token;
-      Client(token).get('/api/wallets/', {}).then((response) => {
-        this.wallets = response.data;
-      }).catch(() => {
-        this.incorrect = true;
-      });
-    }
+      Client(token)
+        .get("/api/wallets/", {})
+        .then((response) => {
+          this.wallets = response.data;
+        })
+        .catch(() => {
+          this.incorrect = true;
+        });
+    },
   },
   watch: {
     // a computed getter
@@ -325,6 +333,68 @@ export default {
 .dashboardcontainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.extremecontainer {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.middlecontainer {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.addgraphform {
+  padding-left: 5%;
+  padding-right: 5%;
+  height: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.stocksearch {
+}
+.stockselection {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.stocktype {
+  align-self: center;
+  width: 80%;
+}
+.graphtype {
+  width: 20%;
+  align-self: center;
+}
+.addbutton {
+  padding-left: 5%;
+  padding-right: 5%;
+  height: 100%;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 
+.dashboardcontainer {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   background: blue;
   width: 100%;
@@ -338,7 +408,7 @@ export default {
   background: red;
   width: 100%;
   height: auto;
-}
+} */
 
 .apexcharts-tooltip {
   color: rgb(0, 0, 0);

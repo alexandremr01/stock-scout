@@ -1,47 +1,35 @@
 <template>
   <div class="homecontainer">
     <div class="extremecontainer">
-      <h1>{{$t('homeMessage')}}</h1>
+      <h1>{{ $t("homeMessage") }}</h1>
     </div>
     <div class="middlecontainer">
-      <StockCard
-        stockname="Selic"
-        description="Selic"
-        :value="selic"
-      />
-      <StockCard
-        stockname="CDI"
-        description="Bitcoin"
-        :value="cdi"
-      />
-      <StockCard
-        stockname="BOVA"
-        description="Ibovespa"
-        :value="ibovespa"
-      />
-      <StockCard
-        stockname="NASDAQ"
-        description="Nasdaq"
-        :value="nasdaq"
-      />
-      <StockCard
-        stockname="USD"
-        description="Dólar"
-        :value="usd"
-        :variation="usd_var"
-      />
-      <StockCard
-        stockname="EUR"
-        description="Euro"
-        :value="eur"
-        :variation="eur_var"
-      />
-      <StockCard
-        stockname="BTC"
-        description="Bitcoin"
-        :value="btc"
-        :variation="btc_var"
-      />
+      <div class="rowcontainer">
+        <StockCard stockname="Selic" description="Selic" :value="selic" />
+        <StockCard stockname="CDI" description="Bitcoin" :value="cdi" />
+        <StockCard stockname="BOVA" description="Ibovespa" :value="ibovespa" />
+        <StockCard stockname="NASDAQ" description="Nasdaq" :value="nasdaq" />
+      </div>
+      <div class="rowcontainer">
+        <StockCard
+          stockname="USD"
+          description="Dólar"
+          :value="usd"
+          :variation="usd_var"
+        />
+        <StockCard
+          stockname="EUR"
+          description="Euro"
+          :value="eur"
+          :variation="eur_var"
+        />
+        <StockCard
+          stockname="BTC"
+          description="Bitcoin"
+          :value="btc"
+          :variation="btc_var"
+        />
+      </div>
     </div>
     <div class="extremescontainer"></div>
   </div>
@@ -55,10 +43,10 @@ import axios from "axios";
 export default {
   components: { StockCard },
   name: "Home",
-  mounted(){
+  mounted() {
     this.fetchData();
   },
-  data(){
+  data() {
     return {
       indexes: {},
       selic: 0.0,
@@ -71,32 +59,34 @@ export default {
       usd_var: 0.0,
       eur_var: 0.0,
       btc_var: 0.0,
-    }
+    };
   },
   methods: {
-    fetchData(){
-      axios.get('/api/index/').then((response) => {
-        let indexes = response.data['indexes'];
-        let usd = response.data['usd'];
-        let eur = response.data['eur'];
-        let bitcoin = response.data['btc'];
+    fetchData() {
+      axios
+        .get("/api/index/")
+        .then((response) => {
+          let indexes = response.data["indexes"];
+          let usd = response.data["usd"];
+          let eur = response.data["eur"];
+          let bitcoin = response.data["btc"];
 
-        this.selic = indexes['selic'] + ' %';
-        this.cdi = indexes['cdi'] + ' %';
-        this.ibovespa = this.toCurrency(indexes['ibovespa']);
-        this.nasdaq = this.toCurrency(indexes['nasdaq']);
-        this.ibovespa = this.toCurrency(indexes['ibovespa']);
+          this.selic = indexes["selic"] + " %";
+          this.cdi = indexes["cdi"] + " %";
+          this.ibovespa = this.toCurrency(indexes["ibovespa"]);
+          this.nasdaq = this.toCurrency(indexes["nasdaq"]);
+          this.ibovespa = this.toCurrency(indexes["ibovespa"]);
 
-        this.usd = this.toCurrency(usd['sell']);
-        this.usd_var = usd['variation'] + ' %';
-        this.btc = this.toCurrency(bitcoin['sell']);
-        this.btc_var = bitcoin['variation'] + ' %';
-        this.eur = this.toCurrency(eur['sell']);
-        this.eur_var = eur['variation'] + ' %';
-
-      }).catch(() => {
-        this.incorrect = true;
-      });
+          this.usd = this.toCurrency(usd["sell"]);
+          this.usd_var = usd["variation"] + " %";
+          this.btc = this.toCurrency(bitcoin["sell"]);
+          this.btc_var = bitcoin["variation"] + " %";
+          this.eur = this.toCurrency(eur["sell"]);
+          this.eur_var = eur["variation"] + " %";
+        })
+        .catch(() => {
+          this.incorrect = true;
+        });
     },
     toCurrency(n) {
       return Number(n).toLocaleString("pt-BR", {
@@ -104,7 +94,7 @@ export default {
         currency: "BRL",
       });
     },
-  }
+  },
 };
 </script>
 <style scoped>
@@ -128,9 +118,16 @@ export default {
   width: 100%;
   height: 80%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-flow: row wrap;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
+}
+
+.rowcontainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
 </style>

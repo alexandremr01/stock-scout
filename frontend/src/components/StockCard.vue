@@ -27,9 +27,10 @@ export default {
   border-radius: 10px;
   background-image: linear-gradient(
     to bottom right,
-    rgb(255, 201, 101),
-    orange
+    #2f373c,
+    rgb(143, 143, 143)
   );
+  /* background-image: linear-gradient(to bottom right, #11c76f, #55b588); */
   padding: 0;
   box-shadow: 10px 10px 2px 1px rgba(0, 0, 0, 0.2);
 }
