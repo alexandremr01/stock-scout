@@ -1,96 +1,121 @@
 <template>
-  <div>
+  <div class="box-externa">
     <b-spinner label="Loading..." v-if="loading"></b-spinner>
+    <b-container class="bv-example-row">
+      <b-row class="text-center">
+        <b-col cols="1" align-v="center">
+          <b-nav-item to="/wallets"> <h2 align="left"> <b-icon-arrow-left-circle style="color: #47545D;">></b-icon-arrow-left-circle>  </h2> </b-nav-item>
+        </b-col>
+        <b-col align-v="center">
+        <b-container class="box-title">
+          <h1 class="text-dark"> {{$t('wallets')}}</h1>
+        </b-container></b-col>
+      </b-row>
+    </b-container>
 
-    <b-nav-item to="/wallets"> <h2 align="left"> <b-icon-arrow-left-circle style="color: #47545D;">></b-icon-arrow-left-circle>  </h2> </b-nav-item>
-
-    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="!unauth && !firstLoading">
-      <h1> {{$t('wallets')}}</h1>
-
+    <b-container class="bv-example-row bv-example-row-flex-cols p-0" v-if="!unauth && !firstLoading">
       <b-row cols="12">
         <b-col cols="6">
-          <h3> {{$t('opInsert')}}  </h3>
+        <b-container class="centerBox bg-secondary">
+          <h3 class="text-primary">{{$t('opInsert')}}</h3>
           <div class="container-fluid">
-          <b-row class="my-1" align-h="start">
-              <b-col sm="3" align="left">{{$t('wDay')}} </b-col>
+            <b-row class="my-3" align-h="center">
+              <b-col sm="3" align="center">{{$t('wDay')}} </b-col>
               <b-col cols="9">     <b-form-datepicker id="example-datepicker" v-model="day" size="sm"></b-form-datepicker></b-col>
-          </b-row>
-          <b-row class="my-1" align-h="start">
-              <b-col sm="3" align="left">{{$t('wQuantity')}} </b-col>
+            </b-row>
+            <b-row class="my-3" align-h="start">
+              <b-col sm="3" align="center">{{$t('wQuantity')}} </b-col>
               <b-col cols="9"> <b-form-input v-model="quantity" type="number"></b-form-input> </b-col>
-          </b-row>
-          <b-row class="my-1" align-h="start">
-              <b-col sm="3" align="left">{{$t('wValue')}} </b-col>
-            <b-col cols="9"> <b-form-input v-model="value" type="text" :formatter="currencyFormat"></b-form-input> </b-col>
-          </b-row>
-          <b-row class="my-1" align-h="start">
-              <b-col sm="3" align="left">{{$t('wSymbol')}} </b-col>
-            <b-col cols="9"> <v-select
-                class="style-chooser"
-                :options="companies"
-                v-model="symbol"
-                :reduce="(x) => x.symbol"
-                label="name"
-            ></v-select> </b-col>
-          </b-row>
+            </b-row>
+            <b-row class="my-3" align-h="start">
+              <b-col sm="3" align="center">{{$t('wValue')}} </b-col>
+              <b-col cols="9"> <b-form-input v-model="value" type="text" :formatter="currencyFormat"></b-form-input> </b-col>
+            </b-row>
+            <b-row class="my-3" align-h="start">
+              <b-col sm="3" align="center">{{$t('wSymbol')}} </b-col>
+              <b-col cols="9"> <v-select
+                  class="style-chooser"
+                  :options="companies"
+                  v-model="symbol"
+                  :reduce="(x) => x.symbol"
+                  label="name"
+              ></v-select> </b-col>
+            </b-row>
 
-          <b-row class="my-1" align-h="center">
-            <b-button-group class="right-chart-options" cols="8">
-              <b-button
-                  v-for="(btn, idx) in marketOptions.buttons"
-                  :key="idx"
-                  :pressed.sync="btn.state"
-                  variant="primary"
-                  @click="market=btn.value">
-                <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
-              </b-button>
-            </b-button-group>
-          </b-row>
+            <b-row class="my-1" align-h="center">
+              <b-button-group class="right-chart-options" cols="8">
+                <b-button
+                    v-for="(btn, idx) in marketOptions.buttons"
+                    :key="idx"
+                    :pressed.sync="btn.state"
+                    variant="primary"
+                    @click="market=btn.value">
+                  <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{ btn.caption }}
+                </b-button>
+              </b-button-group>
+            </b-row>
 
 
-          <b-row class="my-1" align-h="center">
-            <b-form-group>
-              <b-form-radio-group
-                  id="radio-group-1"
-                  v-model="opType"
-                  :options="operationTypes"
-                  name="radio-options"
-              ></b-form-radio-group>
-            </b-form-group>
-          </b-row>
-          <b-row class="my-1" align-h="center">
-            <b-button @click="submit"> {{$t('insert')}}  </b-button>
-          </b-row>
+            <b-row class="my-1" align-h="center">
+              <b-form-group>
+                <b-form-radio-group
+                    id="radio-group-1"
+                    v-model="opType"
+                    :options="operationTypes"
+                    name="radio-options"
+                    class="text-primary"
+                ></b-form-radio-group>
+              </b-form-group>
+            </b-row>
+
+            <b-row class="my-1" align-h="center">
+              <b-button pill @click="submit" class="bg-success text-primary"> {{$t('insert')}}  </b-button>
+            </b-row>
           </div>
+        </b-container>
+
         </b-col>
+
         <b-col cols="6">
-          <h3> {{$t('currentComposition')}} </h3>
+          <b-container class="rightBox bg-secondary">
+          <h3 class="text-primary"> {{$t('currentComposition')}} </h3>
           <div class="container-fluid">
             <b-table sticky-header="true"
                      no-border-collapse
                      small  dark hover :items="consolidated" :fields="fieldsConsolidated">
             </b-table>
           </div>
+          <div class="valorAtual bg-primary">
+            <h3 class="text-secondary"> Valor atual da carteira: {{this.toCurrency(currentTotalValue)}} </h3>
+          </div>
+          </b-container>
+
+          
         </b-col>
-        <b-row class="my-1" align-h="center">
-          <h3> {{$t('opHistory')}} </h3>
+
+        <b-row class="mt-3" align-h="center">
+          <b-col class="pl-4" cols="12">
+          <b-container class="centerBox bg-secondary">
+          <h3 class="text-primary"> {{$t('opHistory')}} </h3>
           <div class="container-fluid">
             <b-table sticky-header="200px"
                      no-border-collapse
                      small fixed dark hover :items="opHistory" :fields="fields">
               <template #cell(actions)="row">
-                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
+                <b-button pill variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
                   {{ $t('remove') }}
                 </b-button>
               </template>
-
             </b-table>
           </div>
+          </b-container>
+          </b-col>
         </b-row>
 
-        <b-row class="my-1" align-h="center">
-          <h3> Valor atual da carteira: {{this.toCurrency(currentTotalValue)}} </h3>
-        </b-row>
+        <!-- <b-row class="my-2" align-h="center">
+          
+        </b-row> -->
+
       </b-row>
     </b-container>
 
@@ -100,7 +125,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
@@ -114,6 +139,36 @@
 .style-chooser .vs__clear,
 .style-chooser .vs__open-indicator {
   fill: #394066;
+}
+.box-externa {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.back-button {
+  height: 50%;
+  width: 100%;
+}
+.box-title {
+  padding: 10px;
+}
+.valorAtual {
+  padding: 10px;
+  border-radius: 20px;
+  width: 100%;
+}
+.centerBox {
+  border-radius: 20px;
+  padding: 10px;
+}
+.rightBox {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  border-radius: 20px;
+  padding: 10px;
 }
 </style>
 
@@ -291,6 +346,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>
