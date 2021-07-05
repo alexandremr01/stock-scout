@@ -4,6 +4,7 @@
 
     <GraphCard
       v-for="chart in charts"
+      ref="charts"
       :key="chart.id"
       :chartType="chart.type"
       :stock="chart.stockName"
@@ -11,6 +12,7 @@
       :chartSeries="chart.series"
       :id="chart.id"
       v-on:remove="removeChart"
+      v-on:changeFrequency="changeChartFrequency"
     >
     </GraphCard>
 
@@ -31,7 +33,7 @@
 
     <b-button
       variant="primary"
-      style="fontsize: 16px; width: 135px;"
+      style="fontsize: 16px; width: 135px"
       @click="chartType = chartType === 'line' ? 'candlestick' : 'line'"
     >
       <div v-if="chartType == 'line'">
@@ -225,6 +227,55 @@ export default {
     removeChart(id) {
       let index = this.charts.findIndex((chart) => chart.id === id);
       this.charts.splice(index, 1);
+    },
+    changeChartFrequency(id, chartType, stock, frequency) {
+      let parsedSymbol = stock + (this.market === BOVESPA ? ".SA" : "");
+      
+      this.loading = true;
+      axios
+        .get(
+          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + frequency
+        )
+        .then((response) => {
+          this.loading = false;
+          
+          let data = response.data;
+          data = JSON.parse(data);
+
+          if (chartType == "line") {
+            let dateArray = [];
+            let closingPriceArray = [];
+
+            data.forEach((dataElement) => {
+              const date = dataElement.Date;
+              const closingPrice = dataElement.close;
+
+              dateArray.push(date);
+              closingPriceArray.push(closingPrice);
+            });
+            this.$refs.charts[id].changeChartData(dateArray, closingPriceArray);
+          }
+
+          if (chartType == "candlestick") {
+            let dateArray = [];
+            let dataArray = [];
+
+            data.forEach((dataElement) => {
+              const date = dataElement.Date;
+              const openingPrice = dataElement.open;
+              const closingPrice = dataElement.close;
+              const highPrice = dataElement.high;
+              const lowPrice = dataElement.low;
+
+              dateArray.push(date);
+              dataArray.push({
+                x: date,
+                y: [openingPrice, highPrice, lowPrice, closingPrice],
+              });
+            });
+            this.$refs.charts[id].changeChartData(dateArray, dataArray);
+          }
+        });
     },
   },
   watch: {
