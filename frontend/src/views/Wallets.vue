@@ -1,32 +1,53 @@
 <template>
-  <div>
-    <h1>{{$t('wallets')}}</h1>
+  <div class="big-box-wallet">
+    <b-container class="small-box">
+      <b-container fluid class="title-wallet">
+        <h1 class="text-secondary">{{$t('wallets')}}</h1>
+      </b-container>
 
-    <b-container class="bv-example-row bv-example-row-flex-cols">
-          <div class="container-fluid">
-            <b-table sticky-header="true" no-border-collapse dark hover :items="wallets" :fields="fields">
-              <template #cell(actions)="row">
-                <b-button variant="primary" size="sm" @click="$router.push('wallets/'+ row.item.id)" class="mr-1">
-                  {{ $t('see') }}
-                </b-button>
-                <b-button variant="danger" size="sm" @click="remove(row.item, row.index, $event.target)" class="mr-1">
-                  {{ $t('remove') }}
-                </b-button>
-              </template>
-            </b-table>
-          </div>
+      <b-container fluid class="wallet-list bg-secondary text-primary">
+              <b-table 
+                sticky-header="true" 
+                no-border-collapse dark hover 
+                :items="wallets" 
+                :fields="fields"
+                >
+                <template #cell(actions)="row">
+                  <b-button 
+                    variant="primary" 
+                    size="sm" 
+                    @click="$router.push('wallets/'+ row.item.id)" 
+                    class="mr-1 text-dark"
+                    >
+                    {{ $t('see') }}
+                  </b-button>
+                  <b-button 
+                    variant="danger" 
+                    size="sm" 
+                    @click="remove(row.item, row.index, $event.target)" 
+                    class="mr-1"
+                    >
+                    {{ $t('remove') }}
+                  </b-button>
+                </template>
+              </b-table>
+      </b-container>
     </b-container>
 
-    <h3> {{ $t('createNew') }} </h3>
+
+    <b-container fluid class="pt-5 title-wallet">
+      <h2 class="text-secondary">{{ $t('createNew') }}</h2>
+    </b-container>
+
     <div class="container-fluid">
-      <b-row class="my-1" align-h="start">
+      <b-row class="my-1" align-h="center">
         <b-row cols="12">
-          <b-col cols="3" align="left">{{$t('name')}} </b-col>
+          <b-col cols="3" align-self="center"><h3 class="text-dark">{{$t('name')}}</h3></b-col>
           <b-col cols="6">
             <b-form-input v-model="walletName" placeholder="Nome"></b-form-input>
           </b-col>
           <b-col cols="3">
-            <b-button variant="primary" @click="submit">
+            <b-button variant="primary" @click="submit" class="text-dark">
               {{ $t('save') }}
             </b-button>
           </b-col>
@@ -50,6 +71,27 @@
 .style-chooser .vs__clear,
 .style-chooser .vs__open-indicator {
   fill: #394066;
+}
+.title-wallet {
+  padding: 10px;
+}
+.big-box-wallet {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.wallet-list {
+  padding: 20px;
+  max-width: 50%;
+  height: auto;
+  border-radius: 20px;
+}
+.small-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
 }
 </style>
 
@@ -122,6 +164,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>
