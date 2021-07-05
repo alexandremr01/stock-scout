@@ -1,9 +1,9 @@
 <template>
   <div class="card-bg">
     <container class="remove-button">
-      <b-button pill @click="removeChart">
-        <b-icon icon="x-circle-fill"></b-icon>
-      </b-button>
+      <button pill @click="removeChart">
+        <b-icon scale="1.5" icon="x-circle"></b-icon>
+      </button>
     </container>
     <container class="chart">
       <vue-apex-charts
