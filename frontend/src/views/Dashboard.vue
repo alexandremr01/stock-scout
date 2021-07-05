@@ -160,7 +160,10 @@ export default {
 
       let parsedSymbol =
         this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
-      axios.get("/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency)
+      axios
+        .get(
+          "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
+        )
         .then((response) => {
           let data = response.data;
           this.loading = false;
@@ -239,7 +242,7 @@ export default {
     },
     removeChart(id) {
       console.log(id);
-    }
+    },
   },
   watch: {
     // a computed getter

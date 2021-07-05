@@ -1,11 +1,11 @@
 <template>
   <div>
-    <b-container vertical class="stockcard">
-      <b-container vertical class="text">
+    <b-container fluid vertical class="stockcard">
+      <b-container fluid vertical class="text">
         <h2>{{ stockname }}</h2>
         <h7>{{ description }}</h7>
       </b-container>
-      <b-container vertical class="value">
+      <b-container fluid vertical class="value">
         <h4>{{ value }}</h4>
         <h7>{{ variation }}</h7>
       </b-container>
@@ -36,9 +36,9 @@ export default {
 
 .text {
   color: white;
-  padding-top: 10px;
+  padding-top: 5%;
   text-align: left;
-  padding-bottom: 20px;
+  padding-bottom: 10%;
 }
 
 .value {
