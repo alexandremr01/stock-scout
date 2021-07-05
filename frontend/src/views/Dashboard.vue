@@ -107,7 +107,6 @@ import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 const WALLET = "WALLET";
-const INDEX = "INDEX";
 
 import GraphCard from "../components/GraphCard.vue";
 import Client from "../repositories/Clients/AxiosClient";
@@ -130,14 +129,6 @@ export default {
       searchText: "",
       chartType: "line",
       chartCounter: 0,
-      indexOptions: [
-        { name: "Selic" },
-        { name: "USD" },
-        { name: "EUR" },
-        { name: "Nasdaq" },
-        { name: "Ibovespa" },
-        { name: "Bitcoin" },
-      ],
       charts: [],
       loading: false,
       error: false,
@@ -156,9 +147,6 @@ export default {
   },
   methods: {
     getStockData: async function () {
-      console.log(this.chartType);
-      console.log(this.stockSymbol);
-
       this.loading = true;
       if (this.market === NASDAQ || this.market === BOVESPA){
         let parsedSymbol = this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
@@ -178,15 +166,11 @@ export default {
       } else if (this.market === WALLET){
         let walletID = this.searchText;
         const token = this.$store.state.token;
-        console.log("aqui")
         Client(token).get("/api/wallets/" + walletID + "/history")
             .then((response) => {
               let data = response.data;
               this.loading = false;
-              console.log(this.searchText)
-              console.log(this.wallets)
               let walletName = this.wallets.filter(x => x.symbol==this.searchText)[0].name;
-              console.log(walletName)
               let parsedData = JSON.parse(data).map((x) => {return {Date: x.day, close: x.value}});
               this.parseData(parsedData, walletName);
             })
@@ -334,8 +318,6 @@ export default {
         this.companies = nasdaqCompanies;
       } else if (val === WALLET) {
         this.companies = this.wallets;
-      } else if (val === INDEX) {
-        this.companies = this.indexOptions;
       }
       this.marketOptions.buttons.forEach((btn, index) =>
         btn.value != val ? (btn.state = false) : null
@@ -386,8 +368,7 @@ export default {
   flex-direction: column;
   justify-content: space-evenly;
 }
-.stocksearch {
-}
+
 .stockselection {
   display: flex;
   flex-direction: row;
@@ -410,25 +391,6 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-
-/* 
-.dashboardcontainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: blue;
-  width: 100%;
-  height: 100%;
-}
-
-.graphcontainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  background: red;
-  width: 100%;
-  height: auto;
-} */
 
 .apexcharts-tooltip {
   color: rgb(0, 0, 0);

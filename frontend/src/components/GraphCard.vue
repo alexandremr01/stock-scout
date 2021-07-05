@@ -207,7 +207,6 @@ export default {
       );
     },
     changeChartData(xaxisData, yaxisData) {
-      console.log("ala");
       this.$refs.chart.updateOptions({
         series: [
           {
@@ -254,8 +253,5 @@ export default {
   align-self: center;
   width: 100%;
   height: auto;
-}
-
-.frequency-options {
 }
 </style>
