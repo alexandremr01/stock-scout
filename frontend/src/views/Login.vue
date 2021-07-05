@@ -105,6 +105,9 @@ export default {
 </script>
 <style scoped>
 .bloco {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 500px;
   border-radius: 20px;
   padding: 0px 50px;

@@ -33,6 +33,7 @@ def alphav_to_ss(alphav_data, freq):
     
     return json.dumps(ss_arr)
 
+# json to model
 def get_or_update_stock_time_series(symbol, freq):
     query = StockTimeSeries.objects.filter(ticker=symbol).filter(frequency=freq)
     refresh = {'DAY': 1, 'WEEK': 7, 'MONTH': 30}
@@ -54,7 +55,7 @@ def get_or_update_stock_time_series(symbol, freq):
         time_series.data = ss_json
         time_series.save()
     
-    return time_series.data
+    return time_series
 
 def get_or_update_coin_quotations(currency):
     query = CoinQuotation.objects.filter(name=currency)
@@ -81,10 +82,10 @@ def get_or_update_coin_quotations(currency):
 
 # json to map
 def get_daily_history(symbol):
-    data = get_or_update_stock_time_series(symbol, 'DAY')
+    time_series = get_or_update_stock_time_series(symbol, 'DAY')
 
     daily_hist = {}
-    for daily_intel in eval(data):
+    for daily_intel in eval(time_series.data):
         daily_hist[daily_intel['Date']] = daily_intel['close']
     return daily_hist
 
@@ -92,8 +93,8 @@ def get_pseudo_current_stock_value(symbols):
     values = {}
 
     for symbol in symbols:
-        data = get_or_update_stock_time_series(symbol, 'DAY')
-        first_record = eval(data)[0]['close']
+        time_series = get_or_update_stock_time_series(symbol, 'DAY')
+        first_record = eval(time_series.data)[0]['close']
         values[symbol] = first_record
     
     return values
