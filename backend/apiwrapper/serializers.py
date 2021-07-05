@@ -2,7 +2,7 @@ import json
 
 from rest_framework import serializers
 from .models import StockTimeSeries, CoinQuotation
-from .api_client import alpha_vantage_client
+from .api_client import alpha_vantage_client, hg_brasil_client
 
 from datetime import datetime, timedelta, timezone
 
@@ -55,6 +55,29 @@ def get_or_update_stock_time_series(symbol, freq):
         time_series.save()
     
     return time_series.data
+
+def get_or_update_coin_quotations(currency):
+    query = CoinQuotation.objects.filter(name=currency)
+    coin_quotation = None
+
+    if query.exists():
+        coin_quotation = query[0]
+    
+    if not query.exists():
+        hgbr_json = hg_brasil_client()
+        data = hgbr_json["results"]["currencies"][coin_quotation.name]
+        coin_quotation.buy = data["buy"]
+        coin_quotation.sell = data["sell"]
+        coin_quotation.variation = data["variation"]
+        coin_quotation.save()
+
+    if datetime.now(timezone.utc) - coin_quotation.last_modified < timedelta(minutes=15):
+        hgbr_json = hg_brasil_client()
+        data = hgbr_json["results"]["currencies"][coin_quotation.name]
+        coin_quotation = CoinQuotation(name=currency, buy=data["buy"], sell=data["sell"], variation=data["variation"])
+        coin_quotation.save()
+
+    return coin_quotation
 
 # json to map
 def get_daily_history(symbol):

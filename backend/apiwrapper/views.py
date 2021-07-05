@@ -3,11 +3,7 @@ from .models import CoinQuotation
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
-
-from .api_client import hg_brasil_client
-from .serializers import get_or_update_stock_time_series, CoinQuotationSerializer
-
-from datetime import datetime, timedelta, timezone
+from .serializers import get_or_update_stock_time_series, get_or_update_coin_quotations, CoinQuotationSerializer
 
 # Create your views here.
 class StockDetail(APIView):
@@ -32,23 +28,5 @@ class CoinDetail(APIView):
 
     def get(self, request, format=None):
         coin_name = request.query_params.get('code')
-        filter = CoinQuotation.objects.filter(name=coin_name)
-        if filter.exists():
-            coin_quotation = filter[0]
-
-            if datetime.now(timezone.utc) - coin_quotation.last_modified < timedelta(minutes=15):
-                return Response(CoinQuotationSerializer(coin_quotation).data)
-            
-            hgbr_json = hg_brasil_client()
-            data = hgbr_json["results"]["currencies"][coin_quotation.name]
-            coin_quotation.buy = data["buy"]
-            coin_quotation.sell = data["sell"]
-            coin_quotation.variation = data["variation"]
-            coin_quotation.save()
-            return Response(CoinQuotationSerializer(coin_quotation).data)
-        
-        hgbr_json = hg_brasil_client()
-        data = hgbr_json["results"]["currencies"][coin_name]
-        new_coin_quotation = CoinQuotation(name=coin_name, buy=data["buy"], sell=data["sell"], variation=data["variation"])
-        new_coin_quotation.save()
-        return Response(CoinQuotationSerializer(new_coin_quotation).data)
+        coin_quotation = get_or_update_coin_quotations(coin_name)
+        return Response(CoinQuotationSerializer(coin_quotation).data)
