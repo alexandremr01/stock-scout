@@ -120,40 +120,6 @@
     </div>
     <div class="middlecontainer">
       <GraphCard
-        :key="`1`"
-        :chartType="line"
-        :stock="stockname"
-        :categories="`[1,2,3]`"
-        :chartSeries="`[{data: [1,2,3]}]`"
-        :id="`1`"
-        v-on:remove="removeChart"
-        v-on:changeFrequency="changeChartFrequency"
-      >
-      </GraphCard>
-      <GraphCard
-        :key="`1`"
-        :chartType="line"
-        :stock="stockname"
-        :categories="`[1,2,3]`"
-        :chartSeries="`[{data: [1,2,3]}]`"
-        :id="`1`"
-        v-on:remove="removeChart"
-        v-on:changeFrequency="changeChartFrequency"
-      >
-      </GraphCard>
-      <GraphCard
-        :key="`1`"
-        :chartType="line"
-        :stock="stockname"
-        :categories="`[1,2,3]`"
-        :chartSeries="`[{data: [1,2,3]}]`"
-        :id="`1`"
-        v-on:remove="removeChart"
-        v-on:changeFrequency="changeChartFrequency"
-      >
-      </GraphCard>
-
-      <!-- <GraphCard
         v-for="chart in charts"
         ref="charts"
         :key="chart.id"
@@ -165,7 +131,7 @@
         v-on:remove="removeChart"
         v-on:changeFrequency="changeChartFrequency"
       >
-      </GraphCard> -->
+      </GraphCard>
     </div>
     <div class="extremecontainer"></div>
 
