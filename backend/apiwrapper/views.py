@@ -16,8 +16,8 @@ class StockDetail(APIView):
     def get(self, request, format=None):
         symbol = request.query_params.get('symbol')
         freq = request.query_params.get('freq')
-        data = get_or_update_stock_time_series(symbol, freq)
-        return Response(data)
+        time_series = get_or_update_stock_time_series(symbol, freq)
+        return Response(time_series.data)
 
 class CoinDetail(APIView):
     """
