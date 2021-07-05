@@ -195,22 +195,30 @@ export default {
     },
     frequencyOnPress(i) {
       let frequency = [];
-      this.frequencyOptions.buttons.forEach(
-        (btn, index) => (btn.state = i === index) ? frequency = btn.frequency : null
+      this.frequencyOptions.buttons.forEach((btn, index) =>
+        (btn.state = i === index) ? (frequency = btn.frequency) : null
       );
-      this.$emit("changeFrequency", this.id, this.chartType, this.stock, frequency);
+      this.$emit(
+        "changeFrequency",
+        this.id,
+        this.chartType,
+        this.stock,
+        frequency
+      );
     },
     changeChartData(xaxisData, yaxisData) {
-      console.log("ala")
+      console.log("ala");
       this.$refs.chart.updateOptions({
-        series: [{
-          data: yaxisData
-        }],
+        series: [
+          {
+            data: yaxisData,
+          },
+        ],
         xaxis: {
-          categories: xaxisData
-        }
+          categories: xaxisData,
+        },
       });
-    }
+    },
   },
   components: { VueApexCharts },
   props: ["chartType", "stock", "categories", "chartSeries", "id"],
@@ -230,14 +238,9 @@ export default {
 .card-bg {
   display: flex;
   flex-direction: column;
-  background: rgb(234, 243, 243);
-  background: linear-gradient(
-    to bottom right,
-    rgba(234, 243, 243, 1) 0%,
-    rgba(203, 214, 208, 1) 35%,
-    rgba(190, 205, 206, 1) 100%
-  );
+  background: white;
   padding: 10px;
+  flex-grow: 0.33;
   box-shadow: 10px 10px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 }

@@ -120,6 +120,40 @@
     </div>
     <div class="middlecontainer">
       <GraphCard
+        :key="`1`"
+        :chartType="line"
+        :stock="stockname"
+        :categories="`[1,2,3]`"
+        :chartSeries="`[{data: [1,2,3]}]`"
+        :id="`1`"
+        v-on:remove="removeChart"
+        v-on:changeFrequency="changeChartFrequency"
+      >
+      </GraphCard>
+      <GraphCard
+        :key="`1`"
+        :chartType="line"
+        :stock="stockname"
+        :categories="`[1,2,3]`"
+        :chartSeries="`[{data: [1,2,3]}]`"
+        :id="`1`"
+        v-on:remove="removeChart"
+        v-on:changeFrequency="changeChartFrequency"
+      >
+      </GraphCard>
+      <GraphCard
+        :key="`1`"
+        :chartType="line"
+        :stock="stockname"
+        :categories="`[1,2,3]`"
+        :chartSeries="`[{data: [1,2,3]}]`"
+        :id="`1`"
+        v-on:remove="removeChart"
+        v-on:changeFrequency="changeChartFrequency"
+      >
+      </GraphCard>
+
+      <!-- <GraphCard
         v-for="chart in charts"
         ref="charts"
         :key="chart.id"
@@ -131,7 +165,7 @@
         v-on:remove="removeChart"
         v-on:changeFrequency="changeChartFrequency"
       >
-      </GraphCard>
+      </GraphCard> -->
     </div>
     <div class="extremecontainer"></div>
 
@@ -397,7 +431,7 @@ export default {
 
 .extremecontainer {
   width: 100%;
-  height: 15%;
+  height: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -406,12 +440,13 @@ export default {
 
 .middlecontainer {
   width: 100%;
-  height: 70%;
+  height: 60%;
   display: flex;
   flex-direction: row;
+  align-content: stretch;
+  align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
-  align-items: center;
 }
 
 .addgraphform {
