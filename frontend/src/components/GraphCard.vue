@@ -33,6 +33,7 @@
 import VueApexCharts from "vue-apexcharts";
 
 export default {
+  name: "graphCard",
   data() {
     return {
       lineOptions: {
@@ -86,7 +87,7 @@ export default {
           mode: "light",
         },
         title: {
-          text: this.stock,
+          text: "",
           align: "center",
           offsetY: 10,
           style: {
@@ -153,7 +154,7 @@ export default {
           mode: "light",
         },
         title: {
-          text: this.stock,
+          text: "",
           align: "center",
           offsetY: 10,
           style: {
@@ -205,6 +206,15 @@ export default {
   },
   components: { VueApexCharts },
   props: ["chartType", "stock", "categories", "chartSeries"],
+  created() {
+    if (this.chartType == "line") {
+      this.lineOptions.xaxis.categories = this.categories;
+      this.lineOptions.title.text = this.stock;
+    } else if (this.chartType == "candlestick") {
+      this.candlestickOptions.xaxis.categories = this.categories;
+      this.candlestickOptions.title.text = this.stock;
+    }
+  },
 };
 </script>
 

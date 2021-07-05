@@ -1,106 +1,105 @@
 <template>
   <div class="big-box">
-    <b-container class="description">
-      <h1>{{ $t("simulations") }}</h1>
-      <h3 class="text-primary">{{ $t("simulationDescription") }}</h3>
+    <b-container fluid class="description">
+      <h1 class="text-secondary">{{ $t("simulations") }}</h1>
+      <h3 class="text-secondary">{{ $t("simulationDescription") }}</h3>
     </b-container>
 
-    <b-container class="box">
+    <div fluid class="box">
       <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
-      <b-container class="bv-example-row bv-example-row-flex-cols">
+      <b-container fluid class="calculator bg-secondary text-primary">
         <b-row>
-          <b-col>
-            <b-container class="calculator">
-              <b-row class="my-2" align-h="start">
-                <b-col sm="4" align="left"
-                  ><h2>{{ $t("calculate") }}</h2></b-col
-                >
-                <b-col cols="8"
-                  ><v-select
-                    class="style-chooser"
-                    @input="updateType"
-                    :options="calculationOptions"
-                    v-model="selectedSim"
-                  ></v-select
-                ></b-col>
-              </b-row>
-
-              <b-row class="my-2" v-for="input in inputs" :key="input.name">
-                <b-col sm="4" align="left"
-                  ><h5>{{ $t(input.name) }}</h5></b-col
-                >
-                <b-col sm="8"
-                  ><b-form-input
-                    v-model="input.value"
-                    :readonly="selected === input.name"
-                    :formatter="input.formatter"
-                    @input="update"
-                  ></b-form-input
-                ></b-col>
-              </b-row>
-            </b-container>
-
-            <b-container class="buttons">
-              <b-row cols="12">
-                <b-col cols="5">
-                  <b-form-input
-                    v-model="simName"
-                    placeholder="Nome"
-                  ></b-form-input>
-                </b-col>
-                <b-col cols="3">
-                  <b-button variant="primary" @click="save">
-                    {{ $t("save") }}
-                  </b-button>
-                </b-col>
-                <b-col cols="3">
-                  <b-button variant="primary" @click="clean">
-                    {{ $t("clear") }}
-                  </b-button>
-                </b-col>
-                <div v-if="incorrect">
-                  {{ $t("errorSimulation") }}
-                </div>
-              </b-row>
-            </b-container>
-          </b-col>
-          <b-col>
-            <div class="container-fluid saved-simulations">
-              <h2>{{ $t("savedSimulations") }}</h2>
-              <b-table
-                small
-                fixed
-                sticky-header="true"
-                dark
-                hover
-                :items="simulations"
-                :fields="fields"
-              >
-                <template #cell(actions)="row">
-                  <b-button
-                    variant="primary"
-                    size="sm"
-                    @click="selectRow(row.item, row.index, $event.target)"
-                    class="mr-1"
-                  >
-                    {{ $t("see") }}
-                  </b-button>
-                  <b-button
-                    variant="danger"
-                    size="sm"
-                    @click="remove(row.item, row.index, $event.target)"
-                    class="mr-1"
-                  >
-                    {{ $t("remove") }}
-                  </b-button>
-                </template>
-              </b-table>
-            </div>
-          </b-col>
+          <b-col
+            ><h2>{{ $t("calculate") }}</h2></b-col
+          >
+          <b-col
+            ><v-select
+              class="style-chooser"
+              @input="updateType"
+              :options="calculationOptions"
+              v-model="selectedSim"
+            ></v-select
+          ></b-col>
         </b-row>
+
+        <b-row v-for="input in inputs" :key="input.name">
+          <b-col
+            ><h5>{{ $t(input.name) }}</h5></b-col
+          >
+          <b-col
+            ><b-form-input
+              v-model="input.value"
+              :readonly="selected === input.name"
+              :formatter="input.formatter"
+              @input="update"
+            ></b-form-input
+          ></b-col>
+        </b-row>
+        <b-container fluid class="buttons">
+          <b-row cols="12">
+            <b-col cols="5">
+              <b-form-input v-model="simName" placeholder="Nome"></b-form-input>
+            </b-col>
+            <b-col cols="3">
+              <b-button
+                class="text-primary"
+                pill
+                variant="success"
+                @click="save"
+              >
+                {{ $t("save") }}
+              </b-button>
+            </b-col>
+            <b-col cols="3">
+              <b-button
+                class="text-primary"
+                pill
+                variant="danger"
+                @click="clean"
+              >
+                {{ $t("clear") }}
+              </b-button>
+            </b-col>
+            <div v-if="incorrect">
+              {{ $t("errorSimulation") }}
+            </div>
+          </b-row>
+        </b-container>
       </b-container>
-    </b-container>
+
+      <b-container fluid class="saved-simulations bg-secondary text-primary">
+        <h2>{{ $t("savedSimulations") }}</h2>
+        <b-table
+          small
+          fixed
+          sticky-header="true"
+          dark
+          hover
+          :items="simulations"
+          :fields="fields"
+        >
+          <template #cell(actions)="row">
+            <b-button
+              variant="primary"
+              size="sm"
+              @click="selectRow(row.item, row.index, $event.target)"
+              class="mr-1"
+            >
+              {{ $t("see") }}
+            </b-button>
+            <b-button
+              variant="danger"
+              size="sm"
+              @click="remove(row.item, row.index, $event.target)"
+              class="mr-1"
+            >
+              {{ $t("remove") }}
+            </b-button>
+          </template>
+        </b-table>
+      </b-container>
+    </div>
   </div>
 </template>
 
@@ -119,26 +118,46 @@
 .style-chooser .vs__open-indicator {
   fill: #394066;
 }
+
 .description {
+  height: 20%;
+  width: 100%;
   padding: 50px;
-  background-color: lightblue;
 }
 .calculator {
-  background-color: lightcoral;
+  height: 500px;
+  width: 800px;
+  display: flex;
+  margin-right: 5%;
+  flex-direction: column;
+  border-radius: 20px;
+  justify-content: space-evenly;
 }
+
 .buttons {
-  background-color: lightgreen;
 }
-.saved-simulations {
-  background-color: lightpink;
-}
-.box {
-  background-color: lightslategray;
-}
+
 .big-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
-  background-color: lime;
+}
+
+.saved-simulations {
+  padding: 20px;
+  max-width: 50%;
+  height: auto;
+  border-radius: 20px;
+}
+
+.box {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  justify-content: space-around;
+  width: 100%;
 }
 </style>
 

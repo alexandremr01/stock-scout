@@ -1,30 +1,46 @@
 <template>
-  <div id="Dashboard" class="dashboardcontainer">
-    <container class="addGraph"></container>
-    <container class="graphcontainer">
-      <GraphCard
-        chartType="line"
-        stock="hello"
-        :categories="[1, 2, 3]"
-        :chartSeries="[
-          {
-            data: [1, 2, 3],
-          },
-        ]"
-      />
-      <GraphCard
-        chartType="line"
-        stock="hello"
-        :categories="[1, 2, 3]"
-        :chartSeries="[
-          {
-            data: [1, 2, 3],
-          },
-        ]"
-      />
-    </container>
+  <div id="Dashboard">
+    <!-- <GraphCard
+      chartType="line"
+      stock="hello"
+      :categories="[1, 2, 3]"
+      :chartSeries="[
+        {
+          data: [1, 2, 3],
+        },
+      ]"
+    /> -->
+    <b-spinner label="Loading..." v-if="loading"></b-spinner>
 
-    <!-- <b-container class="right-chart-container">
+    <GraphCard
+      v-for="chart in charts"
+      :key="chart.id"
+      :chartType="chart.type"
+      :stock="chart.stockName"
+      :categories="chart.categories"
+      :chartSeries="chart.series"
+    >
+    </GraphCard>
+
+    <!-- <GraphCard
+      chartType="candlestick"
+      stock="hello"
+      :categories="[1, 2]"
+      :chartSeries="[{
+        data: [
+          {
+            x: 1,
+            y: [6593.34, 6600, 6582.63, 6600],
+          },
+          {
+            x: 2,
+            y: [6593.34, 6600, 4000, 3000],
+          }
+        ]
+      }]"
+    /> -->
+
+    <b-container class="mt-5">
       <b-row>
         <b-col cols="5">
           <v-select
@@ -43,11 +59,11 @@
               <b-icon icon="bar-chart-fill" aria-hidden="true"></b-icon>
               Visualization
             </template>
-            <b-dropdown-item-button>
+            <b-dropdown-item-button @click="updateChartType('line')">
               <b-icon icon="graph-up" aria-hidden="true"></b-icon>
               Line
             </b-dropdown-item-button>
-            <b-dropdown-item-button>
+            <b-dropdown-item-button @click="updateChartType('candlestick')">
               <b-icon icon="align-middle" aria-hidden="true"></b-icon>
               Candlestick
             </b-dropdown-item-button>
@@ -56,7 +72,7 @@
       </b-row>
     </b-container>
 
-    <b-button-group class="right-chart-options" size="lm">
+    <b-button-group class="mt-5" size="lm">
       <b-button
         v-for="(btn, idx) in marketOptions.buttons"
         :key="idx"
@@ -69,108 +85,33 @@
       </b-button>
     </b-button-group>
 
-    <div class="right-chart-buy-sell">
-      <b-button variant="success" class="buyStock" size="lm">
-        <b-icon icon="bag-plus-fill" aria-hidden="true"></b-icon
-        >&nbsp;Buy </b-button
-      >&nbsp;
-    <b-form @submit="onSubmit" class="form-input">
-          <b-form-group
-            class="align-label"
-            id="input-group-1"
-            label-for="input-1"
-          >
-            <b-form-input
-              id="input-1"
-              v-model="form.email"
-              placeholder="Enter email"
-              required
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            class="align-label"
-            id="input-group-2"
-            label-for="input-2"
-          >
-            <b-form-input
-              id="input-2"
-              v-model="form.password"
-              placeholder="Enter password"
-              type="password"
-              required
-            ></b-form-input>
-          </b-form-group>
-
-          <div v-if="incorrect">Usuário ou senha incorreto.</div>
-
-          <b-container vertical>
-            <b-container class="buttons">
-              <b-button pill type="submit" variant="success" class="button"
-                >Login</b-button
-              >
-              <b-button
-                pill
-                @click="toDashboard"
-                variant="success"
-                class="button"
-                >Guest Login</b-button
-              >
-            </b-container>
-            <b-container class="footer">
-              <p>
-                New to Stock Scout?
-                <b-link @click="toSignup">SignUp</b-link>
-              </p>
-            </b-container>
-          </b-container>
-        </b-form>  <b-button variant="danger" class="sellStock" size="lm">
-        <b-icon icon="bag-x-fill" aria-hidden="true"></b-icon>&nbsp;Sell
-      </b-button>
-    </div>
-
-    <b-button-group class="lineChartFrequencyOptions" size="lm">
-      <b-button
-        v-for="(btn, idx) in lineChartFrequencyOptions.buttons"
-        :key="idx"
-        :pressed.sync="btn.state"
-        variant="primary"
-        @click="lineChartFrequencyOnPress(idx)"
-        class="lineChartFrequencyOptionsButton"
-      >
-        <b-icon :icon="btn.icon"></b-icon>&nbsp;{{ btn.caption }}
-      </b-button>
-    </b-button-group>
-
-    <div class="Chart">
-      <lineChart
-        ref="Chart"
-        width="70%"
-        type="line"
-        :options="lineChartOptions"
-        :series="lineChartSeries"
-        class="Chart"
-      ></lineChart>
-    </div>
-
-    <div class="candlestickChart">
-      <candlestickChart
-        ref="candlestickChart"
-        width="70%"
-        type="candlestick"
-        :options="candlestickChartOptions"
-        :series="candlestickChartSeries"
-        class="candlestickChart"
-      ></candlestickChart>
-    </div> -->
+    <b-col cols="2">
+      <b-button variant="primary" @click="getStockData()">Add</b-button>
+    </b-col>
   </div>
 </template>
+
+<style>
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+  background: #fbfcfc;
+  border: none;
+  color: #6bbe0c;
+  text-transform: lowercase;
+  font-variant: small-caps;
+}
+
+.style-chooser .vs__clear,
+.style-chooser .vs__open-indicator {
+  fill: #394066;
+}
+</style>
 
 <script>
 import axios from "axios";
 import nasdaqCompanies from "../data/nasdaq.json";
 import bovespaCompanies from "../data/bovespa.json";
-import VueApexCharts from "vue-apexcharts";
 import vSelect from "vue-select";
 const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
@@ -180,8 +121,6 @@ import GraphCard from "../components/GraphCard.vue";
 export default {
   name: "Dashboard",
   components: {
-    lineChart: VueApexCharts,
-    candlestickChart: VueApexCharts,
     vSelect,
     GraphCard,
   },
@@ -192,262 +131,82 @@ export default {
       stockSymbol: "PETR4", // initial value
       stockFrequency: "DAY", // initial value
       searchText: "",
-      lineChartFrequencyOptions: {
-        buttons: [
-          {
-            caption: "Daily",
-            state: true,
-            frequency: "DAY",
-            icon: "calendar3-event",
-          },
-          {
-            caption: "Weekly",
-            state: false,
-            frequency: "WEEK",
-            icon: "calendar3-week",
-          },
-          {
-            caption: "Monthly",
-            state: false,
-            frequency: "MONTH",
-            icon: "calendar3",
-          },
-        ],
-      },
+      chartType: "line",
+      charts: [],
+      loading: false,
       marketOptions: {
         buttons: [
           { caption: "BOVESPA", state: true, value: BOVESPA, flag: "br" },
           { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
         ],
       },
-      lineChartOptions: {
-        chart: {
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ["#358C59"], // @todo
-        dataLabels: {
-          enabled: false, // todo: add button to enable/disable
-          style: {
-            fontSize: "12px",
-          },
-        },
-        grid: {
-          borderColor: "#2f373c",
-        },
-        xaxis: {
-          categories: [],
-          type: "datetime",
-          labels: {
-            format: "dd MMM",
-            style: {
-              colors: "#2f373c",
-              fontSize: "16px",
-            },
-          },
-        },
-        yaxis: {
-          decimalsInFloat: 0,
-          labels: {
-            style: {
-              colors: "#2f373c",
-              fontSize: "16px",
-            },
-          },
-          title: {
-            text: "Price",
-            style: {
-              color: "#2f373c",
-              fontSize: "18px",
-            },
-          },
-        },
-        stroke: {
-          curve: "smooth",
-          width: 3,
-        },
-        theme: {
-          mode: "light",
-        },
-        title: {
-          text: "TSLA",
-          align: "center",
-          offsetY: 10,
-          style: {
-            fontSize: "18px",
-            fontWeight: "bold",
-            color: "#2f373c",
-          },
-        },
-        tooltip: {
-          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-            return (
-              '<div class="arrow_box">' +
-              "<span>" +
-              series[seriesIndex][dataPointIndex] +
-              " USD" +
-              "</span>" +
-              "</div>"
-            );
-          },
-        },
-      },
-      candlestickChartOptions: {
-        chart: {
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ["#cc5d18"], // @todo
-        xaxis: {
-          categories: [],
-          type: "datetime",
-          labels: {
-            format: "dd MMM",
-            style: {
-              colors: "#2f373c",
-              fontSize: "16px",
-            },
-          },
-        },
-        grid: {
-          borderColor: "#2f373c",
-        },
-        yaxis: {
-          decimalsInFloat: 0,
-          labels: {
-            style: {
-              colors: "#2f373c",
-              fontSize: "16px",
-            },
-          },
-          title: {
-            text: "Price",
-            style: {
-              color: "#2f373c",
-              fontSize: "18px",
-            },
-          },
-        },
-        stroke: {
-          curve: "smooth",
-          width: 3,
-        },
-        theme: {
-          mode: "light",
-        },
-        title: {
-          text: "TSLA",
-          align: "center",
-          offsetY: 10,
-          style: {
-            fontSize: "18px",
-            fontWeight: "bold",
-            color: "#2f373c",
-          },
-        },
-      },
-      lineChartSeries: [
-        {
-          data: [],
-        },
-      ],
-      candlestickChartSeries: [
-        {
-          data: [],
-        },
-      ],
     };
   },
   methods: {
-    renderChart: async function (stockSymbol, stockFrequency) {
-      let parsedSymbol = stockSymbol + (this.market === BOVESPA ? ".SA" : "");
+    getStockData: async function () {
+      console.log(this.chartType);
+      console.log(this.stockSymbol);
+
+      this.loading = true;
+
+      let parsedSymbol =
+        this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
       let { data } = await axios.get(
-        "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + stockFrequency
+        "/api/stocks/?symbol=" + parsedSymbol + "&freq=" + this.stockFrequency
       );
+
+      this.loading = false;
 
       data = JSON.parse(data);
 
-      let dateArray = [];
-      let closingPriceArray = [];
-      let candlestickArray = [];
+      if (this.chartType == "line") {
+        let dateArray = [];
+        let closingPriceArray = [];
 
-      data.forEach((dataElement) => {
-        const date = dataElement.Date;
-        const openingPrice = dataElement.open;
-        const closingPrice = dataElement.close;
-        const highPrice = dataElement.high;
-        const lowPrice = dataElement.low;
+        data.forEach((dataElement) => {
+          const date = dataElement.Date;
+          const closingPrice = dataElement.close;
 
-        dateArray.push(date);
-        closingPriceArray.push(closingPrice);
-        candlestickArray.push({
-          x: date,
-          y: [openingPrice, highPrice, lowPrice, closingPrice],
+          dateArray.push(date);
+          closingPriceArray.push(closingPrice);
         });
-      });
+        this.charts.push({
+          type: this.chartType,
+          stockName: this.stockSymbol,
+          categories: dateArray,
+          series: [
+            {
+              data: closingPriceArray,
+            },
+          ],
+        });
+      }
 
-      this.renderLineChart(dateArray, closingPriceArray);
-      this.renderCandlestickChart(dateArray, candlestickArray);
-    },
-    renderLineChart: function (date, openingPrice) {
-      this.lineChartOptions.xaxis.categories = date.reverse();
-      this.lineChartSeries.data = openingPrice.reverse();
+      console.log(this.charts);
+      // let dateArray = [];
+      // let closingPriceArray = [];
+      // let candlestickArray = [];
 
-      console.log(this.stockSymbol);
+      // data.forEach((dataElement) => {
+      //   const date = dataElement.Date;
+      //   const openingPrice = dataElement.open;
+      //   const closingPrice = dataElement.close;
+      //   const highPrice = dataElement.high;
+      //   const lowPrice = dataElement.low;
 
-      this.$refs.Chart.updateOptions({
-        series: [
-          {
-            data: this.lineChartSeries.data,
-          },
-        ],
-        xaxis: {
-          categories: this.lineChartOptions.xaxis.categories,
-        },
-        title: {
-          text: this.stockSymbol,
-        },
-      });
-    },
-    renderCandlestickChart: function (date, data) {
-      this.candlestickChartOptions.xaxis.categories = date.reverse();
-      this.candlestickChartSeries.data = data.reverse();
-
-      this.$refs.candlestickChart.updateOptions({
-        series: [
-          {
-            data: this.candlestickChartSeries.data,
-          },
-        ],
-        xaxis: {
-          categories: this.candlestickChartOptions.xaxis.categories,
-        },
-        title: {
-          text: this.stockSymbol,
-        },
-      });
-    },
-    changeChartFrequency: function (stockFrequency) {
-      return this.renderChart(this.stockSymbol, stockFrequency);
+      //   dateArray.push(date);
+      //   closingPriceArray.push(closingPrice);
+      //   candlestickArray.push({
+      //     x: date,
+      //     y: [openingPrice, highPrice, lowPrice, closingPrice],
+      //   });
+      // });
     },
     searchStock: function () {
       this.stockSymbol = this.searchText.toUpperCase();
-      console.log(this.stockSymbol);
-      console.log(this.searchText);
-      return this.renderChart(this.stockSymbol, this.stockFrequency);
     },
-    lineChartFrequencyOnPress(i) {
-      this.lineChartFrequencyOptions.buttons.forEach(
-        (btn, index) => (btn.state = i === index)
-      );
-      this.lineChartFrequencyOptions.buttons.forEach((btn, index) =>
-        i === index ? this.changeChartFrequency(btn.frequency) : null
-      );
-      this.lineChartFrequencyOptions.buttons.forEach((btn, index) =>
-        i === index ? (this.stockFrequency = btn.frequency) : null
-      );
+    updateChartType: function (newType) {
+      this.chartType = newType;
     },
     updateMarket(mkt) {
       this.market = mkt;
@@ -459,9 +218,7 @@ export default {
       this.companies = val === BOVESPA ? bovespaCompanies : nasdaqCompanies;
     },
   },
-  beforeMount() {
-    this.renderChart(this.stockSymbol, this.stockFrequency);
-  },
+  beforeMount() {},
 };
 </script>
 
