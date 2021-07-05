@@ -118,8 +118,9 @@ def get_daily_history(symbols):
             daily_hist[daily_intel['Date']] = daily_intel['close']
         daily_histories[symbol] = daily_hist
     days = []
-    for daily_intel in eval(time_series.data):
-        days.append(daily_intel['Date'])
+    if time_series is not None:
+        for daily_intel in eval(time_series.data):
+            days.append(daily_intel['Date'])
 
     return days, daily_histories
 
