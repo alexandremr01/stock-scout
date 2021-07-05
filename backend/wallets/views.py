@@ -17,7 +17,6 @@ from datetime import datetime
 class WalletViewSet(viewsets.ModelViewSet):
     queryset = Wallet.objects.all().order_by('name')
     serializer_class = WalletSerializer
-    permission_classes = (permissions.AllowAny,)
 
     def list(self, request):
         user = request.user
@@ -88,8 +87,8 @@ class WalletViewSet(viewsets.ModelViewSet):
         return Response(WalletSerializer(wallet).data)
 
     def history(self, request, pk):
-        # if isAuthorized(request, pk) is False:
-        #     return HttpResponse(status=403)
+        if isAuthorized(request, pk) is False:
+            return HttpResponse(status=403)
         wallet = Wallet.objects.filter(id=pk).first()
         operations = Operations.objects.filter(wallet=wallet).order_by('day')
 
@@ -117,6 +116,7 @@ class WalletViewSet(viewsets.ModelViewSet):
             day_value = 0
             for symbol, quantity in obtained_symbols.items():
                 if day in histories[symbol]:
+                    if symbol = ''
                     day_value += quantity*float(histories[symbol][day])
             wallet_history.append({'day': day, 'value': str(round(day_value, 2))})
         decreasing_history = []
