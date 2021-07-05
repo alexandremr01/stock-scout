@@ -11,7 +11,7 @@
 
       <div class="flagcontainer">
         <div class="flag"></div>
-        <div class="flagtext">{{ $t("hello") }}, {{ username }}</div>
+        <div class="flagtext text-primary">{{ $t("hello") }}, {{ username }}</div>
         <div class="flag">
           <b-dropdown>
             <template #button-content>

@@ -1,12 +1,12 @@
 <template>
   <div class="homecontainer">
     <div class="extremecontainer">
-      <h1>{{ $t("homeMessage") }}</h1>
+      <h1 class="text-secondary">{{ $t("homeMessage") }}</h1>
     </div>
     <div class="middlecontainer">
       <div class="rowcontainer">
-        <StockCard stockname="Selic" description="Selic" :value="selic" />
-        <StockCard stockname="CDI" description="Bitcoin" :value="cdi" />
+        <StockCard stockname="Selic" description="Taxa Selic" :value="selic" />
+        <StockCard stockname="CDI" description="Taxa CDI" :value="cdi" />
         <StockCard stockname="BOVA" description="Ibovespa" :value="ibovespa" />
         <StockCard stockname="NASDAQ" description="Nasdaq" :value="nasdaq" />
       </div>

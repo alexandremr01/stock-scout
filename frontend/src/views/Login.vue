@@ -2,7 +2,7 @@
   <div>
     <b-container class="bloco bg-secondary">
       <b-container class="title">
-        <h1>Login</h1>
+        <h1 class="text-primary">Login</h1>
       </b-container>
       <b-container class="form">
         <b-form @submit="onSubmit" class="form-input">

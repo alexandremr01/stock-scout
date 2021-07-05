@@ -2,7 +2,7 @@
   <div>
     <b-container fluid class="bloco bg-secondary">
       <b-container class="title">
-        <h1>Signup</h1>
+        <h1 class="text-primary">Signup</h1>
       </b-container>
 
       <b-container class="form">
