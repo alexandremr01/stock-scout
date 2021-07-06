@@ -47,14 +47,14 @@
           >
           <b-nav-item to="/wallets" v-if="$store.getters.isLoggedIn">
             <b-icon-wallet2 scale=".6" shift-v="-.6"></b-icon-wallet2>
-            Wallets</b-nav-item
+            {{$t('wallets')}}</b-nav-item
           >
           <b-nav-item to="/simulations">
             <b-icon-calculator-fill
               scale=".6"
               shift-v="-.6"
             ></b-icon-calculator-fill>
-            Simulations</b-nav-item
+            {{$t('simulations')}}</b-nav-item
           >
           <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn">
             <b-icon-arrow-return-left
@@ -86,7 +86,7 @@ export default {
     return {
       loginPage: false,
       signUpPage: false,
-      username: "Guest",
+      username: '',
       languages: [
         { flag: "us", language: "en", title: "English" },
         { flag: "br", language: "pt-br", title: "Português" },
@@ -103,6 +103,7 @@ export default {
       i18n.locale = locale.language;
       this.selectedFlag = locale.flag;
       localStorage.setItem("locale", JSON.stringify(locale));
+      this.username = this.$t('guest');
       this.$emit("refresh");
     },
   },
@@ -115,6 +116,7 @@ export default {
         this.selectedFlag = parsedLocale.flag;
       }
     }
+    this.username = this.$t('guest');
 
     if (this.$store.getters.isLoggedIn) {
       const token = this.$store.state.token;

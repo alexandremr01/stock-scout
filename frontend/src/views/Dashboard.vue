@@ -50,11 +50,11 @@
               >
                 <div v-if="chartType == 'line'">
                   <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-                  Line
+                  {{$t('line')}}
                 </div>
                 <div v-else>
                   <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-                  Candlestick
+                  {{$t('candlestick')}}
                 </div>
               </b-button>
             </div>
@@ -64,7 +64,8 @@
         <div class="addselection">
           <div class="addbutton">
             <b-button variant="primary" @click="getStockData()">
-              <b-icon icon="plus-square"> </b-icon> Add
+              <b-icon icon="plus-square"> </b-icon>
+              {{ $t('add') }}
             </b-button>
           </div>
 
@@ -146,6 +147,7 @@ const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 const WALLET = "WALLET";
 
+import i18n from "@/plugins/i18n";
 import GraphCard from "../components/GraphCard.vue";
 import Client from "../repositories/Clients/AxiosClient";
 
@@ -156,7 +158,7 @@ export default {
     GraphCard,
   },
   mounted() {
-    this.fetchWallets();
+    if(this.$store.getters.isLoggedIn) this.fetchWallets();
   },
   data: function () {
     return {
@@ -176,11 +178,6 @@ export default {
           { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
         ],
       },
-      otherMarketOptions: {
-        buttons: [
-          { caption: "WALLET", state: false, value: WALLET, icon: "wallet" },
-        ],
-      },
     };
   },
   methods: {
@@ -193,6 +190,7 @@ export default {
       if (this.market === NASDAQ || this.market === BOVESPA) {
         let parsedSymbol =
           this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
+
         axios
           .get(
             "/api/stocks/?symbol=" +
@@ -214,8 +212,10 @@ export default {
       } else if (this.market === WALLET) {
         let walletID = this.searchText;
         const token = this.$store.state.token;
+        let currency = i18n.locale === "pt-br" ? "BRL" : "USD";
+
         Client(token)
-          .get("/api/wallets/" + walletID + "/history")
+          .get("/api/wallets/" + walletID + "/history?currency=" + currency)
           .then((response) => {
             let data = response.data;
             this.loading = false;
@@ -364,6 +364,18 @@ export default {
           this.incorrect = true;
         });
     },
+  },
+  computed: {
+    otherMarketOptions: function () {
+      if (this.$store.getters.isLoggedIn) {
+        return {
+          buttons: [
+            {caption: this.$t('WALLET'), state: false, value: WALLET, icon: "wallet"},
+          ],
+        }
+      }
+      return {buttons: []}
+    }
   },
   watch: {
     // a computed getter

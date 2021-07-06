@@ -4,10 +4,10 @@
     <div class="anthonyphoto">
       <container class="continuecontainer">
         <container class="continuetext">
-          <h3>A melhor maneira de acompanhar seus investimentos.</h3>
+          <h3>{{$t("welcomeMessage")}} </h3>
         </container>
-        <b-button pill class="button" @click="toLogin"
-          >Continuar
+        <b-button pill class="button2" @click="toLogin"
+          >{{ $t('continue') }}
           <svg
             width="16"
             height="16"
@@ -92,7 +92,7 @@ export default {
   color: black;
 }
 
-.button {
+.button2 {
   align-self: center;
   width: 80%;
 }
