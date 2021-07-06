@@ -77,8 +77,10 @@
                   </b-col>
                 </b-row>
 
-                <b-row class="my-1" align-h="center" >
-                    <b-button-group class="right-chart-options" cols="8">
+                <b-row class="my-1" align-h="right" cols="12" >
+                  <b-col cols="10">
+
+                  <b-button-group class="right-chart-options">
                       <b-button
                         v-for="(btn, idx) in marketOptions.buttons"
                         :key="idx"
@@ -91,6 +93,7 @@
                         }}
                       </b-button>
                     </b-button-group>
+                  </b-col>
                 </b-row>
 
                 <b-row class="my-1" align-h="right" cols="12">
@@ -193,13 +196,13 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
-  background: #dfe5fb;
+  background: #fbfcfc;
   border: none;
-  color: #394066;
+  color: #6bbe0c;
   text-transform: lowercase;
   font-variant: small-caps;
 }
