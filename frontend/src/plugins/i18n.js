@@ -67,6 +67,7 @@ const messages = {
         'guestLogin': 'Guest Login',
         'welcomeFriend': 'Welcome, Friend!',
         'welcomeBack': 'Welcome Back!',
+        'max-length': "Maximum number of charts"
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -132,6 +133,7 @@ const messages = {
         'guestLogin': 'Convidado',
         'welcomeFriend': 'Olá, amigo!',
         'welcomeBack': 'Bem-vindo de volta!',
+        "max-length": "Limite máximo de gráficos"
     }
 };
 

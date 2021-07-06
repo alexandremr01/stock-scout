@@ -92,6 +92,19 @@
       </GraphCard>
     </div>
     <div class="extremecontainer"></div>
+
+    <b-modal id="max-chart-length" hide-footer hide-header>
+      <div class="d-block text-center">
+        <h3 class="text-secondary">{{ $t("max-length") }}</h3>
+      </div>
+      <b-button
+        class="mt-3 text-primary"
+        block
+        @click="$bvModal.hide('max-chart-length')"
+        style="width: 40%; margin-left: 30%; margin-left: 30%;"
+        >OK</b-button
+      >
+    </b-modal>
   </div>
 </template>
 
@@ -156,6 +169,10 @@ export default {
   },
   methods: {
     getStockData: async function () {
+      if (this.charts.length === 3) {
+        this.$bvModal.show("max-chart-length");
+        return;
+      }
       this.loading = true;
       if (this.market === NASDAQ || this.market === BOVESPA) {
         let parsedSymbol =
