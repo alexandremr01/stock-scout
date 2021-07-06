@@ -91,6 +91,9 @@ class WalletViewSet(viewsets.ModelViewSet):
             return HttpResponse(status=403)
         wallet = Wallet.objects.filter(id=pk).first()
         operations = Operations.objects.filter(wallet=wallet).order_by('day')
+        currency = request.query_params.get('currency')
+        if currency is None:
+            currency = 'BRL'
 
         symbols = []
         for op in operations:
@@ -100,6 +103,12 @@ class WalletViewSet(viewsets.ModelViewSet):
         op_iter = 0
         obtained_symbols = {}
         wallet_history = []
+
+        usd_value_s = get_or_update_coin_quotations('USD')
+        try:
+            usd_value = float(usd_value_s.sell)
+        except ValueError:
+            usd_value = 0
 
         started = False
         for day in days:
@@ -117,8 +126,14 @@ class WalletViewSet(viewsets.ModelViewSet):
 
             day_value = 0
             for symbol, quantity in obtained_symbols.items():
+                value = float(histories[symbol][day])
+                if is_brl(symbol) and currency == "USD":
+                    value = round(value/usd_value, 2)
+                elif not is_brl(symbol) and currency == "BRL":
+                    value = round(value*usd_value, 2)
+
                 if day in histories[symbol]:
-                    day_value += quantity*float(histories[symbol][day])
+                    day_value += quantity*value
             if day_value > 0 and not started:
                 started = True
             if started:

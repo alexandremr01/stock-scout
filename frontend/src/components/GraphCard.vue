@@ -57,7 +57,7 @@ export default {
           categories: [],
           type: "datetime",
           labels: {
-            format: "dd MMM",
+            format: "dd MMM yy",
             style: {
               colors: "#2f373c",
               fontSize: "16px",
@@ -103,7 +103,6 @@ export default {
               '<div class="arrow_box">' +
               "<span>" +
               series[seriesIndex][dataPointIndex] +
-              " USD" +
               "</span>" +
               "</div>"
             );
@@ -121,7 +120,7 @@ export default {
           categories: [],
           type: "datetime",
           labels: {
-            format: "dd MMM",
+            format: "dd MMM yy",
             style: {
               colors: "#2f373c",
               fontSize: "16px",
@@ -168,19 +167,19 @@ export default {
       frequencyOptions: {
         buttons: [
           {
-            caption: "Daily",
+            caption: this.$t('daily'),
             state: true,
             frequency: "DAY",
             icon: "calendar3-event",
           },
           {
-            caption: "Weekly",
+            caption: this.$t('weekly'),
             state: false,
             frequency: "WEEK",
             icon: "calendar3-week",
           },
           {
-            caption: "Monthly",
+            caption: this.$t('monthlyFreq'),
             state: false,
             frequency: "MONTH",
             icon: "calendar3",
@@ -220,7 +219,14 @@ export default {
     },
   },
   components: { VueApexCharts },
-  props: ["chartType", "stock", "categories", "chartSeries", "id", "marketType"],
+  props: [
+    "chartType",
+    "stock",
+    "categories",
+    "chartSeries",
+    "id",
+    "marketType",
+  ],
   created() {
     if (this.chartType == "line") {
       this.lineOptions.xaxis.categories = this.categories;
@@ -228,6 +234,18 @@ export default {
     } else if (this.chartType == "candlestick") {
       this.candlestickOptions.xaxis.categories = this.categories;
       this.candlestickOptions.title.text = this.stock;
+    }
+    if (this.marketType === "BOVESPA") {
+      this.lineOptions.yaxis.title.text = "Price (BRL)";
+      this.candlestickOptions.yaxis.title.text = "Price (BRL)";
+    }
+    else if (this.marketType === "NASDAQ") {
+      this.lineOptions.yaxis.title.text = "Price (USD)";
+      this.candlestickOptions.yaxis.title.text = "Price (USD)";
+    }
+    else if (this.marketType === "WALLET") {
+      this.lineOptions.yaxis.title.text = "Price";
+      this.candlestickOptions.yaxis.title.text = "Price";
     }
   },
 };
