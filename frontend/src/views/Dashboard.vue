@@ -50,11 +50,11 @@
               >
                 <div v-if="chartType == 'line'">
                   <b-icon icon="graph-up" aria-hidden="true"></b-icon>
-                  {{$t('line')}}
+                  {{ $t("line") }}
                 </div>
                 <div v-else>
                   <b-icon icon="align-middle" aria-hidden="true"></b-icon>
-                  {{$t('candlestick')}}
+                  {{ $t("candlestick") }}
                 </div>
               </b-button>
             </div>
@@ -65,7 +65,7 @@
           <div class="addbutton">
             <b-button variant="primary" @click="getStockData()">
               <b-icon icon="plus-square"> </b-icon>
-              {{ $t('add') }}
+              {{ $t("add") }}
             </b-button>
           </div>
 
@@ -101,7 +101,7 @@
         class="mt-3 text-primary"
         block
         @click="$bvModal.hide('max-chart-length')"
-        style="width: 40%; margin-left: 30%; margin-left: 30%;"
+        style="width: 40%; margin-left: 30%; margin-left: 30%"
         >OK</b-button
       >
     </b-modal>
@@ -114,7 +114,7 @@
         class="mt-3 text-primary"
         block
         @click="$bvModal.hide('stock-not-found')"
-        style="width: 40%; margin-left: 30%; margin-left: 30%;"
+        style="width: 40%; margin-left: 30%; margin-left: 30%"
         >OK</b-button
       >
     </b-modal>
@@ -158,7 +158,7 @@ export default {
     GraphCard,
   },
   mounted() {
-    if(this.$store.getters.isLoggedIn) this.fetchWallets();
+    if (this.$store.getters.isLoggedIn) this.fetchWallets();
   },
   data: function () {
     return {
@@ -370,12 +370,17 @@ export default {
       if (this.$store.getters.isLoggedIn) {
         return {
           buttons: [
-            {caption: this.$t('WALLET'), state: false, value: WALLET, icon: "wallet"},
+            {
+              caption: this.$t("WALLET"),
+              state: false,
+              value: WALLET,
+              icon: "wallet",
+            },
           ],
-        }
+        };
       }
-      return {buttons: []}
-    }
+      return { buttons: [] };
+    },
   },
   watch: {
     // a computed getter
@@ -434,7 +439,6 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  flex-wrap: wrap;
 }
 
 .addgraphform {
