@@ -50,6 +50,8 @@ const messages = {
         'stock': "Stock",
         'value': "Value",
         'homeMessage': "The World Today",
+        'madeBy': "Made By",
+        'credits': "Créditos"
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -98,6 +100,8 @@ const messages = {
         'stock': "Ação",
         'value': "Valor",
         'homeMessage': "O Mundo Hoje",
+        'madeBy': "Feito Por",
+        'credits': "Créditos"
     }
 };
 

@@ -56,6 +56,10 @@
             ></b-icon-calculator-fill>
             Simulations</b-nav-item
           >
+          <b-nav-item @click="credits">
+            <b-icon-people-fill scale=".6" shift-v="-.6"></b-icon-people-fill>
+            {{ $t("credits") }}</b-nav-item
+          >
           <b-nav-item @click="logout" v-if="$store.getters.isLoggedIn">
             <b-icon-arrow-return-left
               scale=".6"
@@ -95,6 +99,9 @@ export default {
     };
   },
   methods: {
+    credits() {
+      this.$router.push("/about");
+    },
     logout() {
       this.$store.commit("removeToken");
       this.$router.push("/");
