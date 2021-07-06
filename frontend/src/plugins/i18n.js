@@ -52,7 +52,7 @@ const messages = {
         'candlestick': "Candlestick",
         'homeMessage': "The World Today",
         'madeBy': "Made By",
-        'credits': "Créditos",
+        'credits': "About",
         'welcomeMessage': "The best way to keep up with your investments.",
         'add': 'Add',
         'WALLET': 'WALLET',
