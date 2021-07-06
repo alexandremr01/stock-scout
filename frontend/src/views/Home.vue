@@ -9,7 +9,7 @@
         <StockCard stockname="CDI" :description="$t('cdi')" :value="cdi" />
         <StockCard stockname="BOVA" description="Ibovespa" :value="ibovespa" />
         <StockCard stockname="NASDAQ" description="Nasdaq" :value="nasdaq" />
-      </div>
+      </div> 
       <div class="rowcontainer">
         <StockCard
           stockname="USD"
