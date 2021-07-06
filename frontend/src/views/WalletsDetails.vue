@@ -74,42 +74,49 @@
                   </b-col>
                 </b-row>
 
-                <b-row class="my-1" align-h="center">
-                  <b-button-group class="right-chart-options" cols="8">
+                <b-row class="my-1" align-h="center" >
+                    <b-button-group class="right-chart-options" cols="8">
+                      <b-button
+                        v-for="(btn, idx) in marketOptions.buttons"
+                        :key="idx"
+                        :pressed.sync="btn.state"
+                        variant="primary"
+                        @click="updateMarket(btn.value)"
+                      >
+                        <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{
+                          btn.caption
+                        }}
+                      </b-button>
+                    </b-button-group>
+                </b-row>
+
+                <b-row class="my-1" align-h="right" cols="12">
+                  <b-col cols="10">
+                  <b-button-group class="right-chart-options">
                     <b-button
-                      v-for="(btn, idx) in marketOptions.buttons"
-                      :key="idx"
-                      :pressed.sync="btn.state"
-                      variant="primary"
-                      @click="market = btn.value"
+                        v-for="(btn, idx) in operationOptions.buttons"
+                        :key="idx"
+                        :pressed.sync="btn.state"
+                        variant="primary"
+                        @click="changeOpType(btn.value)"
                     >
-                      <flag :iso="btn.flag" v-bind:squared="false" />&nbsp;{{
+                      <b-icon :icon="btn.icon" />&nbsp;{{
                         btn.caption
                       }}
                     </b-button>
                   </b-button-group>
-                </b-row>
+                  </b-col>
+                  <b-col cols="2">
+                    <b-button
+                        pill
+                        @click="submit"
+                        class="bg-success text-primary"
+                    >
+                      {{ $t("insert") }}
+                    </b-button>
+                  </b-col>
 
-                <b-row class="my-1" align-h="center">
-                  <b-form-group>
-                    <b-form-radio-group
-                      id="radio-group-1"
-                      v-model="opType"
-                      :options="operationTypes"
-                      name="radio-options"
-                      class="text-primary"
-                    ></b-form-radio-group>
-                  </b-form-group>
-                </b-row>
 
-                <b-row class="my-1" align-h="center">
-                  <b-button
-                    pill
-                    @click="submit"
-                    class="bg-success text-primary"
-                  >
-                    {{ $t("insert") }}
-                  </b-button>
                 </b-row>
               </div>
             </b-container>
@@ -279,6 +286,12 @@ export default {
           { caption: "NASDAQ", state: false, value: NASDAQ, flag: "us" },
         ],
       },
+      operationOptions: {
+        buttons: [
+          { caption: "Buy", state: true, value: "buye", icon: "bag-plus" },
+          { caption: "Sell", state: false, value: "sell", icon: "bag-dash" },
+        ],
+      },
       id: 0,
       symbol: "",
       opHistory: [],
@@ -432,6 +445,12 @@ export default {
           btn.value !== val ? (btn.state = false) : null
       );
       this.symbol = '';
+    },
+    changeOpType(val){
+      this.opType = val;
+      this.operationOptions.buttons.forEach((btn) =>
+          btn.value !== val ? (btn.state = false) : null
+      );
     }
   },
   watch: {

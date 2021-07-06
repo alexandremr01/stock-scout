@@ -1,6 +1,6 @@
 # Stock Scout
 
-This project was a assignment for CES-22 course (OOP) at Aeronautics Institute of Technology, São Paulo, Brazil.
+This project was an assignment for CES-22 course (OOP) at Aeronautics Institute of Technology, São Paulo, Brazil.
 
 # Running in development
 
