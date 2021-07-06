@@ -41,7 +41,6 @@ def alphav_to_ss(alphav_data, freq):
 # json to model
 def get_or_update_stock_time_series(symbol, freq):
     query = StockTimeSeries.objects.filter(ticker=symbol).filter(frequency=freq)
-    refresh = {'DAY': 1, 'WEEK': 7, 'MONTH': 30}
     time_series = None
 
     if query.exists():
@@ -54,7 +53,7 @@ def get_or_update_stock_time_series(symbol, freq):
         new_time_series.save()
         time_series = new_time_series
     
-    if datetime.now(timezone.utc) - time_series.last_modified > timedelta(days=refresh[freq]):
+    if datetime.now(timezone.utc) - time_series.last_modified > timedelta(days=1):
         alphav_json = alpha_vantage_client(symbol, freq)
         ss_json = alphav_to_ss(alphav_json, freq)
         time_series.data = ss_json
@@ -75,7 +74,7 @@ def get_or_update_coin_quotations(currency):
         coin_quotation = CoinQuotation(name=currency, buy=data["buy"], sell=data["sell"], variation=data["variation"])
         coin_quotation.save()
 
-    if datetime.now(timezone.utc) - coin_quotation.last_modified < timedelta(minutes=15):
+    if datetime.now(timezone.utc) - coin_quotation.last_modified < timedelta(hours=1):
         hgbr_json = hg_brasil_client()
         data = hgbr_json["results"]["currencies"][coin_quotation.name]
         coin_quotation.buy = data["buy"]

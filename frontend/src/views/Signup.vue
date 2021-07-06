@@ -2,7 +2,7 @@
   <div>
     <b-container fluid class="bloco bg-secondary">
       <b-container class="title">
-        <h1>Signup</h1>
+        <h1 class="text-primary">Signup</h1>
       </b-container>
 
       <b-container class="form">
@@ -53,8 +53,9 @@
           >
             <b-form-input
               id="input-4"
-              v-model="form.phoneNumber"
-              placeholder="Enter phone number"
+              v-model="form.password"
+              placeholder="Enter password"
+              type="password"
               required
             ></b-form-input>
           </b-form-group>
@@ -66,20 +67,6 @@
           >
             <b-form-input
               id="input-5"
-              v-model="form.password"
-              placeholder="Enter password"
-              type="password"
-              required
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            class="align-label"
-            id="input-group-6"
-            label-for="input-6"
-          >
-            <b-form-input
-              id="input-6"
               v-model="form.confirmPassword"
               placeholder="Confirm password"
               type="password"

@@ -32,12 +32,6 @@ export default {
   height: 220px;
   width: 200px;
   border-radius: 10px;
-  /* background-image: linear-gradient(
-    to bottom right,
-    #2f373c,
-    rgb(143, 143, 143)
-  ); */
-  /* background-image: linear-gradient(to bottom right, #11c76f, #55b588); */
   padding: 0;
   box-shadow: 10px 10px 2px 1px rgba(0, 0, 0, 0.2);
 }
@@ -55,14 +49,14 @@ export default {
 }
 
 .text {
-  color: white;
+  color: #fbfcfc;
   padding-top: 5%;
   text-align: left;
   padding-bottom: 10%;
 }
 
 .value {
-  color: black;
+  color: #2f373c;
   text-align: left;
   margin: 0;
 }

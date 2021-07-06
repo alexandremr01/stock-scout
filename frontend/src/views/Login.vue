@@ -2,7 +2,7 @@
   <div>
     <b-container class="bloco bg-secondary">
       <b-container class="title">
-        <h1>Login</h1>
+        <h1 class="text-primary">Login</h1>
       </b-container>
       <b-container class="form">
         <b-form @submit="onSubmit" class="form-input">
@@ -45,13 +45,13 @@
                 @click="toDashboard"
                 variant="success"
                 class="button"
-                >Guest Login</b-button
+                >{{$t('guestLogin')}}</b-button
               >
             </b-container>
             <b-container class="footer">
               <p>
-                New to Stock Scout?
-                <b-link @click="toSignup">Signup</b-link>
+                {{$t('newToStockScout')}}
+                <b-link @click="toSignup">{{$t('signUp')}}</b-link>
               </p>
             </b-container>
           </b-container>

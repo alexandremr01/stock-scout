@@ -17,8 +17,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'first_name',
-            'last_name',
-            'phone_number'
+            'last_name'
         ]
     
     def create(self, request):
@@ -32,7 +31,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             email=request['email'],
             first_name=request['first_name'],
             last_name=request['last_name'],
-            phone_number=request['phone_number'],
             user=user
         )
         profile.save()
