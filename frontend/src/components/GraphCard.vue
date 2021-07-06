@@ -167,19 +167,19 @@ export default {
       frequencyOptions: {
         buttons: [
           {
-            caption: this.$t("daily"),
+            caption: this.$t('daily'),
             state: true,
             frequency: "DAY",
             icon: "calendar3-event",
           },
           {
-            caption: this.$t("weekly"),
+            caption: this.$t('weekly'),
             state: false,
             frequency: "WEEK",
             icon: "calendar3-week",
           },
           {
-            caption: this.$t("monthlyFreq"),
+            caption: this.$t('monthlyFreq'),
             state: false,
             frequency: "MONTH",
             icon: "calendar3",
@@ -238,10 +238,12 @@ export default {
     if (this.marketType === "BOVESPA") {
       this.lineOptions.yaxis.title.text = "Price (BRL)";
       this.candlestickOptions.yaxis.title.text = "Price (BRL)";
-    } else if (this.marketType === "NASDAQ") {
+    }
+    else if (this.marketType === "NASDAQ") {
       this.lineOptions.yaxis.title.text = "Price (USD)";
       this.candlestickOptions.yaxis.title.text = "Price (USD)";
-    } else if (this.marketType === "WALLET") {
+    }
+    else if (this.marketType === "WALLET") {
       this.lineOptions.yaxis.title.text = "Price";
       this.candlestickOptions.yaxis.title.text = "Price";
     }
@@ -254,7 +256,8 @@ export default {
   display: flex;
   flex-direction: column;
   background: white;
-  flex-grow: 0.3;
+  width: 400px;
+  height: auto;
   padding: 10px;
   box-shadow: 10px 10px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
