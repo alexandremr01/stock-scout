@@ -7,8 +7,8 @@
       <div class="rowcontainer">
         <StockCard stockname="Selic" :description="$t('selic')" :value="selic" />
         <StockCard stockname="CDI" :description="$t('cdi')" :value="cdi" />
-        <StockCard stockname="BOVA" :description="Ibovespa" :value="ibovespa" />
-        <StockCard stockname="NASDAQ" :description="Nasdaq" :value="nasdaq" />
+        <StockCard stockname="BOVA" description="Ibovespa" :value="ibovespa" />
+        <StockCard stockname="NASDAQ" description="Nasdaq" :value="nasdaq" />
       </div>
       <div class="rowcontainer">
         <StockCard
