@@ -50,6 +50,7 @@ const messages = {
         'stock': "Stock",
         'value': "Value",
         'homeMessage': "The World Today",
+        'max-length': "Maximum number of charts"
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
@@ -98,6 +99,7 @@ const messages = {
         'stock': "Ação",
         'value': "Valor",
         'homeMessage': "O Mundo Hoje",
+        "max-length": "Limite máximo de gráficos"
     }
 };
 
