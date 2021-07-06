@@ -1,27 +1,30 @@
 <template>
-  <div class="box-externa">
-    <b-container fluid class="outcontainer">
-      <b-container class="bv-example-row">
-        <b-row>
-          <b-col cols="1" align-v="center">
-            <b-nav-item to="/wallets">
-              <h2 align="left">
-                <b-icon-arrow-left-circle style="color: #47545d"
-                  >></b-icon-arrow-left-circle
-                >
-              </h2>
-            </b-nav-item>
-          </b-col>
-          <b-col align-v="center">
-            <b-container class="box-title">
-              <h1 class="text-dark">{{ $t("wallets") }}</h1>
-            </b-container>
-          </b-col>
-          <b-col cols="1" align-v="center">
-            <b-spinner label="Loading..." v-if="loading"></b-spinner>
-          </b-col>
-        </b-row>
-      </b-container>
+<!-- <div class="box-externa"> -->
+  <div class="outercontainer">
+    <div class="wallettext">
+        <b-container class="bv-example-row">
+          <b-row>
+            <b-col cols="1" align-v="center">
+              <b-nav-item to="/wallets">
+                <h2 align="left">
+                  <b-icon-arrow-left-circle style="color: #47545d"
+                    ></b-icon-arrow-left-circle
+                  >
+                </h2>
+              </b-nav-item>
+            </b-col>
+            <b-col align-v="center">
+              <b-container class="box-title">
+                <h1 class="text-dark">{{ $t("wallets") }}</h1>
+              </b-container>
+            </b-col>
+            <b-col cols="1" align-v="center">
+              <b-container fluid class="loadico"><b-spinner label="Loading..." v-if="loading"></b-spinner></b-container>
+            </b-col>
+          </b-row>
+        </b-container>
+    </div>
+    <div class="walletinfo">
 
       <b-container
         class="bv-example-row bv-example-row-flex-cols p-0"
@@ -131,52 +134,55 @@
                 </b-table>
               </div>
               <div class="valorAtual bg-primary">
-                <h3 class="text-secondary">
+                <h5 class="text-secondary">
                   Valor atual da carteira:
                   {{ this.toCurrency(currentTotalValue) }}
-                </h3>
+                </h5>
               </div>
             </b-container>
           </b-col>
         </b-row>
       </b-container>
-    </b-container>
-    <b-container class="bv-example-row bv-example-row-flex-cols" v-if="unauth">
-      <h1>Unauthorized</h1>
-    </b-container>
-    <b-container fluid class="ccontainer">
-      <b-row class="mt-3" align-h="center">
-        <b-col class="pl-4" cols="12">
-          <b-container class="centerBox bg-secondary">
-            <h3 class="text-primary">{{ $t("opHistory") }}</h3>
-            <div class="container-fluid">
-              <b-table
-                sticky-header="200px"
-                no-border-collapse
-                small
-                fixed
-                dark
-                hover
-                :items="opHistory"
-                :fields="fields"
-              >
-                <template #cell(actions)="row">
-                  <b-button
-                    pill
-                    variant="danger"
-                    size="sm"
-                    @click="remove(row.item, row.index, $event.target)"
-                    class="mr-1"
-                  >
-                    {{ $t("remove") }}
-                  </b-button>
-                </template>
-              </b-table>
-            </div>
-          </b-container>
-        </b-col>
-      </b-row>
-    </b-container>
+
+      <b-container fluid class="bv-example-row bv-example-row-flex-cols" v-if="unauth">
+        <h1>Unauthorized</h1>
+      </b-container>
+
+      <b-container fluid class="ccontainer" v-if="!unauth && !firstLoading">
+        <b-row class="mt-3" align-h="center">
+          <b-col class="pl-4" cols="12">
+            <b-container class="centerBox bg-secondary">
+              <h3 class="text-primary">{{ $t("opHistory") }}</h3>
+              <div class="container-fluid">
+                <b-table
+                  sticky-header="200px"
+                  no-border-collapse
+                  small
+                  fixed
+                  dark
+                  hover
+                  :items="opHistory"
+                  :fields="fields"
+                >
+                  <template #cell(actions)="row">
+                    <b-button
+                      pill
+                      variant="danger"
+                      size="sm"
+                      @click="remove(row.item, row.index, $event.target)"
+                      class="mr-1"
+                    >
+                      {{ $t("remove") }}
+                    </b-button>
+                  </template>
+                </b-table>
+              </div>
+            </b-container>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+    <div class="wallettext"></div>
   </div>
 </template>
 
@@ -194,13 +200,6 @@
 .style-chooser .vs__clear,
 .style-chooser .vs__open-indicator {
   fill: #394066;
-}
-.box-externa {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  width: 100%;
-  height: 100%;
 }
 .back-button {
   height: 50%;
@@ -225,15 +224,6 @@
   border-radius: 20px;
   padding: 10px;
 }
-.outcontainer {
-  width: 100%;
-  height: 65%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
-
 .ccontainer {
   width: 100%;
   height: 35%;
@@ -241,7 +231,47 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.outercontainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wallettext {
+  width: 100%;
+  height: 5%;
+  display: flex;
+  flex-direction: column;
+}
+
+.walletinfo {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.insertcurrent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.operations {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.loadico {
+  margin-top: 25px;
 }
 </style>
 
