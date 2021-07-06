@@ -8,7 +8,6 @@ const messages = {
         'backToHome': "Back to home",
         'login': "Login",
         'signup': "Signup",
-        'guest': "Join as Guest",
         'join': "Join us!",
         'back': "Back",
         'monthly': "Monthly contribution",
@@ -67,14 +66,15 @@ const messages = {
         'guestLogin': 'Guest Login',
         'welcomeFriend': 'Welcome, Friend!',
         'welcomeBack': 'Welcome Back!',
-        'max-length': "Maximum number of charts"
+        'max-length': "Maximum number of charts",
+        "guest": "Guest"
+
     },
     'pt-br': {
         'pageNotFound': "Página Não Encontrada",
         'backToHome': "Voltar ao início",
         'login': "Entrar",
         'signup': "Registrar",
-        'guest': "Entre como convidado",
         'join': "Junte-se a nós!",
         'back': "Voltar",
         'monthly': "Aporte mensal",
@@ -133,7 +133,8 @@ const messages = {
         'guestLogin': 'Convidado',
         'welcomeFriend': 'Olá, amigo!',
         'welcomeBack': 'Bem-vindo de volta!',
-        "max-length": "Limite máximo de gráficos"
+        "max-length": "Limite máximo de gráficos",
+        "guest": "Visitante"
     }
 };
 

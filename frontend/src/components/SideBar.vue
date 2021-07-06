@@ -86,7 +86,7 @@ export default {
     return {
       loginPage: false,
       signUpPage: false,
-      username: "Guest",
+      username: '',
       languages: [
         { flag: "us", language: "en", title: "English" },
         { flag: "br", language: "pt-br", title: "Português" },
@@ -103,6 +103,7 @@ export default {
       i18n.locale = locale.language;
       this.selectedFlag = locale.flag;
       localStorage.setItem("locale", JSON.stringify(locale));
+      this.username = this.$t('guest');
       this.$emit("refresh");
     },
   },
@@ -115,6 +116,7 @@ export default {
         this.selectedFlag = parsedLocale.flag;
       }
     }
+    this.username = this.$t('guest');
 
     if (this.$store.getters.isLoggedIn) {
       const token = this.$store.state.token;
