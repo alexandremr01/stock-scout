@@ -10,7 +10,7 @@
       <transition name="enable-sidetext"
         ><b-container fluid class="sidetext" v-if="this.loginSignupState">
           <h1 v-if="this.$route.name === `login`" class="text-primary"> {{ $t('welcomeBack') }}</h1>
-          <h1 v-if="this.$route.name === `signup`" class="text-primary">{{ $t('welcomeFiend') }}</h1>
+          <h1 v-if="this.$route.name === `signup`" class="text-primary">{{ $t('welcomeFriend') }}</h1>
         </b-container></transition
       >
 
