@@ -6,7 +6,7 @@
         <container class="continuetext">
           <h3>{{$t("welcomeMessage")}} </h3>
         </container>
-        <b-button pill class="button2" @click="toLogin"
+        <b-button pill class="text-primary button2" @click="toLogin"
           >{{ $t('continue') }}
           <svg
             width="16"

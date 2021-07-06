@@ -37,14 +37,14 @@
 
           <b-container vertical>
             <b-container class="buttons">
-              <b-button pill type="submit" variant="success" class="button"
+              <b-button pill type="submit" variant="success" class="text-primary button"
                 >Login</b-button
               >
               <b-button
                 pill
                 @click="toDashboard"
                 variant="success"
-                class="button"
+                class="text-primary button"
                 >{{$t('guestLogin')}}</b-button
               >
             </b-container>
