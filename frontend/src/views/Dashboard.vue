@@ -121,6 +121,7 @@ const BOVESPA = "BOVESPA";
 const NASDAQ = "NASDAQ";
 const WALLET = "WALLET";
 
+import i18n from "@/plugins/i18n";
 import GraphCard from "../components/GraphCard.vue";
 import Client from "../repositories/Clients/AxiosClient";
 
@@ -159,6 +160,7 @@ export default {
       if (this.market === NASDAQ || this.market === BOVESPA) {
         let parsedSymbol =
           this.stockSymbol + (this.market === BOVESPA ? ".SA" : "");
+
         axios
           .get(
             "/api/stocks/?symbol=" +
@@ -179,8 +181,10 @@ export default {
       } else if (this.market === WALLET) {
         let walletID = this.searchText;
         const token = this.$store.state.token;
+        let currency = i18n.locale === "pt-br" ? "BRL" : "USD";
+
         Client(token)
-          .get("/api/wallets/" + walletID + "/history")
+          .get("/api/wallets/" + walletID + "/history?currency=" + currency)
           .then((response) => {
             let data = response.data;
             this.loading = false;

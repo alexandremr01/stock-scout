@@ -45,13 +45,13 @@
                 @click="toDashboard"
                 variant="success"
                 class="button"
-                >Guest Login</b-button
+                >{{$t('guestLogin')}}</b-button
               >
             </b-container>
             <b-container class="footer">
               <p>
-                New to Stock Scout?
-                <b-link @click="toSignup">Signup</b-link>
+                {{$t('newToStockScout')}}
+                <b-link @click="toSignup">{{$t('signUp')}}</b-link>
               </p>
             </b-container>
           </b-container>

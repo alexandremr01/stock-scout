@@ -5,10 +5,10 @@
     </div>
     <div class="middlecontainer">
       <div class="rowcontainer">
-        <StockCard stockname="Selic" description="Taxa Selic" :value="selic" />
-        <StockCard stockname="CDI" description="Taxa CDI" :value="cdi" />
-        <StockCard stockname="BOVA" description="Ibovespa" :value="ibovespa" />
-        <StockCard stockname="NASDAQ" description="Nasdaq" :value="nasdaq" />
+        <StockCard stockname="Selic" :description="$t('selic')" :value="selic" />
+        <StockCard stockname="CDI" :description="$t('cdi')" :value="cdi" />
+        <StockCard stockname="BOVA" :description="Ibovespa" :value="ibovespa" />
+        <StockCard stockname="NASDAQ" :description="Nasdaq" :value="nasdaq" />
       </div>
       <div class="rowcontainer">
         <StockCard

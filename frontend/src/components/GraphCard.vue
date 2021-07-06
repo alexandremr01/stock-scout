@@ -168,19 +168,19 @@ export default {
       frequencyOptions: {
         buttons: [
           {
-            caption: "Daily",
+            caption: this.$t('daily'),
             state: true,
             frequency: "DAY",
             icon: "calendar3-event",
           },
           {
-            caption: "Weekly",
+            caption: this.$t('weekly'),
             state: false,
             frequency: "WEEK",
             icon: "calendar3-week",
           },
           {
-            caption: "Monthly",
+            caption: this.$t('monthlyFreq'),
             state: false,
             frequency: "MONTH",
             icon: "calendar3",
