@@ -77,7 +77,7 @@
           <div v-if="incorrect">Algo de errado aconteceu.</div>
 
           <b-container class="buttons">
-            <b-button pill type="submit" variant="success" class="button"
+            <b-button pill type="submit" variant="success" class="text-primary  button"
               >Signup</b-button
             >
           </b-container>
