@@ -104,6 +104,19 @@
         >OK</b-button
       >
     </b-modal>
+
+    <b-modal id="stock-not-found" hide-footer hide-header>
+      <div class="d-block text-center">
+        <h3 class="text-secondary">{{ $t("api-stock-not-found") }}</h3>
+      </div>
+      <b-button
+        class="mt-3 text-primary"
+        block
+        @click="$bvModal.hide('stock-not-found')"
+        style="width: 40%; margin-left: 30%; margin-left: 30%;"
+        >OK</b-button
+      >
+    </b-modal>
   </div>
 </template>
 
@@ -195,6 +208,7 @@ export default {
           })
           .catch(() => {
             this.error = true;
+            this.$bvModal.show("stock-not-found");
             this.loading = false;
           });
       } else if (this.market === WALLET) {
