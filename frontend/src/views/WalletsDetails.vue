@@ -321,7 +321,7 @@ export default {
       },
       operationOptions: {
         buttons: [
-          { caption: "Buy", state: true, value: "buye", icon: "bag-plus" },
+          { caption: "Buy", state: true, value: "buy", icon: "bag-plus" },
           { caption: "Sell", state: false, value: "sell", icon: "bag-dash" },
         ],
       },
